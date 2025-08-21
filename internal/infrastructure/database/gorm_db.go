@@ -7,6 +7,7 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -22,7 +23,11 @@ func NewGormconnection(connStr string, debug bool) *gorm.DB {
 
 	for {
 		fmt.Println("Connectiong to SQL-DB...")
-		db, err = gorm.Open(postgres.Open(connStr), gormConfig)
+		var dbConf gorm.Dialector = sqlite.Open("debug.db")
+		if !debug {
+			dbConf = postgres.Open(connStr)
+		}
+		db, err = gorm.Open(dbConf, gormConfig)
 		if err != nil {
 			fmt.Println("failed to connect database:", err)
 			time.Sleep(5 * time.Second)

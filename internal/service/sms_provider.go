@@ -14,6 +14,6 @@ func NewSMSService() interfaces.SmsService {
 }
 
 func (s *smsProviderService) SendToClient(fields dto.SmsSendClientFields) error {
-	fmt.Printf("Sms to %v: %v", fields.PhoneNumber, fields.Text)
+	fmt.Printf("Sms to %v: %v\n", fields.PhoneNumber, fields.Text)
 	return nil
 }

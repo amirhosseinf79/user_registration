@@ -1,6 +1,6 @@
 package model
 
 type Token struct {
-	AccessToken  string `json:"accessToken"`
+	UserID       uint
 	RefreshToken string `json:"refreshToken"`
 }

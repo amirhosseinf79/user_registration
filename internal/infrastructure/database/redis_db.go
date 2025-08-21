@@ -17,7 +17,7 @@ func NewRedisConnection(addr, psswd string, ctx context.Context) *redis.Client {
 	})
 
 	val, err := client.Get(ctx, "foo").Result()
-	if err != nil {
+	if err != redis.Nil {
 		log.Fatal(err)
 	}
 	fmt.Println("foo", val)

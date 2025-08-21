@@ -5,6 +5,7 @@ import (
 )
 
 type OTPRepository interface {
-	Set(otp *model.OTP) error
-	Get(otp *model.OTP) error
+	CanSetOTP(mobile string) (bool, error)
+	SaveOTP(otp *model.OTP) error
+	GetOTPByMobile(mobile string) (string, error)
 }

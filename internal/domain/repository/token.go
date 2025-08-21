@@ -5,6 +5,6 @@ import (
 )
 
 type TokenRepository interface {
-	Set(token *model.Token) error
-	Get(token *model.Token) error
+	SaveRefreshToken(token *model.Token) error
+	GetUserIDByRefresh(refreshToken string) (uint, error)
 }
