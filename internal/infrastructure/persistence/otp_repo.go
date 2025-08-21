@@ -14,18 +14,20 @@ type otpRepository struct {
 	ctx    context.Context
 	client *redis.Client
 	prefix string
+	otpExp time.Duration
 }
 
-func NewOTPRepository(ctx context.Context, client *redis.Client) repository.OTPRepository {
+func NewOTPRepository(ctx context.Context, client *redis.Client, otpExp time.Duration) repository.OTPRepository {
 	return &otpRepository{
 		prefix: "OTP:",
 		client: client,
 		ctx:    ctx,
+		otpExp: otpExp,
 	}
 }
 
-func (o *otpRepository) Set(otp *model.OTP, exp time.Duration) error {
-	return o.client.Set(o.ctx, o.prefix+otp.Mobile, otp, exp).Err()
+func (o *otpRepository) Set(otp *model.OTP) error {
+	return o.client.Set(o.ctx, o.prefix+otp.Mobile, otp, o.otpExp).Err()
 }
 
 func (o *otpRepository) Get(otp *model.OTP) error {

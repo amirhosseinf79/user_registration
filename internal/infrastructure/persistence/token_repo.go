@@ -2,7 +2,6 @@ package persistence
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
@@ -11,27 +10,30 @@ import (
 )
 
 type tokenRepository struct {
-	ctx    context.Context
-	client *redis.Client
-	prefix string
+	ctx             context.Context
+	client          *redis.Client
+	prefix          string
+	refreshRokenExp time.Duration
 }
 
-func NewTokenRepository(ctx context.Context, client *redis.Client) repository.TokenRepository {
+func NewTokenRepository(ctx context.Context, client *redis.Client, refreshRokenExp time.Duration) repository.TokenRepository {
 	return &tokenRepository{
-		ctx:    ctx,
-		client: client,
-		prefix: "token:",
+		ctx:             ctx,
+		client:          client,
+		prefix:          "token:",
+		refreshRokenExp: refreshRokenExp,
 	}
 }
 
-func (t *tokenRepository) Set(token *model.Token, exp time.Duration) error {
-	return t.client.Set(t.ctx, t.prefix+token.UserID, token, exp).Err()
+func (t *tokenRepository) Set(token *model.Token) error {
+	return t.client.Set(t.ctx, t.prefix+token.RefreshToken, token.AccessToken, t.refreshRokenExp).Err()
 }
 
 func (t *tokenRepository) Get(token *model.Token) error {
-	errStr := t.client.HGetAll(t.ctx, t.prefix+token.UserID).Scan(token).Error()
-	if errStr != "" {
-		return errors.New(errStr)
+	accessToken, err := t.client.Get(t.ctx, t.prefix+token.RefreshToken).Result()
+	if err != redis.Nil {
+		return err
 	}
+	token.AccessToken = accessToken
 	return nil
 }

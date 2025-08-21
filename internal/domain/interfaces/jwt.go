@@ -1,10 +1,6 @@
 package interfaces
 
-import (
-	"time"
-)
-
 type JWTInterface interface {
-	GenerateToken(userID uint, exp time.Duration) (string, error)
+	GenerateToken(userID uint, long bool) (string, error)
 	Verify(tokenString string) (uint, error)
 }

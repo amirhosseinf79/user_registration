@@ -10,16 +10,25 @@ import (
 )
 
 type jwtSetvice struct {
-	secretKey []byte
+	secretKey       []byte
+	accessTokenExp  time.Duration
+	refreshRokenExp time.Duration
 }
 
-func NewJWTService(secretKey string) interfaces.JWTInterface {
+func NewJWTService(secretKey string, accessTokenExp time.Duration, refreshRokenExp time.Duration) interfaces.JWTInterface {
 	return &jwtSetvice{
-		secretKey: []byte(secretKey),
+		secretKey:       []byte(secretKey),
+		accessTokenExp:  accessTokenExp,
+		refreshRokenExp: refreshRokenExp,
 	}
 }
 
-func (j *jwtSetvice) GenerateToken(userID uint, exp time.Duration) (string, error) {
+func (j *jwtSetvice) GenerateToken(userID uint, long bool) (string, error) {
+	exp := j.accessTokenExp
+	if long {
+		exp = j.refreshRokenExp
+	}
+
 	now := time.Now().UTC()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
