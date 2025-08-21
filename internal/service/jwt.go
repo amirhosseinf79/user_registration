@@ -51,3 +51,11 @@ func (j *jwtService) GetUserIDByRefreshToken(oldRefreshToken string) (uint, erro
 	}
 	return userID, nil
 }
+
+func (j *jwtService) GetUserIDByAccessToken(accessToke string) (uint, error) {
+	userID, err := j.jwtRepo.Verify(accessToke)
+	if err != nil {
+		return 0, err
+	}
+	return userID, nil
+}

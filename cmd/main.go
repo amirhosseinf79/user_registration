@@ -23,8 +23,8 @@ func main() {
 	otpTimeExp := 2 * time.Minute
 	accessTokenExp := 2 * time.Hour
 	refreshRokenExp := 6 * time.Hour
-	smsRateLimitCount := 3
 	smsRateLimitDuration := 1 * time.Minute
+	smsRateLimitCount := 3
 
 	ctx := context.Background()
 	gormDB := database.NewGormconnection(gormConnStr, debug)
@@ -48,38 +48,18 @@ func main() {
 	)
 
 	fieldValidator := middleware.NewFieldValidator()
+	authValidator := middleware.NewAuthMiddleware(jwtService)
 	authHandler := handler.NewAuthHandler(authService)
+	userHandler := handler.NewUserHandler(userService)
 
 	server := server.NewServer(
 		fieldValidator,
+		authValidator,
 		authHandler,
+		userHandler,
 	)
 
 	server.InitAuthRoutes()
+	server.InitUserRoutes()
 	server.Start(serverPort)
-
-	// test
-	// sendOtpFields := dto.AuthSendOTPFields{PhoneNumber: "09334429096"}
-	// err := authService.SendOTP(sendOtpFields)
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-	// reader := bufio.NewReader(os.Stdin)
-	// fmt.Print("Code: ")
-	// code, _ := reader.ReadString('\n')
-	// code = code[:len(code)-2]
-	// result, err := authService.VerifyOTP(dto.AuthVerifyOTPFields{AuthSendOTPFields: sendOtpFields, Code: code})
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-	// fmt.Println(result.AccessToken, "\n", result.RefreshToken)
-
-	// fmt.Print("refreshRoken: ")
-	// rToken, _ := reader.ReadString('\n')
-	// rToken = rToken[:len(rToken)-2]
-	// result2, err2 := authService.RefreshToken(rToken)
-	// if err2 != nil {
-	// 	fmt.Println(err2.Error())
-	// }
-	// fmt.Println(result2.AccessToken, "\n", result2.RefreshToken)
 }

@@ -1,8 +1,12 @@
 package repository
 
-import "github.com/amirhosseinf79/user_registration/internal/domain/model"
+import (
+	"github.com/amirhosseinf79/user_registration/internal/domain/model"
+	"github.com/amirhosseinf79/user_registration/internal/dto"
+)
 
 type UserRepository interface {
+	GetAllByFilter(filter dto.FilterUser) ([]*model.User, int64, error)
 	GetByMobile(mobile string) (*model.User, error)
 	CheckMobileExists(mobile string) (bool, error)
 	GetByID(userID uint) (*model.User, error)

@@ -64,11 +64,11 @@ func (j *jwtRepo) Verify(tokenString string) (uint, error) {
 				return 0, dto.ErrInvalidIssuer
 			}
 		}
-		userID, ok := claims["userID"].(uint)
+		userID, ok := claims["userID"].(float64)
 		if !ok {
 			return 0, dto.ErrInvalidUser
 		}
-		return userID, nil
+		return uint(userID), err
 	}
 	return 0, dto.ErrInvalidToken
 }

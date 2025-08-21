@@ -3,6 +3,7 @@ package persistence
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
+	"github.com/amirhosseinf79/user_registration/internal/dto"
 	"gorm.io/gorm"
 )
 
@@ -51,11 +52,29 @@ func (r *userRepository) CheckMobileExists(mobile string) (exists bool, err erro
 	return count > 0, nil
 }
 
-// func (r *userRepository) GetAllByFilter(filter dto.UserFilter) (users []*model.User, total int64, err error) {
-// 	query := r.db.Model(&model.User{})
-// 	if filter.Email != "" {
-// 		query = query.Where("email = ?", filter.Email)
-// 	}
-// 	err = query.Count(&total).Find(&users).Error
-// 	return
-// }
+func (r *userRepository) GetAllByFilter(filter dto.FilterUser) (users []*model.User, total int64, err error) {
+	query := r.db.Model(&model.User{})
+	if filter.PhoneNumber != "" {
+		query = query.Where("phone_number = ?", filter.PhoneNumber)
+	}
+	if filter.Email != "" {
+		query = query.Where("email = ?", filter.Email)
+	}
+	if filter.Name != "" {
+		query = query.Where("concat(first_name, ' ', last_name) like ?", "%"+filter.Name+"%")
+	}
+	err = query.Count(&total).Error
+	if err != nil {
+		return
+	}
+
+	if filter.Page < 1 {
+		filter.Page = 1
+	}
+	if filter.PageSize <= 0 || filter.PageSize > 100 {
+		filter.PageSize = 10
+	}
+
+	err = query.Offset((filter.Page - 1) * filter.PageSize).Limit(filter.PageSize).Find(&users).Error
+	return
+}
