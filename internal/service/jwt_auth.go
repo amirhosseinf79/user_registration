@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
@@ -14,19 +15,12 @@ type jwtSetvice struct {
 }
 
 func NewJWTService(secretKey string) interfaces.JWTInterface {
-	return jwtSetvice{
+	return &jwtSetvice{
 		secretKey: []byte(secretKey),
 	}
 }
 
-func (j *jwtSetvice) NewToken(phoneNumber string) interfaces.JWTInterface {
-	return jwtSetvice{
-		phoneNumber: phoneNumber,
-		secretKey:   j.secretKey,
-	}
-}
-
-func (j *jwtSetvice) Create() (string, error) {
+func (j *jwtSetvice) Generate(phoneNumber string) (string, error) {
 	now := time.Now().UTC()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
@@ -42,4 +36,29 @@ func (j *jwtSetvice) Create() (string, error) {
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func (j *jwtSetvice) Verify(tokenString string) (*jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(tt *jwt.Token) (any, error) {
+		return j.secretKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if exp, ok := claims["exp"].(float64); ok {
+			if int64(exp) < time.Now().Unix() {
+				return nil, fmt.Errorf("token expired")
+			}
+		}
+		if iss, ok := claims["iss"].(string); ok {
+			if iss != "auth-svc" {
+				return nil, fmt.Errorf("invalid issuer")
+			}
+		}
+		return &claims, nil
+	}
+
+	return nil, fmt.Errorf("invalid token")
 }
