@@ -18,7 +18,7 @@ func NewOTPService(otpRepo repository.OTPRepository) interfaces.OTPService {
 	}
 }
 
-func (o *otpService) StoreCode(fields dto.AuthSendOTPFields) (string, error) {
+func (o *otpService) StoreCode(fields dto.FieldAuthSendOTP) (string, error) {
 	canGenerate, err := o.otpRepo.CanSetOTP(fields.PhoneNumber)
 	if err != nil {
 		return "", err
@@ -40,13 +40,17 @@ func (o *otpService) StoreCode(fields dto.AuthSendOTPFields) (string, error) {
 	return generatedCode, nil
 }
 
-func (o *otpService) CheckOTPCode(fields dto.AuthVerifyOTPFields) (bool, error) {
+func (o *otpService) CheckOTPCode(fields dto.FieldAuthVerifyOTP) (bool, error) {
 	savedCode, err := o.otpRepo.GetOTPByMobile(fields.PhoneNumber)
 	if err != nil {
 		return false, err
 	}
 	if fields.Code != savedCode {
 		return false, dto.ErrInvalidCode
+	}
+	err = o.otpRepo.DeleteOTP(fields.PhoneNumber)
+	if err != nil {
+		return false, err
 	}
 	return true, nil
 }

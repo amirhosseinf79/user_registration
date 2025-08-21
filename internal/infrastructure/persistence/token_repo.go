@@ -32,13 +32,15 @@ func (t *tokenRepository) SaveRefreshToken(token *model.Token) error {
 }
 
 func (t *tokenRepository) GetUserIDByRefresh(refreshToken string) (uint, error) {
-	userID, err := t.client.Get(t.ctx, t.prefix+refreshToken).Result()
+	key := t.prefix + refreshToken
+	userID, err := t.client.Get(t.ctx, key).Result()
 	if err == redis.Nil {
 		return 0, dto.ErrObjectNotFound
 	}
 	if err != nil {
 		return 0, err
 	}
+	// t.client.Expire(t.ctx, key, 0)
 	id, err := strconv.ParseUint(userID, 10, 64)
 	if err != nil {
 		return 0, err

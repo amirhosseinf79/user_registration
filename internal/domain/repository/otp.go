@@ -8,4 +8,5 @@ type OTPRepository interface {
 	CanSetOTP(mobile string) (bool, error)
 	SaveOTP(otp *model.OTP) error
 	GetOTPByMobile(mobile string) (string, error)
+	DeleteOTP(mobile string) error
 }

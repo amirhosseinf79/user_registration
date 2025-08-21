@@ -1,3 +1,9 @@
 package interfaces
 
-type AuthHandler interface{}
+import "github.com/gofiber/fiber/v3"
+
+type AuthHandler interface {
+	SendOTP(ctx fiber.Ctx) error
+	VerifyOTP(ctx fiber.Ctx) error
+	RefreshToken(ctx fiber.Ctx) error
+}

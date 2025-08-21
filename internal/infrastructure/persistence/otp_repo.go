@@ -68,3 +68,14 @@ func (o *otpRepository) GetOTPByMobile(mobile string) (string, error) {
 	}
 	return code, nil
 }
+
+func (o *otpRepository) DeleteOTP(mobile string) error {
+	err := o.client.Del(o.ctx, o.prefix+mobile).Err()
+	if err == redis.Nil {
+		return dto.ErrObjectNotFound
+	}
+	if err != nil {
+		return err
+	}
+	return nil
+}

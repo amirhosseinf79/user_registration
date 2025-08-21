@@ -1,15 +1,19 @@
 package dto
 
-type AuthSendOTPFields struct {
-	PhoneNumber string `json:"phoneNumber"`
+type FieldRefreshToken struct {
+	RefreshToken string `json:"refreshToken" validate:"required"`
 }
 
-type AuthVerifyOTPFields struct {
-	AuthSendOTPFields
-	Code string `json:"code"`
+type FieldAuthSendOTP struct {
+	PhoneNumber string `json:"phoneNumber" validate:"required"`
 }
 
-type AuthOkResponse struct {
+type FieldAuthVerifyOTP struct {
+	FieldAuthSendOTP
+	Code string `json:"code" validate:"required"`
+}
+
+type ResponseAuthOk struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
 }

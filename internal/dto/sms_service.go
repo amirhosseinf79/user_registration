@@ -1,6 +1,6 @@
 package dto
 
-type SmsSendClientFields struct {
-	AuthSendOTPFields
+type FieldSmsSendClient struct {
+	FieldAuthSendOTP
 	Text string
 }

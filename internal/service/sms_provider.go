@@ -13,7 +13,7 @@ func NewSMSService() interfaces.SmsService {
 	return &smsProviderService{}
 }
 
-func (s *smsProviderService) SendToClient(fields dto.SmsSendClientFields) error {
+func (s *smsProviderService) SendToClient(fields dto.FieldSmsSendClient) error {
 	fmt.Printf("Sms to %v: %v\n", fields.PhoneNumber, fields.Text)
 	return nil
 }

@@ -26,19 +26,19 @@ func NewAuthService(
 	}
 }
 
-func (a *authService) SendOTP(fields dto.AuthSendOTPFields) error {
+func (a *authService) SendOTP(fields dto.FieldAuthSendOTP) error {
 	generatedCode, err := a.otpService.StoreCode(fields)
 	if err != nil {
 		return err
 	}
-	err = a.smsService.SendToClient(dto.SmsSendClientFields{
-		AuthSendOTPFields: fields,
-		Text:              generatedCode,
+	err = a.smsService.SendToClient(dto.FieldSmsSendClient{
+		FieldAuthSendOTP: fields,
+		Text:             generatedCode,
 	})
 	return err
 }
 
-func (a *authService) VerifyOTP(fields dto.AuthVerifyOTPFields) (*dto.AuthOkResponse, error) {
+func (a *authService) VerifyOTP(fields dto.FieldAuthVerifyOTP) (*dto.ResponseAuthOk, error) {
 	ok, err := a.otpService.CheckOTPCode(fields)
 	if !ok {
 		return nil, err
@@ -57,7 +57,7 @@ func (a *authService) VerifyOTP(fields dto.AuthVerifyOTPFields) (*dto.AuthOkResp
 	return token, nil
 }
 
-func (a *authService) RefreshToken(oldRefreshToken string) (*dto.AuthOkResponse, error) {
+func (a *authService) RefreshToken(oldRefreshToken string) (*dto.ResponseAuthOk, error) {
 	userID, err := a.jwtService.GetUserIDByRefreshToken(oldRefreshToken)
 	if err != nil {
 		return nil, err

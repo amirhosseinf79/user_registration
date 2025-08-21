@@ -19,7 +19,7 @@ func NewJWTService(jwtRepo repository.JWTRepository, tokenRepo repository.TokenR
 	}
 }
 
-func (j *jwtService) GenerateAuthTokens(userID uint) (*dto.AuthOkResponse, error) {
+func (j *jwtService) GenerateAuthTokens(userID uint) (*dto.ResponseAuthOk, error) {
 	accessToken, err := j.jwtRepo.GenerateToken(userID, false)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (j *jwtService) GenerateAuthTokens(userID uint) (*dto.AuthOkResponse, error
 		return nil, err
 	}
 
-	token := dto.AuthOkResponse{
+	token := dto.ResponseAuthOk{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}

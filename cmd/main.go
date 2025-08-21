@@ -4,12 +4,16 @@ import (
 	"context"
 	"time"
 
+	"github.com/amirhosseinf79/user_registration/internal/application/handler"
+	"github.com/amirhosseinf79/user_registration/internal/application/middleware"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/database"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/persistence"
+	"github.com/amirhosseinf79/user_registration/internal/infrastructure/server"
 	"github.com/amirhosseinf79/user_registration/internal/service"
 )
 
 func main() {
+	serverPort := "8080"
 	secret := "24vm89v5y7q-x,m349ci-143-v5um120-5v27n45-1237cn4"
 	gormConnStr := "user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Tehran"
 	redisAddr := "localhost:6379"
@@ -42,6 +46,17 @@ func main() {
 		otpService,
 		smsService,
 	)
+
+	fieldValidator := middleware.NewFieldValidator()
+	authHandler := handler.NewAuthHandler(authService)
+
+	server := server.NewServer(
+		fieldValidator,
+		authHandler,
+	)
+
+	server.InitAuthRoutes()
+	server.Start(serverPort)
 
 	// test
 	// sendOtpFields := dto.AuthSendOTPFields{PhoneNumber: "09334429096"}
