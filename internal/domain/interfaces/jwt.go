@@ -1,8 +1,10 @@
 package interfaces
 
-import "github.com/golang-jwt/jwt/v5"
+import (
+	"time"
+)
 
 type JWTInterface interface {
-	Verify(tokenString string) (*jwt.MapClaims, error)
-	Generate(phoneNumber string) (string, error)
+	GenerateToken(userID uint, exp time.Duration) (string, error)
+	Verify(tokenString string) (uint, error)
 }

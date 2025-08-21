@@ -10,8 +10,7 @@ import (
 )
 
 type jwtSetvice struct {
-	phoneNumber string
-	secretKey   []byte
+	secretKey []byte
 }
 
 func NewJWTService(secretKey string) interfaces.JWTInterface {
@@ -20,15 +19,15 @@ func NewJWTService(secretKey string) interfaces.JWTInterface {
 	}
 }
 
-func (j *jwtSetvice) Generate(phoneNumber string) (string, error) {
+func (j *jwtSetvice) GenerateToken(userID uint, exp time.Duration) (string, error) {
 	now := time.Now().UTC()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"iss":         "auth-svc",
-			"iat":         now.Unix(),
-			"jti":         uuid.NewString(),
-			"phoneNumber": j.phoneNumber,
-			"exp":         now.Add(time.Hour * 24).Unix(),
+			"iss":    "auth-svc",
+			"iat":    now.Unix(),
+			"jti":    uuid.NewString(),
+			"userID": userID,
+			"exp":    now.Add(exp).Unix(),
 		})
 
 	tokenString, err := token.SignedString(j.secretKey)
@@ -38,27 +37,29 @@ func (j *jwtSetvice) Generate(phoneNumber string) (string, error) {
 	return tokenString, nil
 }
 
-func (j *jwtSetvice) Verify(tokenString string) (*jwt.MapClaims, error) {
+func (j *jwtSetvice) Verify(tokenString string) (uint, error) {
 	token, err := jwt.Parse(tokenString, func(tt *jwt.Token) (any, error) {
 		return j.secretKey, nil
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if exp, ok := claims["exp"].(float64); ok {
 			if int64(exp) < time.Now().Unix() {
-				return nil, fmt.Errorf("token expired")
+				return 0, fmt.Errorf("token expired")
 			}
 		}
 		if iss, ok := claims["iss"].(string); ok {
 			if iss != "auth-svc" {
-				return nil, fmt.Errorf("invalid issuer")
+				return 0, fmt.Errorf("invalid issuer")
 			}
 		}
-		return &claims, nil
+		userID, ok := claims["userID"].(uint)
+		if !ok {
+			return 0, fmt.Errorf("user invalid")
+		}
+		return userID, nil
 	}
-
-	return nil, fmt.Errorf("invalid token")
+	return 0, fmt.Errorf("invalid token")
 }
