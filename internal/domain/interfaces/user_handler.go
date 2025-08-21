@@ -1,9 +1,9 @@
 package interfaces
 
-import "github.com/gofiber/fiber/v3"
+import "github.com/gofiber/fiber/v2"
 
 type UserHandler interface {
-	GetUserByID(ctx fiber.Ctx) error
-	GetUsersList(ctx fiber.Ctx) error
-	UpdateProfileInfo(ctx fiber.Ctx) error
+	GetUserByID(ctx *fiber.Ctx) error
+	GetUsersList(ctx *fiber.Ctx) error
+	UpdateProfileInfo(ctx *fiber.Ctx) error
 }

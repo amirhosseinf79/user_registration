@@ -6,7 +6,7 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/dto"
 	"github.com/amirhosseinf79/user_registration/pkg"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 type fieldsValidatorMiddleware struct{}
@@ -15,7 +15,7 @@ func NewFieldValidator() interfaces.FieldValidatorMiddleware {
 	return &fieldsValidatorMiddleware{}
 }
 
-func (fv *fieldsValidatorMiddleware) ValidateMobile(ctx fiber.Ctx) error {
+func (fv *fieldsValidatorMiddleware) ValidateMobile(ctx *fiber.Ctx) error {
 	re := regexp.MustCompile(`^09\d{9}$`)
 	var fields dto.FieldAuthSendOTP
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
@@ -30,7 +30,7 @@ func (fv *fieldsValidatorMiddleware) ValidateMobile(ctx fiber.Ctx) error {
 	return ctx.Next()
 }
 
-func (fv *fieldsValidatorMiddleware) ValidateCode(ctx fiber.Ctx) error {
+func (fv *fieldsValidatorMiddleware) ValidateCode(ctx *fiber.Ctx) error {
 	var fields dto.FieldAuthVerifyOTP
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
@@ -40,7 +40,7 @@ func (fv *fieldsValidatorMiddleware) ValidateCode(ctx fiber.Ctx) error {
 	return ctx.Next()
 }
 
-func (fv *fieldsValidatorMiddleware) ValidateRefreshToken(ctx fiber.Ctx) error {
+func (fv *fieldsValidatorMiddleware) ValidateRefreshToken(ctx *fiber.Ctx) error {
 	var fields dto.FieldRefreshToken
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
@@ -50,7 +50,7 @@ func (fv *fieldsValidatorMiddleware) ValidateRefreshToken(ctx fiber.Ctx) error {
 	return ctx.Next()
 }
 
-func (fv *fieldsValidatorMiddleware) ValidateEmailBody(ctx fiber.Ctx) error {
+func (fv *fieldsValidatorMiddleware) ValidateEmailBody(ctx *fiber.Ctx) error {
 	re := regexp.MustCompile(`^(.{3,})@(.{3,})\.(.{2,})$`)
 	var fields dto.FieldEmail
 	response, err := pkg.ValidateRequestBody(&fields, ctx)

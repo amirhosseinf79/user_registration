@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
-func ValidateRequestBody[T any](request *T, c fiber.Ctx) (map[string]string, error) {
-	if err := c.Bind().Body(request); err != nil {
+func ValidateRequestBody[T any](request *T, c *fiber.Ctx) (map[string]string, error) {
+	if err := c.BodyParser(request); err != nil {
 		return map[string]string{
 			"error": "Invalid request data",
 		}, errors.New("invalid request data")
@@ -27,8 +27,8 @@ func ValidateRequestBody[T any](request *T, c fiber.Ctx) (map[string]string, err
 	return nil, nil
 }
 
-func ValidateQueryParams[T any](request *T, c fiber.Ctx) (map[string]string, error) {
-	if err := c.Bind().Query(request); err != nil {
+func ValidateQueryParams[T any](request *T, c *fiber.Ctx) (map[string]string, error) {
+	if err := c.QueryParser(request); err != nil {
 		return map[string]string{
 			"error": "Invalid request data",
 		}, errors.New("invalid request data")

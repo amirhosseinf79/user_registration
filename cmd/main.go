@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/amirhosseinf79/user_registration/docs"
 	"github.com/amirhosseinf79/user_registration/internal/application/handler"
 	"github.com/amirhosseinf79/user_registration/internal/application/middleware"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/database"

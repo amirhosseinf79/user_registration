@@ -5,7 +5,7 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/dto"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 type authMiddleware struct {
@@ -20,7 +20,7 @@ func NewAuthMiddleware(jwtService interfaces.JWTService) interfaces.AuthMiddlewa
 	}
 }
 
-func (am *authMiddleware) CheckToken(ctx fiber.Ctx) error {
+func (am *authMiddleware) CheckToken(ctx *fiber.Ctx) error {
 	token := ctx.Get("Authorization", "")
 	if token == "" || !strings.Contains(strings.ToLower(token), strings.ToLower(am.prefix)) {
 		statuscode, response := dto.NewDefaultRespose(dto.ErrInvalidToken, fiber.StatusUnauthorized)

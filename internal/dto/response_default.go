@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/gofiber/fiber/v3"
+import "github.com/gofiber/fiber/v2"
 
 type responseOneMessage struct {
 	Code    int    `json:"code,omitempty"`

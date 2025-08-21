@@ -5,7 +5,7 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/dto"
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 type authHandler struct {
@@ -18,9 +18,9 @@ func NewAuthHandler(authService interfaces.AuthService) interfaces.AuthHandler {
 	}
 }
 
-func (ah *authHandler) SendOTP(ctx fiber.Ctx) error {
+func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 	var fields dto.FieldAuthSendOTP
-	ctx.Bind().Body(&fields)
+	ctx.BodyParser(&fields)
 	err := ah.authService.SendOTP(fields)
 	if errors.Is(err, dto.ErrSmsRateLimited) {
 		statusCode, response := dto.NewDefaultRespose(err, fiber.StatusForbidden)
@@ -30,9 +30,9 @@ func (ah *authHandler) SendOTP(ctx fiber.Ctx) error {
 	return ctx.Status(statusCode).JSON(response)
 }
 
-func (ah *authHandler) VerifyOTP(ctx fiber.Ctx) error {
+func (ah *authHandler) VerifyOTP(ctx *fiber.Ctx) error {
 	var fields dto.FieldAuthVerifyOTP
-	ctx.Bind().Body(&fields)
+	ctx.BodyParser(&fields)
 	response, err := ah.authService.VerifyOTP(fields)
 	if err != nil {
 		statusCode, response := dto.NewDefaultRespose(dto.ErrUnauthorized, fiber.StatusUnauthorized)
@@ -41,9 +41,9 @@ func (ah *authHandler) VerifyOTP(ctx fiber.Ctx) error {
 	return ctx.JSON(response)
 }
 
-func (ah *authHandler) RefreshToken(ctx fiber.Ctx) error {
+func (ah *authHandler) RefreshToken(ctx *fiber.Ctx) error {
 	var fields dto.FieldRefreshToken
-	ctx.Bind().Body(&fields)
+	ctx.BodyParser(&fields)
 	response, err := ah.authService.RefreshToken(fields.RefreshToken)
 	if err != nil {
 		statusCode, response := dto.NewDefaultRespose(dto.ErrInvalidToken, fiber.StatusUnauthorized)
