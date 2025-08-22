@@ -38,7 +38,7 @@ func (a *authService) SendOTP(fields dto.FieldAuthSendOTP) error {
 	return err
 }
 
-func (a *authService) VerifyOTP(fields dto.FieldAuthVerifyOTP) (*dto.ResponseAuthOk, error) {
+func (a *authService) LoginByOTP(fields dto.FieldAuthVerifyOTP) (*dto.ResponseAuthOk, error) {
 	ok, err := a.otpService.CheckOTPCode(fields)
 	if !ok {
 		return nil, err

@@ -49,10 +49,10 @@ func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 // @Success 200 {array} dto.ResponseAuthOk
 // @Failure 401 {object} dto.responseOneMessage
 // @Router /auth/verify-otp [post]
-func (ah *authHandler) VerifyOTP(ctx *fiber.Ctx) error {
+func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
 	var fields dto.FieldAuthVerifyOTP
 	ctx.BodyParser(&fields)
-	response, err := ah.authService.VerifyOTP(fields)
+	response, err := ah.authService.LoginByOTP(fields)
 	if err != nil {
 		statusCode, response := dto.NewDefaultRespose(dto.ErrUnauthorized, fiber.StatusUnauthorized)
 		return ctx.Status(statusCode).JSON(response)
