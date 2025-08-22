@@ -24,6 +24,19 @@ definitions:
     required:
     - refreshToken
     type: object
+  dto.MetaPagination:
+    properties:
+      currentPage:
+        type: integer
+      endPage:
+        type: integer
+      nextPage:
+        type: integer
+      pageSize:
+        type: integer
+      totalCount:
+        type: integer
+    type: object
   dto.ResponseAuthOk:
     properties:
       accessToken:
@@ -43,6 +56,15 @@ definitions:
         type: string
       phoneNumber:
         type: string
+    type: object
+  dto.ResponseUserList:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.ResponseUserDetails'
+        type: array
+      meta:
+        $ref: '#/definitions/dto.MetaPagination'
     type: object
   dto.UpdateUserDetails:
     properties:
@@ -232,9 +254,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/dto.ResponseUserDetails'
-            type: array
+            $ref: '#/definitions/dto.ResponseUserList'
         "500":
           description: Internal Server Error
           schema:

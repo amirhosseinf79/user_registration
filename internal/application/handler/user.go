@@ -45,7 +45,7 @@ func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param filters query dto.FilterUser false "Filters"
-// @Success 200 {array} dto.ResponseUserDetails
+// @Success 200 {object} dto.ResponseUserList
 // @Failure 500 {object} dto.responseOneMessage
 // @Router /user/all [get]
 func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {

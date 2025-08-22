@@ -24,3 +24,8 @@ type UpdateUserDetails struct {
 	LastName  string `json:"lastName"`
 	FieldEmail
 }
+
+type ResponseUserList struct {
+	Items []ResponseUserDetails `json:"items"`
+	Meta  MetaPagination        `json:"meta"`
+}

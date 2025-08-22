@@ -234,10 +234,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/dto.ResponseUserDetails"
-                            }
+                            "$ref": "#/definitions/dto.ResponseUserList"
                         }
                     },
                     "500": {
@@ -326,6 +323,26 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.MetaPagination": {
+            "type": "object",
+            "properties": {
+                "currentPage": {
+                    "type": "integer"
+                },
+                "endPage": {
+                    "type": "integer"
+                },
+                "nextPage": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "totalCount": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.ResponseAuthOk": {
             "type": "object",
             "properties": {
@@ -354,6 +371,20 @@ const docTemplate = `{
                 },
                 "phoneNumber": {
                     "type": "string"
+                }
+            }
+        },
+        "dto.ResponseUserList": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ResponseUserDetails"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.MetaPagination"
                 }
             }
         },
