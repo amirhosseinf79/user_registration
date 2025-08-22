@@ -174,17 +174,6 @@ go mod download
 go run main.go
 ```
 
-### Database Schema
-```sql
-CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    phone_number VARCHAR(15) UNIQUE NOT NULL,
-    registration_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMPTZ,
-    is_active BOOLEAN DEFAULT TRUE
-);
-```
-
 ## Security Features
 
 - JWT token authentication
