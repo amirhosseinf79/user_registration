@@ -22,12 +22,12 @@ import (
 // @BasePath /
 // @schemes http
 func main() {
-
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Printf("Error loading .env file: %v\n", err)
 	}
 
+	// Database and secrets config
 	serverPort := os.Getenv("PORT")
 	secret := os.Getenv("SECRET")
 	gormConnStr := os.Getenv("SQLDB")
@@ -39,6 +39,7 @@ func main() {
 		debug = true
 	}
 
+	// Expiration time configs
 	otpTimeExp := 2 * time.Minute
 	accessTokenExp := 2 * time.Hour
 	refreshRokenExp := 6 * time.Hour
