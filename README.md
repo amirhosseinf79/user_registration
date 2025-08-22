@@ -81,29 +81,41 @@ RATE_LIMIT_WINDOW_MINUTES=10
 ### Docker Services
 
 ```yaml
-version: '3.8'
 services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_otp
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis-data:/data
+
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: cmd/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
+      - db
       - redis
-
-  postgres:
-    image: postgres:15-alpine
     environment:
-      POSTGRES_DB: otp_service
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - PORT=8080
+      - SECRET=24vm89v5y7q-x,m349ci-143-v5um120-5v27n45-1237cn4
+      - SQLDB=host=db user=postgres password=postgres dbname=user_otp port=5432 sslmode=disable TimeZone=Asia/Tehran
+      - RedisServer=redis:6379
+      - RedisPass=
+      - DEBUG=false
 
-  redis:
-    image: redis:7-alpine
-    volumes:
-      - redis_data:/data
+volumes:
+  db-data:
+  redis-data:
 ```
 
 ### Useful Commands
