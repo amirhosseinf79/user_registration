@@ -34,7 +34,7 @@ func main() {
 	otpTimeExp := 2 * time.Minute
 	accessTokenExp := 2 * time.Hour
 	refreshRokenExp := 6 * time.Hour
-	smsRateLimitDuration := 1 * time.Minute
+	smsRateLimitDuration := 10 * time.Minute
 	smsRateLimitCount := 3
 
 	ctx := context.Background()
