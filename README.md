@@ -31,7 +31,7 @@ A robust Golang backend service implementing OTP-based login and registration wi
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:amirhosseinf79/user_registration.git
    cd otp-service
    ```
 
