@@ -21,7 +21,7 @@ import (
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-// @description User OTP Registration API
+// @description Bearer [...]
 // @BasePath /
 // @schemes http
 func main() {

@@ -421,7 +421,7 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "User OTP Registration API",
+            "description": "Bearer [...]",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

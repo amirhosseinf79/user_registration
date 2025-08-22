@@ -264,7 +264,7 @@ paths:
       - user
 securityDefinitions:
   BearerAuth:
-    description: User OTP Registration API
+    description: Bearer [...]
     in: header
     name: Authorization
     type: apiKey
