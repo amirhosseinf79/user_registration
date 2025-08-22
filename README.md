@@ -17,7 +17,7 @@ A robust Golang backend service implementing OTP-based login and registration wi
 - **Backend**: Golang with Fiber framework
 - **Primary Database**: PostgreSQL for user data persistence
 - **Cache Layer**: Redis for OTP storage and rate limiting
-- **Authentication**: JWT tokens
+- **Authentication**: JWT Bearer tokens
 - **Documentation**: Swagger/OpenAPI
 
 ## Prerequisites
