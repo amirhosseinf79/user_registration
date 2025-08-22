@@ -184,4 +184,4 @@ go run main.go
 
 ## Documentation
 
-Complete API documentation is available at `/swagger/index.html` when the application is running.
+Complete API documentation + Example API requests & responses is available at `/swagger/index.html` when the application is running.
