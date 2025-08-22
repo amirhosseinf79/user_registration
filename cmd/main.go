@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"os"
 	"time"
 
 	_ "github.com/amirhosseinf79/user_registration/docs"
@@ -14,17 +13,28 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/service"
 )
 
+// @title User OTP Registration API
+// @version 1.0
+// @description User OTP Registration API
+// @BasePath /
+// @schemes http
 func main() {
-	serverPort := os.Getenv("PORT")
-	secret := os.Getenv("SECRET")
-	gormConnStr := os.Getenv("SQLDB")
-	redisAddr := os.Getenv("RedisServer")
-	redisPwd := os.Getenv("RedisPass")
+	// serverPort := os.Getenv("PORT")
+	// secret := os.Getenv("SECRET")
+	// gormConnStr := os.Getenv("SQLDB")
+	// redisAddr := os.Getenv("RedisServer")
+	// redisPwd := os.Getenv("RedisPass")
 
-	debug := false
-	if os.Getenv("DEBUG") == "true" {
-		debug = true
-	}
+	// debug := false
+	// if os.Getenv("DEBUG") == "true" {
+	// 	debug = true
+	// }
+	serverPort := "8080"
+	secret := "24vm89v5y7q-x,m349ci-143-v5um120-5v27n45-1237cn4"
+	gormConnStr := "user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Tehran"
+	redisAddr := "localhost:6379"
+	redisPwd := ""
+	debug := true
 
 	otpTimeExp := 2 * time.Minute
 	accessTokenExp := 2 * time.Hour
@@ -65,6 +75,7 @@ func main() {
 		userHandler,
 	)
 
+	server.InitSwaggerRoutes()
 	server.InitAuthRoutes()
 	server.InitUserRoutes()
 	server.Start(serverPort)

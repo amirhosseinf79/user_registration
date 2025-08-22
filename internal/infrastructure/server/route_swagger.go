@@ -1,7 +1,7 @@
 package server
 
-// fiberSwagger "github.com/swaggo/fiber-swagger"
+import fiberSwagger "github.com/swaggo/fiber-swagger"
 
-// func (s server) InitSwaggerRoutes() {
-// 	app.Get("/swagger/*", fiberSwagger.WrapHandler)
-// }
+func (s server) InitSwaggerRoutes() {
+	s.app.Get("/swagger/*", fiberSwagger.WrapHandler)
+}

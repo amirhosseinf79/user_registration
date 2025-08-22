@@ -16,13 +16,15 @@ func NewUserHandler(userService interfaces.UserService) interfaces.UserHandler {
 	}
 }
 
-// GetUserByID
-// @Summary Say Hello
-// @Description Returns Hello World message
-// @Tags example
+// @Summary Get user details
+// @Description Get User Details by ID
+// @Tags user
+// @Accept json
 // @Produce json
-// @Success 200 {object} map[string]string
-// @Router /hello [get]
+// @Param userID path int true "UserID"
+// @Success 200 {object} dto.ResponseUserDetails
+// @Failure 500 {object} dto.responseOneMessage
+// @Router /user/{userID} [get]
 func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 	userID, err := ctx.ParamsInt("userID", 0)
 	if err != nil {
@@ -37,6 +39,15 @@ func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 	return ctx.JSON(userDetails)
 }
 
+// @Summary Get all users
+// @Description Get list of all users
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param filters query dto.FilterUser false "Filters"
+// @Success 200 {array} dto.ResponseUserDetails
+// @Failure 500 {object} dto.responseOneMessage
+// @Router /user/all [get]
 func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 	var filter dto.FilterUser
 	ctx.QueryParser(&filter)
@@ -48,6 +59,15 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 	return ctx.JSON(userDetails)
 }
 
+// @Summary Update user Profile
+// @Description Update User Profile
+// @Tags user
+// @Accept json
+// @Produce json
+// @Param user body dto.UpdateUserDetails true "user"
+// @Success 200 {object} dto.ResponseUserDetails
+// @Failure 500 {object} dto.responseOneMessage
+// @Router /profile/update [post]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 	var fields dto.UpdateUserDetails
 	ctx.BodyParser(&fields)

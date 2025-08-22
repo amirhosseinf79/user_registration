@@ -1,19 +1,247 @@
+basePath: /
+definitions:
+  dto.FieldAuthSendOTP:
+    properties:
+      phoneNumber:
+        type: string
+    required:
+    - phoneNumber
+    type: object
+  dto.FieldAuthVerifyOTP:
+    properties:
+      code:
+        type: string
+      phoneNumber:
+        type: string
+    required:
+    - code
+    - phoneNumber
+    type: object
+  dto.FieldRefreshToken:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
+  dto.ResponseAuthOk:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
+  dto.ResponseUserDetails:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      phoneNumber:
+        type: string
+    type: object
+  dto.UpdateUserDetails:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+    type: object
+  dto.responseOneMessage:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
 info:
   contact: {}
+  description: User OTP Registration API
+  title: User OTP Registration API
+  version: "1.0"
 paths:
-  /hello:
-    get:
-      description: Returns Hello World message
+  /auth/refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh Token
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FieldRefreshToken'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Say Hello
+            items:
+              $ref: '#/definitions/dto.ResponseAuthOk'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+      summary: Refresh Token
       tags:
-      - example
+      - auth
+  /auth/send-otp:
+    post:
+      consumes:
+      - application/json
+      description: Send OTP
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FieldAuthSendOTP'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.responseOneMessage'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+      summary: Send OTP
+      tags:
+      - auth
+  /auth/verify-otp:
+    post:
+      consumes:
+      - application/json
+      description: Verify OTP & Login or Register user
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/dto.FieldAuthVerifyOTP'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseAuthOk'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+      summary: Verify OTP
+      tags:
+      - auth
+  /profile/update:
+    post:
+      consumes:
+      - application/json
+      description: Update User Profile
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDetails'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponseUserDetails'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+      summary: Update user Profile
+      tags:
+      - user
+  /user/{userID}:
+    get:
+      consumes:
+      - application/json
+      description: Get User Details by ID
+      parameters:
+      - description: UserID
+        in: path
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ResponseUserDetails'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+      summary: Get user details
+      tags:
+      - user
+  /user/all:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all users
+      parameters:
+      - in: query
+        name: email
+        type: string
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: phoneNumber
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.ResponseUserDetails'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.responseOneMessage'
+      summary: Get all users
+      tags:
+      - user
+schemes:
+- http
 swagger: "2.0"

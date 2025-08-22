@@ -5,7 +5,6 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/gofiber/fiber/v2"
-	fiberSwagger "github.com/swaggo/fiber-swagger"
 )
 
 type server struct {
@@ -16,11 +15,6 @@ type server struct {
 	app            *fiber.App
 }
 
-// @title Fiber Swagger Example API
-// @version 1.0
-// @description Sample API using Fiber v3 and Swagger
-// @host localhost:3000
-// @BasePath /api/v1
 func NewServer(
 	fieldValidator interfaces.FieldValidatorMiddleware,
 	authValidator interfaces.AuthMiddleware,
@@ -28,8 +22,6 @@ func NewServer(
 	userHandler interfaces.UserHandler,
 ) interfaces.ServerService {
 	app := fiber.New()
-
-	app.Get("/swagger/*", fiberSwagger.WrapHandler)
 
 	return &server{
 		app:            app,
