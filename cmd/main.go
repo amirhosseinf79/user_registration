@@ -18,6 +18,9 @@ import (
 
 // @title User OTP Registration API
 // @version 1.0
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 // @description User OTP Registration API
 // @BasePath /
 // @schemes http

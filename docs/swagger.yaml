@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   dto.FieldAuthSendOTP:
     properties:
@@ -84,7 +83,6 @@ definitions:
     type: object
 info:
   contact: {}
-  description: User OTP Registration API
   title: User OTP Registration API
   version: "1.0"
 paths:
@@ -199,6 +197,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/dto.responseOneMessage'
+      security:
+      - BearerAuth: []
       summary: Update user Profile
       tags:
       - user
@@ -262,6 +262,10 @@ paths:
       summary: Get all users
       tags:
       - user
-schemes:
-- http
+securityDefinitions:
+  BearerAuth:
+    description: User OTP Registration API
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

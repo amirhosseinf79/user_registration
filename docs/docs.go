@@ -152,6 +152,11 @@ const docTemplate = `{
         },
         "/profile/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update User Profile",
                 "consumes": [
                     "application/json"
@@ -413,6 +418,14 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "User OTP Registration API",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
@@ -420,10 +433,10 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/",
-	Schemes:          []string{"http"},
+	BasePath:         "",
+	Schemes:          []string{},
 	Title:            "User OTP Registration API",
-	Description:      "User OTP Registration API",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -1,15 +1,10 @@
 {
-    "schemes": [
-        "http"
-    ],
     "swagger": "2.0",
     "info": {
-        "description": "User OTP Registration API",
         "title": "User OTP Registration API",
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/",
     "paths": {
         "/auth/refresh-token": {
             "post": {
@@ -148,6 +143,11 @@
         },
         "/profile/update": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update User Profile",
                 "consumes": [
                     "application/json"
@@ -408,6 +408,14 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "User OTP Registration API",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

@@ -64,6 +64,7 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 // @Tags user
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param user body dto.UpdateUserDetails true "user"
 // @Success 200 {object} dto.ResponseUserDetails
 // @Failure 500 {object} dto.responseOneMessage
