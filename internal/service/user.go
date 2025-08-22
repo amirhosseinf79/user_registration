@@ -53,7 +53,7 @@ func (u *userService) GetUserList(filter dto.FilterUser) (*dto.ResponseList[dto.
 			PhoneNumber:  user.PhoneNumber,
 			FirstName:    user.FirstName,
 			LastName:     user.LastName,
-			FieldEmail:   dto.FieldEmail{Email: user.Email},
+			Email:        user.Email,
 			RegisteredAt: user.CreatedAt,
 		}
 		userList = append(userList, userDetails)
@@ -72,7 +72,7 @@ func (u *userService) GetUserDetailsByID(userID uint) (*dto.ResponseUserDetails,
 		PhoneNumber:  user.PhoneNumber,
 		FirstName:    user.FirstName,
 		LastName:     user.LastName,
-		FieldEmail:   dto.FieldEmail{Email: user.Email},
+		Email:        user.Email,
 		RegisteredAt: user.CreatedAt,
 	}
 	return &userDetails, nil
@@ -104,7 +104,7 @@ func (u *userService) UpdateUserProfile(userID uint, fields dto.UpdateUserDetail
 		PhoneNumber:  userM.PhoneNumber,
 		FirstName:    userM.FirstName,
 		LastName:     userM.LastName,
-		FieldEmail:   dto.FieldEmail{Email: userM.Email},
+		Email:        userM.Email,
 		RegisteredAt: userM.CreatedAt,
 	}
 	return &userDetails, nil

@@ -16,16 +16,16 @@ type FilterUser struct {
 type ResponseUserDetails struct {
 	ID           uint      `json:"id"`
 	PhoneNumber  string    `json:"phoneNumber"`
+	Email        string    `json:"email" query:"email"`
 	FirstName    string    `json:"firstName"`
 	LastName     string    `json:"lastName"`
 	RegisteredAt time.Time `json:"registeredAt"`
-	FieldEmail
 }
 
 type UpdateUserDetails struct {
+	Email     string `json:"email" query:"email"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
-	FieldEmail
 }
 
 type ResponseUserList struct {
