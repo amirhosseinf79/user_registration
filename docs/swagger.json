@@ -367,6 +367,9 @@
                 },
                 "phoneNumber": {
                     "type": "string"
+                },
+                "registeredAt": {
+                    "type": "string"
                 }
             }
         },

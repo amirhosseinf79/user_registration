@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type FieldEmail struct {
 	Email string `json:"email" query:"email"`
 }
@@ -12,10 +14,11 @@ type FilterUser struct {
 }
 
 type ResponseUserDetails struct {
-	ID          uint   `json:"id"`
-	PhoneNumber string `json:"phoneNumber"`
-	FirstName   string `json:"firstName"`
-	LastName    string `json:"lastName"`
+	ID           uint      `json:"id"`
+	PhoneNumber  string    `json:"phoneNumber"`
+	FirstName    string    `json:"firstName"`
+	LastName     string    `json:"lastName"`
+	RegisteredAt time.Time `json:"registeredAt"`
 	FieldEmail
 }
 

@@ -376,6 +376,9 @@ const docTemplate = `{
                 },
                 "phoneNumber": {
                     "type": "string"
+                },
+                "registeredAt": {
+                    "type": "string"
                 }
             }
         },

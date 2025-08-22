@@ -49,11 +49,12 @@ func (u *userService) GetUserList(filter dto.FilterUser) (*dto.ResponseList[dto.
 	userList := []dto.ResponseUserDetails{}
 	for _, user := range users {
 		userDetails := dto.ResponseUserDetails{
-			ID:          user.ID,
-			PhoneNumber: user.PhoneNumber,
-			FirstName:   user.FirstName,
-			LastName:    user.LastName,
-			FieldEmail:  dto.FieldEmail{Email: user.Email},
+			ID:           user.ID,
+			PhoneNumber:  user.PhoneNumber,
+			FirstName:    user.FirstName,
+			LastName:     user.LastName,
+			FieldEmail:   dto.FieldEmail{Email: user.Email},
+			RegisteredAt: user.CreatedAt,
 		}
 		userList = append(userList, userDetails)
 	}
@@ -67,11 +68,12 @@ func (u *userService) GetUserDetailsByID(userID uint) (*dto.ResponseUserDetails,
 		return nil, err
 	}
 	userDetails := dto.ResponseUserDetails{
-		ID:          user.ID,
-		PhoneNumber: user.PhoneNumber,
-		FirstName:   user.FirstName,
-		LastName:    user.LastName,
-		FieldEmail:  dto.FieldEmail{Email: user.Email},
+		ID:           user.ID,
+		PhoneNumber:  user.PhoneNumber,
+		FirstName:    user.FirstName,
+		LastName:     user.LastName,
+		FieldEmail:   dto.FieldEmail{Email: user.Email},
+		RegisteredAt: user.CreatedAt,
 	}
 	return &userDetails, nil
 }
