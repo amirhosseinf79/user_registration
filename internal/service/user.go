@@ -100,11 +100,12 @@ func (u *userService) UpdateUserProfile(userID uint, fields dto.UpdateUserDetail
 	}
 
 	userDetails := dto.ResponseUserDetails{
-		ID:          userM.ID,
-		PhoneNumber: userM.PhoneNumber,
-		FirstName:   userM.FirstName,
-		LastName:    userM.LastName,
-		FieldEmail:  dto.FieldEmail{Email: userM.Email},
+		ID:           userM.ID,
+		PhoneNumber:  userM.PhoneNumber,
+		FirstName:    userM.FirstName,
+		LastName:     userM.LastName,
+		FieldEmail:   dto.FieldEmail{Email: userM.Email},
+		RegisteredAt: userM.CreatedAt,
 	}
 	return &userDetails, nil
 }
