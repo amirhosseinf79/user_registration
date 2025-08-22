@@ -55,10 +55,10 @@ func (r *userRepository) CheckMobileExists(mobile string) (exists bool, err erro
 func (r *userRepository) GetAllByFilter(filter dto.FilterUser) (users []*model.User, total int64, err error) {
 	query := r.db.Model(&model.User{})
 	if filter.PhoneNumber != "" {
-		query = query.Where("phone_number = ?", filter.PhoneNumber)
+		query = query.Where("phone_number LIKE ?", "%"+filter.PhoneNumber+"%")
 	}
 	if filter.Email != "" {
-		query = query.Where("email = ?", filter.Email)
+		query = query.Where("email LIKE ?", "%"+filter.Email+"%")
 	}
 	if filter.Name != "" {
 		query = query.Where("concat(first_name, ' ', last_name) like ?", "%"+filter.Name+"%")
