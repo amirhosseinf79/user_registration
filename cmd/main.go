@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/persistence"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/server"
 	"github.com/amirhosseinf79/user_registration/internal/service"
+	"github.com/joho/godotenv"
 )
 
 // @title User OTP Registration API
@@ -20,6 +22,12 @@ import (
 // @BasePath /
 // @schemes http
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Printf("Error loading .env file: %v\n", err)
+	}
+
 	serverPort := os.Getenv("PORT")
 	secret := os.Getenv("SECRET")
 	gormConnStr := os.Getenv("SQLDB")
