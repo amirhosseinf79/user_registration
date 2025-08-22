@@ -2,7 +2,7 @@
 
 A robust Golang backend service implementing OTP-based login and registration with comprehensive user management features.
 
-## 🚀 Features
+## Features
 
 - **OTP Authentication**: Phone number-based registration and login
 - **Rate Limiting**: 3 OTP requests per phone number within 10 minutes
@@ -12,27 +12,27 @@ A robust Golang backend service implementing OTP-based login and registration wi
 - **Swagger Documentation**: Complete API documentation
 - **Docker Support**: Containerized deployment ready
 
-## 🏗️ Architecture
+## Architecture
 
-- **Backend**: Golang with Gin framework
+- **Backend**: Golang with Fiber framework
 - **Primary Database**: PostgreSQL for user data persistence
 - **Cache Layer**: Redis for OTP storage and rate limiting
 - **Authentication**: JWT tokens
 - **Documentation**: Swagger/OpenAPI
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Docker and Docker Compose
 - Git
 
-## 🐳 Docker Setup
+## Docker Setup
 
 ### Quick Start
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd otp-service
+   git clone git@github.com:amirhosseinf79/user_registration.git
+   cd user_registration
    ```
 
 2. **Create environment file**
@@ -54,28 +54,21 @@ A robust Golang backend service implementing OTP-based login and registration wi
 Create a `.env` file with:
 
 ```env
-# Database
-DB_HOST=postgres
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=password
-DB_NAME=otp_service
-
-# Redis
-REDIS_HOST=redis
-REDIS_PORT=6379
-
-# JWT
-JWT_SECRET=your-super-secret-key
-JWT_EXPIRY=24h
-
-# Server
+# Server configuration
 PORT=8080
 
-# OTP Settings
-OTP_EXPIRY_MINUTES=2
-MAX_OTP_REQUESTS=3
-RATE_LIMIT_WINDOW_MINUTES=10
+# Application secret key
+SECRET=your_secret_key_here
+
+# Database connection string (GORM)
+SQLDB="host=db user=postgres password=postgres dbname=user_otp port=5432 sslmode=disable TimeZone=Asia/Tehran"
+
+# Redis configuration
+RedisServer=localhost:6379
+RedisPass=your_redis_password_here
+
+# Debug mode
+DEBUG=true
 ```
 
 ### Docker Services
@@ -134,7 +127,7 @@ docker-compose up --build
 docker-compose down -v
 ```
 
-## 🗄️ Database Choice Justification
+## Database Choice Justification
 
 ### Why PostgreSQL + Redis?
 
@@ -162,25 +155,15 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 - **SQLite**: Not suitable for production concurrent access
 - **In-Memory Only**: Data loss on restart, not suitable for user data
 
-## 📊 Performance Benefits
-
-| Operation | Database | Response Time |
-|-----------|----------|---------------|
-| User Registration | PostgreSQL | ~50ms |
-| OTP Generation | Redis | <1ms |
-| OTP Verification | Redis | <1ms |
-| User Search | PostgreSQL | ~10ms |
-| Rate Limit Check | Redis | <1ms |
-
 ## 🔧 API Endpoints
 
-- `POST /api/v1/auth/request-otp` - Request OTP
-- `POST /api/v1/auth/verify-otp` - Verify OTP and login/register
-- `GET /api/v1/users` - Get users (with pagination and search)
-- `GET /api/v1/users/:id` - Get user by ID
-- `GET /health` - Health check
+- `POST /auth/send-otp` - Request OTP
+- `POST /auth/verify-otp` - Verify OTP and login/register
+- `GET /user/all` - Get users (with pagination and search)
+- `GET /user/:userID` - Get user by ID
+- `GET /profile/update` - Update user Profile
 
-## 🛠️ Development
+## Development
 
 ### Local Development
 ```bash
@@ -191,27 +174,7 @@ go mod download
 go run main.go
 ```
 
-### Database Schema
-```sql
-CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    phone_number VARCHAR(15) UNIQUE NOT NULL,
-    registration_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMPTZ,
-    is_active BOOLEAN DEFAULT TRUE
-);
-```
-
-### Redis Data Structure
-```redis
-# OTP Storage (2 min expiry)
-SET otp:+1234567890 "123456" EX 120
-
-# Rate Limiting (10 min expiry)
-SET rate_limit:+1234567890 3 EX 600
-```
-
-## 🔒 Security Features
+## Security Features
 
 - JWT token authentication
 - Rate limiting to prevent OTP spam
@@ -219,32 +182,6 @@ SET rate_limit:+1234567890 3 EX 600
 - Secure OTP generation (6-digit random)
 - Password-less authentication
 
-## 📖 Documentation
+## Documentation
 
 Complete API documentation is available at `/swagger/index.html` when the application is running.
-
-## 🚀 Production Deployment
-
-For production deployment:
-
-1. Use environment-specific `.env` files
-2. Set up PostgreSQL with read replicas
-3. Configure Redis clustering for high availability
-4. Implement proper logging and monitoring
-5. Use reverse proxy (nginx) for load balancing
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
----
-
-**Built with ❤️ using Golang, PostgreSQL, and Redis**
