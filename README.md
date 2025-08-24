@@ -186,7 +186,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 ```
 
 ## Response:
-```
+```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
