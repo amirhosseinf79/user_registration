@@ -161,7 +161,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 - `POST /auth/verify-otp` - Verify OTP and login/register
 - `GET /user/all` - Get users (with pagination and search)
 - `GET /user/:userID` - Get user by ID
-- `POST /profile/update` - Update user Profile
+- `PUT /profile/update` - Update user Profile
 
 ## Request: POST /auth/send-otp
 ```json
