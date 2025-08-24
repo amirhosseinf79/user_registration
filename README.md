@@ -201,7 +201,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 go mod download
 
 # Run locally (requires PostgreSQL and Redis)
-go run main.go
+go run ./cmd/main.go
 ```
 
 ## Security Features
