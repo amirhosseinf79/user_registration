@@ -17,7 +17,7 @@ A robust Golang backend service implementing OTP-based login and registration wi
 - **Backend**: Golang with Fiber framework
 - **Primary Database**: PostgreSQL for user data persistence
 - **Cache Layer**: Redis for OTP storage and rate limiting
-- **Authentication**: JWT tokens
+- **Authentication**: JWT Bearer tokens
 - **Documentation**: Swagger/OpenAPI
 
 ## Prerequisites
@@ -155,13 +155,43 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 - **SQLite**: Not suitable for production concurrent access
 - **In-Memory Only**: Data loss on restart, not suitable for user data
 
-## 🔧 API Endpoints
+## API Endpoints
 
 - `POST /auth/send-otp` - Request OTP
 - `POST /auth/verify-otp` - Verify OTP and login/register
 - `GET /user/all` - Get users (with pagination and search)
 - `GET /user/:userID` - Get user by ID
-- `GET /profile/update` - Update user Profile
+- `POST /profile/update` - Update user Profile
+
+## Request: POST /auth/send-otp
+```json
+{
+    "phoneNumber": "09334455678"
+}
+```
+
+## Response:
+```json
+{
+  "message": "ok"
+}
+```
+
+## Request: POST /auth/verify-otp
+```json
+{
+  "phone": "09334455678",
+  "code": "123456"
+}
+```
+
+## Response:
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+}
+```
 
 ## Development
 
@@ -171,7 +201,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 go mod download
 
 # Run locally (requires PostgreSQL and Redis)
-go run main.go
+go run ./cmd/main.go
 ```
 
 ## Security Features
