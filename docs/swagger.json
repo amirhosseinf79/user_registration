@@ -142,7 +142,7 @@
             }
         },
         "/profile/update": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []

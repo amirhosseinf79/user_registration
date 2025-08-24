@@ -151,7 +151,7 @@ const docTemplate = `{
             }
         },
         "/profile/update": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "BearerAuth": []

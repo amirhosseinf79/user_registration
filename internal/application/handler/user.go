@@ -68,7 +68,7 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 // @Param user body dto.UpdateUserDetails true "user"
 // @Success 200 {object} dto.ResponseUserDetails
 // @Failure 500 {object} dto.responseOneMessage
-// @Router /profile/update [post]
+// @Router /profile/update [put]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 	var fields dto.UpdateUserDetails
 	ctx.BodyParser(&fields)
