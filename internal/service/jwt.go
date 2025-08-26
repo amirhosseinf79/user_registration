@@ -4,7 +4,7 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	auth_response "github.com/amirhosseinf79/user_registration/internal/dto/auth/response"
+	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/gofiber/fiber/v2"
 )
@@ -21,7 +21,7 @@ func NewJWTService(jwtRepo repository.JWTRepository, tokenRepo repository.TokenR
 	}
 }
 
-func (j *jwtService) GenerateAuthTokens(userID uint) (*auth_response.JWT, *shared_dto.ResponseOneMessage) {
+func (j *jwtService) GenerateAuthTokens(userID uint) (*auth.ResponseJWT, *shared_dto.ResponseOneMessage) {
 	accessToken, err := j.jwtRepo.GenerateToken(userID, false)
 	if err != nil {
 		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
@@ -54,7 +54,7 @@ func (j *jwtService) GenerateAuthTokens(userID uint) (*auth_response.JWT, *share
 		return nil, result
 	}
 
-	token := auth_response.JWT{
+	token := auth.ResponseJWT{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}

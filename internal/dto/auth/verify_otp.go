@@ -1,4 +1,4 @@
-package auth_request
+package auth
 
 type FieldVerifyOTP struct {
 	FieldSendOTP

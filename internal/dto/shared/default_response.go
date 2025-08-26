@@ -1,4 +1,4 @@
-package shared_dto
+package shared
 
 import "github.com/gofiber/fiber/v2"
 

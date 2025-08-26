@@ -1,9 +1,8 @@
 package interfaces
 
 import (
-	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
-	user_request "github.com/amirhosseinf79/user_registration/internal/dto/user/request"
-	user_response "github.com/amirhosseinf79/user_registration/internal/dto/user/response"
+	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	"github.com/amirhosseinf79/user_registration/internal/dto/user"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -14,8 +13,8 @@ type UserHandler interface {
 }
 
 type UserService interface {
-	RegisterUserByNumber(phoneNumber string) (*user_response.Details, *shared_dto.ResponseOneMessage)
-	GetUserList(filter user_request.FilterUser) (*shared_dto.ResponseList[user_response.Details], *shared_dto.ResponseOneMessage)
-	UpdateUserProfile(userID uint, fields user_request.UpdateDetails) (*user_response.Details, *shared_dto.ResponseOneMessage)
-	GetUserDetailsByID(userID uint) (*user_response.Details, *shared_dto.ResponseOneMessage)
+	RegisterUserByNumber(phoneNumber string) (*user.ResponseDetails, *shared.ResponseOneMessage)
+	GetUserList(filter user.FilterUser) (*shared.ResponseList[user.ResponseDetails], *shared.ResponseOneMessage)
+	UpdateUserProfile(userID uint, fields user.FieldUpdateDetails) (*user.ResponseDetails, *shared.ResponseOneMessage)
+	GetUserDetailsByID(userID uint) (*user.ResponseDetails, *shared.ResponseOneMessage)
 }

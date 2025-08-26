@@ -2,8 +2,7 @@ package service
 
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	auth_request "github.com/amirhosseinf79/user_registration/internal/dto/auth/request"
-	auth_response "github.com/amirhosseinf79/user_registration/internal/dto/auth/response"
+	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	sms_dto "github.com/amirhosseinf79/user_registration/internal/dto/sms"
 	"github.com/gofiber/fiber/v2"
@@ -30,7 +29,7 @@ func NewAuthService(
 	}
 }
 
-func (a *authService) SendOTP(fields auth_request.FieldSendOTP) *shared_dto.ResponseOneMessage {
+func (a *authService) SendOTP(fields auth.FieldSendOTP) *shared_dto.ResponseOneMessage {
 	generatedCode, err := a.otpService.StoreCode(fields)
 	if err != nil {
 		return err
@@ -48,7 +47,7 @@ func (a *authService) SendOTP(fields auth_request.FieldSendOTP) *shared_dto.Resp
 	return err
 }
 
-func (a *authService) LoginByOTP(fields auth_request.FieldVerifyOTP) (*auth_response.JWT, *shared_dto.ResponseOneMessage) {
+func (a *authService) LoginByOTP(fields auth.FieldVerifyOTP) (*auth.ResponseJWT, *shared_dto.ResponseOneMessage) {
 	ok, err := a.otpService.CheckOTPCode(fields)
 	if !ok {
 		return nil, err
@@ -67,7 +66,7 @@ func (a *authService) LoginByOTP(fields auth_request.FieldVerifyOTP) (*auth_resp
 	return token, nil
 }
 
-func (a *authService) RefreshToken(oldRefreshToken string) (*auth_response.JWT, *shared_dto.ResponseOneMessage) {
+func (a *authService) RefreshToken(oldRefreshToken string) (*auth.ResponseJWT, *shared_dto.ResponseOneMessage) {
 	userID, err := a.jwtService.GetUserIDByRefreshToken(oldRefreshToken)
 	if err != nil {
 		return nil, err

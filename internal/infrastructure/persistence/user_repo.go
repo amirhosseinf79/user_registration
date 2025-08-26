@@ -3,7 +3,7 @@ package persistence
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	user_request "github.com/amirhosseinf79/user_registration/internal/dto/user/request"
+	"github.com/amirhosseinf79/user_registration/internal/dto/user"
 	"gorm.io/gorm"
 )
 
@@ -52,7 +52,7 @@ func (r *userRepository) CheckMobileExists(mobile string) (exists bool, err erro
 	return count > 0, nil
 }
 
-func (r *userRepository) GetAllByFilter(filter user_request.FilterUser) (users []*model.User, total int64, err error) {
+func (r *userRepository) GetAllByFilter(filter user.FilterUser) (users []*model.User, total int64, err error) {
 	query := r.db.Model(&model.User{})
 	if filter.PhoneNumber != "" {
 		query = query.Where("phone_number LIKE ?", "%"+filter.PhoneNumber+"%")

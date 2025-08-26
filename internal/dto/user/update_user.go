@@ -1,6 +1,6 @@
-package user_request
+package user
 
-type UpdateDetails struct {
+type FieldUpdateDetails struct {
 	Email     string `json:"email"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`

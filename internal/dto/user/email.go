@@ -1,4 +1,4 @@
-package user_request
+package user
 
 type FieldEmail struct {
 	Email string `json:"email" query:"email"`

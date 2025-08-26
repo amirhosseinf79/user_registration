@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	auth_request "github.com/amirhosseinf79/user_registration/internal/dto/auth/request"
+	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,13 +21,13 @@ func NewAuthHandler(authService interfaces.AuthService) interfaces.AuthHandler {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param fields body auth_request.FieldSendOTP true "Fields"
-// @Success 200 {array} shared_dto.ResponseOneMessage
-// @Failure 400 {object} shared_dto.ResponseOneMessage
-// @Failure 403 {object} shared_dto.ResponseOneMessage
+// @Param fields body auth.FieldSendOTP true "Fields"
+// @Success 200 {array} shared.ResponseOneMessage
+// @Failure 400 {object} shared.ResponseOneMessage
+// @Failure 403 {object} shared.ResponseOneMessage
 // @Router /auth/send-otp [post]
 func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
-	var fields auth_request.FieldSendOTP
+	var fields auth.FieldSendOTP
 	ctx.BodyParser(&fields)
 	response := ah.authService.SendOTP(fields)
 	return ctx.Status(response.Code).JSON(response)
@@ -38,12 +38,12 @@ func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param fields body auth_request.FieldVerifyOTP true "Fields"
-// @Success 200 {array} auth_response.JWT
-// @Failure 401 {object} shared_dto.ResponseOneMessage
+// @Param fields body auth.FieldVerifyOTP true "Fields"
+// @Success 200 {array} auth.ResponseJWT
+// @Failure 401 {object} shared.ResponseOneMessage
 // @Router /auth/verify-otp [post]
 func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
-	var fields auth_request.FieldVerifyOTP
+	var fields auth.FieldVerifyOTP
 	ctx.BodyParser(&fields)
 	response, err := ah.authService.LoginByOTP(fields)
 	if err != nil {
@@ -57,12 +57,12 @@ func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param fields body auth_request.FieldRefreshToken true "Fields"
-// @Success 200 {array} auth_response.JWT
-// @Failure 401 {object} shared_dto.ResponseOneMessage
+// @Param fields body auth.FieldRefreshToken true "Fields"
+// @Success 200 {array} auth.ResponseJWT
+// @Failure 401 {object} shared.ResponseOneMessage
 // @Router /auth/refresh-token [post]
 func (ah *authHandler) RefreshToken(ctx *fiber.Ctx) error {
-	var fields auth_request.FieldRefreshToken
+	var fields auth.FieldRefreshToken
 	ctx.BodyParser(&fields)
 	response, err := ah.authService.RefreshToken(fields.RefreshToken)
 	if err != nil {

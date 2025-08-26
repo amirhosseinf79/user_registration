@@ -1,6 +1,6 @@
-package auth_response
+package auth
 
-type JWT struct {
+type ResponseJWT struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
 }

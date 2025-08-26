@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	user_request "github.com/amirhosseinf79/user_registration/internal/dto/user/request"
+	"github.com/amirhosseinf79/user_registration/internal/dto/user"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,9 +22,9 @@ func NewUserHandler(userService interfaces.UserService) interfaces.UserHandler {
 // @Accept json
 // @Produce json
 // @Param userID path int true "UserID"
-// @Success 200 {object} user_response.Details
-// @Failure 404 {object} shared_dto.ResponseOneMessage
-// @Failure 500 {object} shared_dto.ResponseOneMessage
+// @Success 200 {object} user.ResponseDetails
+// @Failure 404 {object} shared.ResponseOneMessage
+// @Failure 500 {object} shared.ResponseOneMessage
 // @Router /user/{userID} [get]
 func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 	userID, _ := ctx.ParamsInt("userID", 0)
@@ -40,12 +40,12 @@ func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param filters query user_request.FilterUser false "Filters"
-// @Success 200 {object} user_response.List
-// @Failure 500 {object} shared_dto.ResponseOneMessage
+// @Param filters query user.FilterUser false "Filters"
+// @Success 200 {object} user.ResponseList
+// @Failure 500 {object} shared.ResponseOneMessage
 // @Router /user/all [get]
 func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
-	var filter user_request.FilterUser
+	var filter user.FilterUser
 	ctx.QueryParser(&filter)
 	userDetails, err := uh.userService.GetUserList(filter)
 	if err != nil {
@@ -60,12 +60,12 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param user body user_request.UpdateDetails true "user"
-// @Success 200 {object} user_response.Details
-// @Failure 500 {object} shared_dto.ResponseOneMessage
+// @Param user body user.FieldUpdateDetails true "user"
+// @Success 200 {object} user.ResponseDetails
+// @Failure 500 {object} shared.ResponseOneMessage
 // @Router /profile/update [patch]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
-	var fields user_request.UpdateDetails
+	var fields user.FieldUpdateDetails
 	ctx.BodyParser(&fields)
 	userID := ctx.Locals("userID").(uint)
 	userDetails, err := uh.userService.UpdateUserProfile(userID, fields)

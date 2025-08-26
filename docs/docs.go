@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth_request.FieldRefreshToken"
+                            "$ref": "#/definitions/auth.FieldRefreshToken"
                         }
                     }
                 ],
@@ -45,14 +45,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/auth_response.JWT"
+                                "$ref": "#/definitions/auth.ResponseJWT"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     }
                 }
@@ -78,7 +78,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth_request.FieldSendOTP"
+                            "$ref": "#/definitions/auth.FieldSendOTP"
                         }
                     }
                 ],
@@ -88,20 +88,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                                "$ref": "#/definitions/shared.ResponseOneMessage"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     }
                 }
@@ -127,7 +127,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth_request.FieldVerifyOTP"
+                            "$ref": "#/definitions/auth.FieldVerifyOTP"
                         }
                     }
                 ],
@@ -137,14 +137,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/auth_response.JWT"
+                                "$ref": "#/definitions/auth.ResponseJWT"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     }
                 }
@@ -175,7 +175,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user_request.UpdateDetails"
+                            "$ref": "#/definitions/user.FieldUpdateDetails"
                         }
                     }
                 ],
@@ -183,13 +183,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_response.Details"
+                            "$ref": "#/definitions/user.ResponseDetails"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     }
                 }
@@ -239,13 +239,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_response.List"
+                            "$ref": "#/definitions/user.ResponseList"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     }
                 }
@@ -277,19 +277,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user_response.Details"
+                            "$ref": "#/definitions/user.ResponseDetails"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     }
                 }
@@ -297,7 +297,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth_request.FieldRefreshToken": {
+        "auth.FieldRefreshToken": {
             "type": "object",
             "required": [
                 "refreshToken"
@@ -308,7 +308,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_request.FieldSendOTP": {
+        "auth.FieldSendOTP": {
             "type": "object",
             "required": [
                 "phoneNumber"
@@ -319,7 +319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_request.FieldVerifyOTP": {
+        "auth.FieldVerifyOTP": {
             "type": "object",
             "required": [
                 "code",
@@ -334,7 +334,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth_response.JWT": {
+        "auth.ResponseJWT": {
             "type": "object",
             "properties": {
                 "accessToken": {
@@ -345,7 +345,7 @@ const docTemplate = `{
                 }
             }
         },
-        "shared_dto.MetaPagination": {
+        "shared.MetaPagination": {
             "type": "object",
             "properties": {
                 "currentPage": {
@@ -365,7 +365,7 @@ const docTemplate = `{
                 }
             }
         },
-        "shared_dto.ResponseOneMessage": {
+        "shared.ResponseOneMessage": {
             "type": "object",
             "properties": {
                 "code": {
@@ -376,7 +376,7 @@ const docTemplate = `{
                 }
             }
         },
-        "user_request.UpdateDetails": {
+        "user.FieldUpdateDetails": {
             "type": "object",
             "properties": {
                 "email": {
@@ -390,7 +390,7 @@ const docTemplate = `{
                 }
             }
         },
-        "user_response.Details": {
+        "user.ResponseDetails": {
             "type": "object",
             "properties": {
                 "email": {
@@ -413,17 +413,17 @@ const docTemplate = `{
                 }
             }
         },
-        "user_response.List": {
+        "user.ResponseList": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/user_response.Details"
+                        "$ref": "#/definitions/user.ResponseDetails"
                     }
                 },
                 "meta": {
-                    "$ref": "#/definitions/shared_dto.MetaPagination"
+                    "$ref": "#/definitions/shared.MetaPagination"
                 }
             }
         }

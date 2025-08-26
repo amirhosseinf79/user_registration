@@ -1,8 +1,8 @@
-package user_response
+package user
 
 import "time"
 
-type Details struct {
+type ResponseDetails struct {
 	ID           uint      `json:"id"`
 	PhoneNumber  string    `json:"phoneNumber"`
 	Email        string    `json:"email" query:"email"`

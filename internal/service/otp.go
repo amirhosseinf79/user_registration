@@ -4,7 +4,7 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	auth_request "github.com/amirhosseinf79/user_registration/internal/dto/auth/request"
+	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/pkg"
 	"github.com/gofiber/fiber/v2"
@@ -21,7 +21,7 @@ func NewOTPService(otpRepo repository.OTPRepository) interfaces.OTPStoreService 
 	}
 }
 
-func (o *otpService) StoreCode(fields auth_request.FieldSendOTP) (string, *shared_dto.ResponseOneMessage) {
+func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *shared_dto.ResponseOneMessage) {
 	canGenerate, err := o.otpRepo.CanSetOTP(fields.PhoneNumber)
 	if err != nil {
 		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
@@ -62,7 +62,7 @@ func (o *otpService) StoreCode(fields auth_request.FieldSendOTP) (string, *share
 	return generatedCode, nil
 }
 
-func (o *otpService) CheckOTPCode(fields auth_request.FieldVerifyOTP) (bool, *shared_dto.ResponseOneMessage) {
+func (o *otpService) CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared_dto.ResponseOneMessage) {
 	savedCode, err := o.otpRepo.GetOTPByMobile(fields.PhoneNumber)
 	if err != nil {
 		if err != redis.Nil {
