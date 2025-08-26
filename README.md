@@ -155,13 +155,16 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 - **SQLite**: Not suitable for production concurrent access
 - **In-Memory Only**: Data loss on restart, not suitable for user data
 
-## API Endpoints
+### API Endpoints
 
-- `POST /auth/send-otp` - Request OTP
-- `POST /auth/verify-otp` - Verify OTP and login/register
-- `GET /user/all` - Get users (with pagination and search)
-- `GET /user/:userID` - Get user by ID
-- `POST /profile/update` - Update user Profile
+| Method | Endpoint          | Description                 |
+|--------|------------------|-----------------------------|
+| POST   | /auth/send-otp    | Request OTP                 |
+| POST   | /auth/verify-otp  | Verify OTP and login/register |
+| GET    | /user/all         | Get users (with pagination & search) |
+| GET    | /user/:userID     | Get user by ID              |
+| PUT    | /profile/update   | Update user profile         |
+
 
 ## Request: POST /auth/send-otp
 ```json
