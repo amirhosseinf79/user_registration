@@ -12,7 +12,11 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/database"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/persistence"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/server"
-	"github.com/amirhosseinf79/user_registration/internal/service"
+	"github.com/amirhosseinf79/user_registration/internal/service/auth"
+	"github.com/amirhosseinf79/user_registration/internal/service/jwt"
+	"github.com/amirhosseinf79/user_registration/internal/service/otp"
+	"github.com/amirhosseinf79/user_registration/internal/service/sms"
+	"github.com/amirhosseinf79/user_registration/internal/service/user"
 	"github.com/joho/godotenv"
 )
 
@@ -58,12 +62,12 @@ func main() {
 	userRepo := persistence.NewUserRepository(gormDB)
 	jwtRepo := persistence.NewJWTRepository(secret, accessTokenExp, refreshRokenExp)
 
-	jwtService := service.NewJWTService(jwtRepo, tokenRepo)
-	otpService := service.NewOTPService(otpRepo)
-	userService := service.NewUserService(userRepo)
+	jwtService := jwt.NewJWTService(jwtRepo, tokenRepo)
+	otpService := otp.NewOTPService(otpRepo)
+	userService := user.NewUserService(userRepo)
 
-	smsService := service.NewSMSService()
-	authService := service.NewAuthService(
+	smsService := sms.NewSMSService()
+	authService := auth.NewAuthService(
 		jwtService,
 		userService,
 		otpService,
