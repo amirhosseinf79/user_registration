@@ -6,7 +6,7 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -61,7 +61,7 @@ func (o *otpRepository) SaveOTP(otp *model.OTP) error {
 func (o *otpRepository) GetOTPByMobile(mobile string) (string, error) {
 	code, err := o.client.Get(o.ctx, o.prefix+mobile).Result()
 	if err == redis.Nil {
-		return "", dto.ErrObjectNotFound
+		return "", shared_dto.ErrUsertNotFound
 	}
 	if err != nil {
 		return "", err
@@ -72,7 +72,7 @@ func (o *otpRepository) GetOTPByMobile(mobile string) (string, error) {
 func (o *otpRepository) DeleteOTP(mobile string) error {
 	err := o.client.Del(o.ctx, o.prefix+mobile).Err()
 	if err == redis.Nil {
-		return dto.ErrObjectNotFound
+		return shared_dto.ErrUsertNotFound
 	}
 	if err != nil {
 		return err

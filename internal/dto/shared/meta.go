@@ -1,4 +1,4 @@
-package dto
+package shared_dto
 
 type FieldPagination struct {
 	Page     int `query:"page"`

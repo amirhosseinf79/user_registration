@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.FieldRefreshToken"
+                            "$ref": "#/definitions/auth_request.FieldRefreshToken"
                         }
                     }
                 ],
@@ -45,14 +45,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.ResponseAuthOk"
+                                "$ref": "#/definitions/auth_response.JWT"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     }
                 }
@@ -78,7 +78,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.FieldAuthSendOTP"
+                            "$ref": "#/definitions/auth_request.FieldSendOTP"
                         }
                     }
                 ],
@@ -88,20 +88,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.responseOneMessage"
+                                "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     }
                 }
@@ -127,7 +127,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.FieldAuthVerifyOTP"
+                            "$ref": "#/definitions/auth_request.FieldVerifyOTP"
                         }
                     }
                 ],
@@ -137,21 +137,21 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.ResponseAuthOk"
+                                "$ref": "#/definitions/auth_response.JWT"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     }
                 }
             }
         },
         "/profile/update": {
-            "put": {
+            "patch": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -175,7 +175,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateUserDetails"
+                            "$ref": "#/definitions/user_request.UpdateDetails"
                         }
                     }
                 ],
@@ -183,13 +183,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ResponseUserDetails"
+                            "$ref": "#/definitions/user_response.Details"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     }
                 }
@@ -239,13 +239,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ResponseUserList"
+                            "$ref": "#/definitions/user_response.List"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     }
                 }
@@ -277,13 +277,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.ResponseUserDetails"
+                            "$ref": "#/definitions/user_response.Details"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/dto.responseOneMessage"
+                            "$ref": "#/definitions/shared_dto.ResponseOneMessage"
                         }
                     }
                 }
@@ -291,7 +297,18 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.FieldAuthSendOTP": {
+        "auth_request.FieldRefreshToken": {
+            "type": "object",
+            "required": [
+                "refreshToken"
+            ],
+            "properties": {
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth_request.FieldSendOTP": {
             "type": "object",
             "required": [
                 "phoneNumber"
@@ -302,7 +319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.FieldAuthVerifyOTP": {
+        "auth_request.FieldVerifyOTP": {
             "type": "object",
             "required": [
                 "code",
@@ -317,18 +334,18 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.FieldRefreshToken": {
+        "auth_response.JWT": {
             "type": "object",
-            "required": [
-                "refreshToken"
-            ],
             "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
                 "refreshToken": {
                     "type": "string"
                 }
             }
         },
-        "dto.MetaPagination": {
+        "shared_dto.MetaPagination": {
             "type": "object",
             "properties": {
                 "currentPage": {
@@ -348,18 +365,32 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.ResponseAuthOk": {
+        "shared_dto.ResponseOneMessage": {
             "type": "object",
             "properties": {
-                "accessToken": {
-                    "type": "string"
+                "code": {
+                    "type": "integer"
                 },
-                "refreshToken": {
+                "message": {
                     "type": "string"
                 }
             }
         },
-        "dto.ResponseUserDetails": {
+        "user_request.UpdateDetails": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_response.Details": {
             "type": "object",
             "properties": {
                 "email": {
@@ -382,42 +413,17 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.ResponseUserList": {
+        "user_response.List": {
             "type": "object",
             "properties": {
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.ResponseUserDetails"
+                        "$ref": "#/definitions/user_response.Details"
                     }
                 },
                 "meta": {
-                    "$ref": "#/definitions/dto.MetaPagination"
-                }
-            }
-        },
-        "dto.UpdateUserDetails": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "lastName": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.responseOneMessage": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "message": {
-                    "type": "string"
+                    "$ref": "#/definitions/shared_dto.MetaPagination"
                 }
             }
         }

@@ -1,12 +1,19 @@
 definitions:
-  dto.FieldAuthSendOTP:
+  auth_request.FieldRefreshToken:
+    properties:
+      refreshToken:
+        type: string
+    required:
+    - refreshToken
+    type: object
+  auth_request.FieldSendOTP:
     properties:
       phoneNumber:
         type: string
     required:
     - phoneNumber
     type: object
-  dto.FieldAuthVerifyOTP:
+  auth_request.FieldVerifyOTP:
     properties:
       code:
         type: string
@@ -16,14 +23,14 @@ definitions:
     - code
     - phoneNumber
     type: object
-  dto.FieldRefreshToken:
+  auth_response.JWT:
     properties:
+      accessToken:
+        type: string
       refreshToken:
         type: string
-    required:
-    - refreshToken
     type: object
-  dto.MetaPagination:
+  shared_dto.MetaPagination:
     properties:
       currentPage:
         type: integer
@@ -36,14 +43,23 @@ definitions:
       totalCount:
         type: integer
     type: object
-  dto.ResponseAuthOk:
+  shared_dto.ResponseOneMessage:
     properties:
-      accessToken:
-        type: string
-      refreshToken:
+      code:
+        type: integer
+      message:
         type: string
     type: object
-  dto.ResponseUserDetails:
+  user_request.UpdateDetails:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+    type: object
+  user_response.Details:
     properties:
       email:
         type: string
@@ -58,30 +74,14 @@ definitions:
       registeredAt:
         type: string
     type: object
-  dto.ResponseUserList:
+  user_response.List:
     properties:
       items:
         items:
-          $ref: '#/definitions/dto.ResponseUserDetails'
+          $ref: '#/definitions/user_response.Details'
         type: array
       meta:
-        $ref: '#/definitions/dto.MetaPagination'
-    type: object
-  dto.UpdateUserDetails:
-    properties:
-      email:
-        type: string
-      firstName:
-        type: string
-      lastName:
-        type: string
-    type: object
-  dto.responseOneMessage:
-    properties:
-      code:
-        type: integer
-      message:
-        type: string
+        $ref: '#/definitions/shared_dto.MetaPagination'
     type: object
 info:
   contact: {}
@@ -99,7 +99,7 @@ paths:
         name: fields
         required: true
         schema:
-          $ref: '#/definitions/dto.FieldRefreshToken'
+          $ref: '#/definitions/auth_request.FieldRefreshToken'
       produces:
       - application/json
       responses:
@@ -107,12 +107,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/dto.ResponseAuthOk'
+              $ref: '#/definitions/auth_response.JWT'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
       summary: Refresh Token
       tags:
       - auth
@@ -127,7 +127,7 @@ paths:
         name: fields
         required: true
         schema:
-          $ref: '#/definitions/dto.FieldAuthSendOTP'
+          $ref: '#/definitions/auth_request.FieldSendOTP'
       produces:
       - application/json
       responses:
@@ -135,16 +135,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/dto.responseOneMessage'
+              $ref: '#/definitions/shared_dto.ResponseOneMessage'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
       summary: Send OTP
       tags:
       - auth
@@ -159,7 +159,7 @@ paths:
         name: fields
         required: true
         schema:
-          $ref: '#/definitions/dto.FieldAuthVerifyOTP'
+          $ref: '#/definitions/auth_request.FieldVerifyOTP'
       produces:
       - application/json
       responses:
@@ -167,17 +167,17 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/dto.ResponseAuthOk'
+              $ref: '#/definitions/auth_response.JWT'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
       summary: Verify OTP
       tags:
       - auth
   /profile/update:
-    put:
+    patch:
       consumes:
       - application/json
       description: Update User Profile
@@ -187,18 +187,18 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/dto.UpdateUserDetails'
+          $ref: '#/definitions/user_request.UpdateDetails'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.ResponseUserDetails'
+            $ref: '#/definitions/user_response.Details'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
       security:
       - BearerAuth: []
       summary: Update user Profile
@@ -221,11 +221,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.ResponseUserDetails'
+            $ref: '#/definitions/user_response.Details'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
       summary: Get user details
       tags:
       - user
@@ -256,11 +260,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.ResponseUserList'
+            $ref: '#/definitions/user_response.List'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/dto.responseOneMessage'
+            $ref: '#/definitions/shared_dto.ResponseOneMessage'
       summary: Get all users
       tags:
       - user

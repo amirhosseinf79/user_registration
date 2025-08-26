@@ -6,5 +6,5 @@ func (s server) InitUserRoutes() {
 	user.Get("/:userID", s.userHandler.GetUserByID)
 
 	profile := s.app.Group("/profile")
-	profile.Put("/update", s.authValidator.CheckToken, s.fieldValidator.ValidateEmailBody, s.userHandler.UpdateProfileInfo)
+	profile.Patch("/update", s.authValidator.CheckToken, s.fieldValidator.ValidateEmailBody, s.userHandler.UpdateProfileInfo)
 }

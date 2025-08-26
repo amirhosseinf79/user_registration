@@ -1,8 +1,8 @@
-package dto
+package shared_dto
 
 import "errors"
 
-var ErrObjectNotFound = errors.New("object not found")
+var ErrUsertNotFound = errors.New("user not found")
 var ErrInvalidToken = errors.New("invalid token")
 var ErrUnauthorized = errors.New("unauthorized")
 var ErrInvalidUser = errors.New("invalid user")
@@ -12,3 +12,4 @@ var ErrInvalidCode = errors.New("invalid code")
 var ErrInvalidMobile = errors.New("invalid phone number")
 var ErrInvalidEmail = errors.New("invalid email")
 var ErrSmsRateLimited = errors.New("can not send sms")
+var ErrInternalServerError = errors.New("internal server error")

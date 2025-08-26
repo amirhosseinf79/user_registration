@@ -7,7 +7,7 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -35,7 +35,7 @@ func (t *tokenRepository) GetUserIDByRefresh(refreshToken string) (uint, error) 
 	key := t.prefix + refreshToken
 	userID, err := t.client.Get(t.ctx, key).Result()
 	if err == redis.Nil {
-		return 0, dto.ErrObjectNotFound
+		return 0, shared_dto.ErrUsertNotFound
 	}
 	if err != nil {
 		return 0, err

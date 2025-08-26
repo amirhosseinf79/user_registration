@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	user_request "github.com/amirhosseinf79/user_registration/internal/dto/user/request"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,19 +22,15 @@ func NewUserHandler(userService interfaces.UserService) interfaces.UserHandler {
 // @Accept json
 // @Produce json
 // @Param userID path int true "UserID"
-// @Success 200 {object} dto.ResponseUserDetails
-// @Failure 500 {object} dto.responseOneMessage
+// @Success 200 {object} user_response.Details
+// @Failure 404 {object} shared_dto.ResponseOneMessage
+// @Failure 500 {object} shared_dto.ResponseOneMessage
 // @Router /user/{userID} [get]
 func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
-	userID, err := ctx.ParamsInt("userID", 0)
-	if err != nil {
-		statusCode, response := dto.NewDefaultRespose(err, fiber.StatusNotFound)
-		return ctx.Status(statusCode).JSON(response)
-	}
+	userID, _ := ctx.ParamsInt("userID", 0)
 	userDetails, err := uh.userService.GetUserDetailsByID(uint(userID))
 	if err != nil {
-		statusCode, response := dto.NewDefaultRespose(err, fiber.StatusNotFound)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(err.Code).JSON(err)
 	}
 	return ctx.JSON(userDetails)
 }
@@ -44,17 +40,16 @@ func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param filters query dto.FilterUser false "Filters"
-// @Success 200 {object} dto.ResponseUserList
-// @Failure 500 {object} dto.responseOneMessage
+// @Param filters query user_request.FilterUser false "Filters"
+// @Success 200 {object} user_response.List
+// @Failure 500 {object} shared_dto.ResponseOneMessage
 // @Router /user/all [get]
 func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
-	var filter dto.FilterUser
+	var filter user_request.FilterUser
 	ctx.QueryParser(&filter)
 	userDetails, err := uh.userService.GetUserList(filter)
 	if err != nil {
-		statusCode, response := dto.NewDefaultRespose(err, fiber.StatusInternalServerError)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(err.Code).JSON(err)
 	}
 	return ctx.JSON(userDetails)
 }
@@ -65,18 +60,17 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param user body dto.UpdateUserDetails true "user"
-// @Success 200 {object} dto.ResponseUserDetails
-// @Failure 500 {object} dto.responseOneMessage
-// @Router /profile/update [put]
+// @Param user body user_request.UpdateDetails true "user"
+// @Success 200 {object} user_response.Details
+// @Failure 500 {object} shared_dto.ResponseOneMessage
+// @Router /profile/update [patch]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
-	var fields dto.UpdateUserDetails
+	var fields user_request.UpdateDetails
 	ctx.BodyParser(&fields)
 	userID := ctx.Locals("userID").(uint)
 	userDetails, err := uh.userService.UpdateUserProfile(userID, fields)
 	if err != nil {
-		statusCode, response := dto.NewDefaultRespose(err, fiber.StatusInternalServerError)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(err.Code).JSON(err)
 	}
 	return ctx.JSON(userDetails)
 }

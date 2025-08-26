@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -56,19 +56,19 @@ func (j *jwtRepo) Verify(tokenString string) (uint, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if exp, ok := claims["exp"].(float64); ok {
 			if int64(exp) < time.Now().Unix() {
-				return 0, dto.ErrTokenExpired
+				return 0, shared_dto.ErrTokenExpired
 			}
 		}
 		if iss, ok := claims["iss"].(string); ok {
 			if iss != "auth-svc" {
-				return 0, dto.ErrInvalidIssuer
+				return 0, shared_dto.ErrInvalidIssuer
 			}
 		}
 		userID, ok := claims["userID"].(float64)
 		if !ok {
-			return 0, dto.ErrInvalidUser
+			return 0, shared_dto.ErrInvalidUser
 		}
 		return uint(userID), err
 	}
-	return 0, dto.ErrInvalidToken
+	return 0, shared_dto.ErrInvalidToken
 }

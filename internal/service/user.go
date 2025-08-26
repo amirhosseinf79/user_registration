@@ -1,10 +1,16 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	user_request "github.com/amirhosseinf79/user_registration/internal/dto/user/request"
+	user_response "github.com/amirhosseinf79/user_registration/internal/dto/user/response"
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 type userService struct {
@@ -17,57 +23,42 @@ func NewUserService(userRepo repository.UserRepository) interfaces.UserService {
 	}
 }
 
-func (u *userService) RegisterUserByNumber(phoneNumber string) (*model.User, error) {
+func (u *userService) RegisterUserByNumber(phoneNumber string) (*user_response.Details, *shared_dto.ResponseOneMessage) {
 	exists, err := u.userRepo.CheckMobileExists(phoneNumber)
 	if err != nil {
-		return nil, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
 	}
 
+	user := &model.User{
+		PhoneNumber: phoneNumber,
+	}
 	if !exists {
-		user := &model.User{
-			PhoneNumber: phoneNumber,
-		}
 		err = u.userRepo.Create(user)
 		if err != nil {
-			return nil, err
+			result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+				ErrStatus:  fiber.StatusInternalServerError,
+				ErrMessage: shared_dto.ErrInternalServerError,
+				RealError:  err,
+			})
+			return nil, result
 		}
-		return user, nil
-	}
-
-	user, err := u.userRepo.GetByMobile(phoneNumber)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
-}
-
-func (u *userService) GetUserList(filter dto.FilterUser) (*dto.ResponseList[dto.ResponseUserDetails], error) {
-	users, total, err := u.userRepo.GetAllByFilter(filter)
-	if err != nil {
-		return nil, err
-	}
-	userList := []dto.ResponseUserDetails{}
-	for _, user := range users {
-		userDetails := dto.ResponseUserDetails{
-			ID:           user.ID,
-			PhoneNumber:  user.PhoneNumber,
-			FirstName:    user.FirstName,
-			LastName:     user.LastName,
-			Email:        user.Email,
-			RegisteredAt: user.CreatedAt,
+	} else {
+		user, err = u.userRepo.GetByMobile(phoneNumber)
+		if err != nil {
+			result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+				ErrStatus:  fiber.StatusInternalServerError,
+				ErrMessage: shared_dto.ErrInternalServerError,
+				RealError:  err,
+			})
+			return nil, result
 		}
-		userList = append(userList, userDetails)
 	}
-	response := dto.NewResponseList(userList, int(total), filter.Page, filter.PageSize)
-	return &response, nil
-}
-
-func (u *userService) GetUserDetailsByID(userID uint) (*dto.ResponseUserDetails, error) {
-	user, err := u.userRepo.GetByID(userID)
-	if err != nil {
-		return nil, err
-	}
-	userDetails := dto.ResponseUserDetails{
+	userDetails := user_response.Details{
 		ID:           user.ID,
 		PhoneNumber:  user.PhoneNumber,
 		FirstName:    user.FirstName,
@@ -78,10 +69,78 @@ func (u *userService) GetUserDetailsByID(userID uint) (*dto.ResponseUserDetails,
 	return &userDetails, nil
 }
 
-func (u *userService) UpdateUserProfile(userID uint, fields dto.UpdateUserDetails) (*dto.ResponseUserDetails, error) {
+func (u *userService) GetUserList(filter user_request.FilterUser) (*shared_dto.ResponseList[user_response.Details], *shared_dto.ResponseOneMessage) {
+	users, total, err := u.userRepo.GetAllByFilter(filter)
+	if err != nil {
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
+	}
+	userList := []user_response.Details{}
+	for _, user := range users {
+		userDetails := user_response.Details{
+			ID:           user.ID,
+			PhoneNumber:  user.PhoneNumber,
+			FirstName:    user.FirstName,
+			LastName:     user.LastName,
+			Email:        user.Email,
+			RegisteredAt: user.CreatedAt,
+		}
+		userList = append(userList, userDetails)
+	}
+	response := shared_dto.NewResponseList(userList, int(total), filter.Page, filter.PageSize)
+	return &response, nil
+}
+
+func (u *userService) GetUserDetailsByID(userID uint) (*user_response.Details, *shared_dto.ResponseOneMessage) {
+	user, err := u.userRepo.GetByID(userID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+				ErrStatus:  fiber.StatusNotFound,
+				ErrMessage: shared_dto.ErrUsertNotFound,
+				RealError:  err,
+			})
+			return nil, result
+		}
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
+	}
+	userDetails := user_response.Details{
+		ID:           user.ID,
+		PhoneNumber:  user.PhoneNumber,
+		FirstName:    user.FirstName,
+		LastName:     user.LastName,
+		Email:        user.Email,
+		RegisteredAt: user.CreatedAt,
+	}
+	return &userDetails, nil
+}
+
+func (u *userService) UpdateUserProfile(userID uint, fields user_request.UpdateDetails) (*user_response.Details, *shared_dto.ResponseOneMessage) {
 	userM, err := u.userRepo.GetByID(userID)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+				ErrStatus:  fiber.StatusNotFound,
+				ErrMessage: shared_dto.ErrUsertNotFound,
+				RealError:  err,
+			})
+			return nil, result
+		}
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
 	}
 
 	if fields.FirstName != "" {
@@ -96,10 +155,14 @@ func (u *userService) UpdateUserProfile(userID uint, fields dto.UpdateUserDetail
 
 	err = u.userRepo.Update(userM)
 	if err != nil {
-		return nil, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
 	}
-
-	userDetails := dto.ResponseUserDetails{
+	userDetails := user_response.Details{
 		ID:           userM.ID,
 		PhoneNumber:  userM.PhoneNumber,
 		FirstName:    userM.FirstName,

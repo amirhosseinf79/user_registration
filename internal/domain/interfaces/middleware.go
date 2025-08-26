@@ -8,3 +8,7 @@ type FieldValidatorMiddleware interface {
 	ValidateRefreshToken(ctx *fiber.Ctx) error
 	ValidateEmailBody(ctx *fiber.Ctx) error
 }
+
+type AuthMiddleware interface {
+	CheckToken(ctx *fiber.Ctx) error
+}

@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -23,13 +23,19 @@ func NewAuthMiddleware(jwtService interfaces.JWTService) interfaces.AuthMiddlewa
 func (am *authMiddleware) CheckToken(ctx *fiber.Ctx) error {
 	token := ctx.Get("Authorization", "")
 	if token == "" || !strings.Contains(strings.ToLower(token), strings.ToLower(am.prefix)) {
-		statuscode, response := dto.NewDefaultRespose(dto.ErrInvalidToken, fiber.StatusUnauthorized)
-		return ctx.Status(statuscode).JSON(response)
+		response := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusUnauthorized,
+			ErrMessage: shared_dto.ErrInvalidToken,
+		})
+		return ctx.Status(response.Code).JSON(response)
 	}
 	userID, err := am.jwtService.GetUserIDByAccessToken(token[len(am.prefix):])
 	if err != nil {
-		statuscode, response := dto.NewDefaultRespose(dto.ErrUnauthorized, fiber.StatusUnauthorized)
-		return ctx.Status(statuscode).JSON(response)
+		response := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusUnauthorized,
+			ErrMessage: shared_dto.ErrUnauthorized,
+		})
+		return ctx.Status(response.Code).JSON(response)
 	}
 	ctx.Locals("userID", userID)
 	return ctx.Next()

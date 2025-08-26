@@ -1,10 +1,8 @@
 package handler
 
 import (
-	"errors"
-
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	auth_request "github.com/amirhosseinf79/user_registration/internal/dto/auth/request"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -23,21 +21,16 @@ func NewAuthHandler(authService interfaces.AuthService) interfaces.AuthHandler {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param fields body dto.FieldAuthSendOTP true "Fields"
-// @Success 200 {array} dto.responseOneMessage
-// @Failure 400 {object} dto.responseOneMessage
-// @Failure 403 {object} dto.responseOneMessage
+// @Param fields body auth_request.FieldSendOTP true "Fields"
+// @Success 200 {array} shared_dto.ResponseOneMessage
+// @Failure 400 {object} shared_dto.ResponseOneMessage
+// @Failure 403 {object} shared_dto.ResponseOneMessage
 // @Router /auth/send-otp [post]
 func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
-	var fields dto.FieldAuthSendOTP
+	var fields auth_request.FieldSendOTP
 	ctx.BodyParser(&fields)
-	err := ah.authService.SendOTP(fields)
-	if errors.Is(err, dto.ErrSmsRateLimited) {
-		statusCode, response := dto.NewDefaultRespose(err, fiber.StatusForbidden)
-		return ctx.Status(statusCode).JSON(response)
-	}
-	statusCode, response := dto.NewDefaultRespose(err, fiber.StatusBadRequest)
-	return ctx.Status(statusCode).JSON(response)
+	response := ah.authService.SendOTP(fields)
+	return ctx.Status(response.Code).JSON(response)
 }
 
 // @Summary Verify OTP
@@ -45,17 +38,16 @@ func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param fields body dto.FieldAuthVerifyOTP true "Fields"
-// @Success 200 {array} dto.ResponseAuthOk
-// @Failure 401 {object} dto.responseOneMessage
+// @Param fields body auth_request.FieldVerifyOTP true "Fields"
+// @Success 200 {array} auth_response.JWT
+// @Failure 401 {object} shared_dto.ResponseOneMessage
 // @Router /auth/verify-otp [post]
 func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
-	var fields dto.FieldAuthVerifyOTP
+	var fields auth_request.FieldVerifyOTP
 	ctx.BodyParser(&fields)
 	response, err := ah.authService.LoginByOTP(fields)
 	if err != nil {
-		statusCode, response := dto.NewDefaultRespose(dto.ErrUnauthorized, fiber.StatusUnauthorized)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(err.Code).JSON(err)
 	}
 	return ctx.JSON(response)
 }
@@ -65,17 +57,16 @@ func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param fields body dto.FieldRefreshToken true "Fields"
-// @Success 200 {array} dto.ResponseAuthOk
-// @Failure 401 {object} dto.responseOneMessage
+// @Param fields body auth_request.FieldRefreshToken true "Fields"
+// @Success 200 {array} auth_response.JWT
+// @Failure 401 {object} shared_dto.ResponseOneMessage
 // @Router /auth/refresh-token [post]
 func (ah *authHandler) RefreshToken(ctx *fiber.Ctx) error {
-	var fields dto.FieldRefreshToken
+	var fields auth_request.FieldRefreshToken
 	ctx.BodyParser(&fields)
 	response, err := ah.authService.RefreshToken(fields.RefreshToken)
 	if err != nil {
-		statusCode, response := dto.NewDefaultRespose(dto.ErrInvalidToken, fiber.StatusUnauthorized)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(err.Code).JSON(err)
 	}
 	return ctx.JSON(response)
 }

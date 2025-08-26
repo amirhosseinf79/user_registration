@@ -4,7 +4,9 @@ import (
 	"regexp"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	auth_request "github.com/amirhosseinf79/user_registration/internal/dto/auth/request"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	user_request "github.com/amirhosseinf79/user_registration/internal/dto/user/request"
 	"github.com/amirhosseinf79/user_registration/pkg"
 	"github.com/gofiber/fiber/v2"
 )
@@ -17,50 +19,52 @@ func NewFieldValidator() interfaces.FieldValidatorMiddleware {
 
 func (fv *fieldsValidatorMiddleware) ValidateMobile(ctx *fiber.Ctx) error {
 	re := regexp.MustCompile(`^09\d{9}$`)
-	var fields dto.FieldAuthSendOTP
+	var fields auth_request.FieldSendOTP
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
-		statusCode, _ := dto.NewDefaultRespose(err, fiber.StatusBadRequest)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	if !re.MatchString(fields.PhoneNumber) {
-		statusCode, response := dto.NewDefaultRespose(dto.ErrInvalidMobile, fiber.StatusBadRequest)
-		return ctx.Status(statusCode).JSON(response)
+		response := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusBadRequest,
+			ErrMessage: shared_dto.ErrInvalidMobile,
+		})
+		return ctx.Status(response.Code).JSON(response)
 	}
 	return ctx.Next()
 }
 
 func (fv *fieldsValidatorMiddleware) ValidateCode(ctx *fiber.Ctx) error {
-	var fields dto.FieldAuthVerifyOTP
+	var fields auth_request.FieldVerifyOTP
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
-		statusCode, _ := dto.NewDefaultRespose(err, fiber.StatusBadRequest)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	return ctx.Next()
 }
 
 func (fv *fieldsValidatorMiddleware) ValidateRefreshToken(ctx *fiber.Ctx) error {
-	var fields dto.FieldRefreshToken
+	var fields auth_request.FieldRefreshToken
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
-		statusCode, _ := dto.NewDefaultRespose(err, fiber.StatusBadRequest)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	return ctx.Next()
 }
 
 func (fv *fieldsValidatorMiddleware) ValidateEmailBody(ctx *fiber.Ctx) error {
 	re := regexp.MustCompile(`^(.{3,})@(.{3,})\.(.{2,})$`)
-	var fields dto.FieldEmail
+	var fields user_request.FieldEmail
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
-		statusCode, _ := dto.NewDefaultRespose(err, fiber.StatusBadRequest)
-		return ctx.Status(statusCode).JSON(response)
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
 	if fields.Email != "" && !re.MatchString(fields.Email) {
-		statusCode, response := dto.NewDefaultRespose(dto.ErrInvalidEmail, fiber.StatusBadRequest)
-		return ctx.Status(statusCode).JSON(response)
+		response := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusBadRequest,
+			ErrMessage: shared_dto.ErrInvalidEmail,
+		})
+		return ctx.Status(response.Code).JSON(response)
 	}
 	return ctx.Next()
 }

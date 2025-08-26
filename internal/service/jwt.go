@@ -4,7 +4,9 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	"github.com/amirhosseinf79/user_registration/internal/dto"
+	auth_response "github.com/amirhosseinf79/user_registration/internal/dto/auth/response"
+	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	"github.com/gofiber/fiber/v2"
 )
 
 type jwtService struct {
@@ -19,14 +21,24 @@ func NewJWTService(jwtRepo repository.JWTRepository, tokenRepo repository.TokenR
 	}
 }
 
-func (j *jwtService) GenerateAuthTokens(userID uint) (*dto.ResponseAuthOk, error) {
+func (j *jwtService) GenerateAuthTokens(userID uint) (*auth_response.JWT, *shared_dto.ResponseOneMessage) {
 	accessToken, err := j.jwtRepo.GenerateToken(userID, false)
 	if err != nil {
-		return nil, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
 	}
 	refreshToken, err := j.jwtRepo.GenerateToken(userID, true)
 	if err != nil {
-		return nil, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
 	}
 	tokenM := model.Token{
 		RefreshToken: refreshToken,
@@ -34,28 +46,43 @@ func (j *jwtService) GenerateAuthTokens(userID uint) (*dto.ResponseAuthOk, error
 	}
 	err = j.tokenRepo.SaveRefreshToken(&tokenM)
 	if err != nil {
-		return nil, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return nil, result
 	}
 
-	token := dto.ResponseAuthOk{
+	token := auth_response.JWT{
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}
 	return &token, nil
 }
 
-func (j *jwtService) GetUserIDByRefreshToken(oldRefreshToken string) (uint, error) {
+func (j *jwtService) GetUserIDByRefreshToken(oldRefreshToken string) (uint, *shared_dto.ResponseOneMessage) {
 	userID, err := j.tokenRepo.GetUserIDByRefresh(oldRefreshToken)
 	if err != nil {
-		return 0, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return 0, result
 	}
 	return userID, nil
 }
 
-func (j *jwtService) GetUserIDByAccessToken(accessToke string) (uint, error) {
+func (j *jwtService) GetUserIDByAccessToken(accessToke string) (uint, *shared_dto.ResponseOneMessage) {
 	userID, err := j.jwtRepo.Verify(accessToke)
 	if err != nil {
-		return 0, err
+		result := shared_dto.NewDefaultResponse(shared_dto.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared_dto.ErrInternalServerError,
+			RealError:  err,
+		})
+		return 0, result
 	}
 	return userID, nil
 }
