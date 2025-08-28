@@ -1,5 +1,34 @@
 definitions:
-  auth.FieldPassLogin:
+  auth.FieldEmailLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth.FieldEmailRegister:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    - phoneNumber
+    type: object
+  auth.FieldMobileLogin:
     properties:
       password:
         type: string
@@ -77,6 +106,8 @@ definitions:
         type: string
       lastName:
         type: string
+      phoneNumber:
+        type: string
     type: object
   user.FieldUpdatePassword:
     properties:
@@ -87,10 +118,19 @@ definitions:
     required:
     - newPassword
     type: object
+  user.FieldVerifyOTP:
+    properties:
+      code:
+        type: string
+    required:
+    - code
+    type: object
   user.ResponseDetails:
     properties:
       email:
         type: string
+      emailVerified:
+        type: boolean
       firstName:
         type: string
       hasPassword:
@@ -99,6 +139,8 @@ definitions:
         type: integer
       lastName:
         type: string
+      mobileVerified:
+        type: boolean
       phoneNumber:
         type: string
       registeredAt:
@@ -118,18 +160,18 @@ info:
   title: User OTP Registration API
   version: "1.0"
 paths:
-  /auth/login:
+  /auth/email-login:
     post:
       consumes:
       - application/json
-      description: Login with Mobile & Password
+      description: Login with Email & Password
       parameters:
       - description: Fields
         in: body
         name: fields
         required: true
         schema:
-          $ref: '#/definitions/auth.FieldPassLogin'
+          $ref: '#/definitions/auth.FieldEmailLogin'
       produces:
       - application/json
       responses:
@@ -143,9 +185,65 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
-      summary: Login with Password
+      summary: Login By Email
       tags:
-      - auth
+      - Auth
+  /auth/mobile-login:
+    post:
+      consumes:
+      - application/json
+      description: Login with Mobile & Password
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/auth.FieldMobileLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.ResponseJWT'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      summary: Login by Mobile
+      tags:
+      - Auth
+  /auth/otp-login:
+    post:
+      consumes:
+      - application/json
+      description: Login By OTP Code
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/auth.FieldVerifyOTP'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.ResponseJWT'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      summary: Login By OTP
+      tags:
+      - Auth
   /auth/refresh-token:
     post:
       consumes:
@@ -173,7 +271,35 @@ paths:
             $ref: '#/definitions/shared.ResponseOneMessage'
       summary: Refresh Token
       tags:
-      - auth
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register By Email
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/auth.FieldEmailRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.ResponseJWT'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      summary: Register By Email
+      tags:
+      - Auth
   /auth/send-otp:
     post:
       consumes:
@@ -197,41 +323,17 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
       summary: Send OTP
       tags:
-      - auth
-  /auth/verify-otp:
-    post:
-      consumes:
-      - application/json
-      description: Verify OTP & Login or Register user
-      parameters:
-      - description: Fields
-        in: body
-        name: fields
-        required: true
-        schema:
-          $ref: '#/definitions/auth.FieldVerifyOTP'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/auth.ResponseJWT'
-            type: array
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/shared.ResponseOneMessage'
-      summary: Verify OTP
-      tags:
-      - auth
+      - Auth
   /profile:
     get:
       consumes:
@@ -244,12 +346,16 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ResponseDetails'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
       security:
       - BearerAuth: []
       summary: Get user profile
       tags:
-      - user
-  /profile/update:
+      - Profile
+  /profile/update/info:
     patch:
       consumes:
       - application/json
@@ -272,12 +378,16 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
       security:
       - BearerAuth: []
       summary: Update user Profile
       tags:
-      - user
-  /profile/update-pass:
+      - Profile
+  /profile/update/password:
     put:
       consumes:
       - application/json
@@ -300,11 +410,47 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
       security:
       - BearerAuth: []
       summary: Update user password
       tags:
-      - user
+      - Profile
+  /profile/verify/mobile:
+    post:
+      consumes:
+      - application/json
+      description: verify Mobile
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/user.FieldVerifyOTP'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseDetails'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      security:
+      - BearerAuth: []
+      summary: Verify Mobile
+      tags:
+      - Profile
   /user/{userID}:
     get:
       consumes:
@@ -329,7 +475,7 @@ paths:
             $ref: '#/definitions/shared.ResponseOneMessage'
       summary: Get user details
       tags:
-      - user
+      - User
   /user/all:
     get:
       consumes:
@@ -360,7 +506,7 @@ paths:
             $ref: '#/definitions/user.ResponseList'
       summary: Get all users
       tags:
-      - user
+      - User
 securityDefinitions:
   BearerAuth:
     description: Bearer [...]

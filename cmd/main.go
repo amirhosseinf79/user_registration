@@ -56,7 +56,7 @@ func main() {
 
 	jwtService := jwt.NewJWTService(jwtRepo, tokenRepo)
 	otpService := otp.NewOTPService(otpRepo)
-	userService := user.NewUserService(userRepo)
+	userService := user.NewUserService(userRepo, otpService)
 
 	smsService := sms.NewSMSService(smsRepo)
 	authService := auth.NewAuthService(

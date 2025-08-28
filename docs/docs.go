@@ -15,7 +15,50 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/login": {
+        "/auth/email-login": {
+            "post": {
+                "description": "Login with Email \u0026 Password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login By Email",
+                "parameters": [
+                    {
+                        "description": "Fields",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.FieldEmailLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/auth.ResponseJWT"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/mobile-login": {
             "post": {
                 "description": "Login with Mobile \u0026 Password",
                 "consumes": [
@@ -25,9 +68,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
-                "summary": "Login with Password",
+                "summary": "Login by Mobile",
                 "parameters": [
                     {
                         "description": "Fields",
@@ -35,7 +78,50 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.FieldPassLogin"
+                            "$ref": "#/definitions/auth.FieldMobileLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/auth.ResponseJWT"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/otp-login": {
+            "post": {
+                "description": "Login By OTP Code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login By OTP",
+                "parameters": [
+                    {
+                        "description": "Fields",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.FieldVerifyOTP"
                         }
                     }
                 ],
@@ -68,7 +154,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Refresh Token",
                 "parameters": [
@@ -101,6 +187,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/register": {
+            "post": {
+                "description": "Register By Email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register By Email",
+                "parameters": [
+                    {
+                        "description": "Fields",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.FieldEmailRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/auth.ResponseJWT"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/send-otp": {
             "post": {
                 "description": "Send OTP",
@@ -111,7 +240,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Send OTP",
                 "parameters": [
@@ -138,51 +267,14 @@ const docTemplate = `{
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
-                    }
-                }
-            }
-        },
-        "/auth/verify-otp": {
-            "post": {
-                "description": "Verify OTP \u0026 Login or Register user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Verify OTP",
-                "parameters": [
-                    {
-                        "description": "Fields",
-                        "name": "fields",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.FieldVerifyOTP"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/auth.ResponseJWT"
-                            }
-                        }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "403": {
+                        "description": "Forbidden",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
@@ -205,7 +297,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "Profile"
                 ],
                 "summary": "Get user profile",
                 "responses": {
@@ -214,11 +306,17 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
                     }
                 }
             }
         },
-        "/profile/update": {
+        "/profile/update/info": {
             "patch": {
                 "security": [
                     {
@@ -233,7 +331,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "Profile"
                 ],
                 "summary": "Update user Profile",
                 "parameters": [
@@ -259,11 +357,17 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
                     }
                 }
             }
         },
-        "/profile/update-pass": {
+        "/profile/update/password": {
             "put": {
                 "security": [
                     {
@@ -278,7 +382,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "Profile"
                 ],
                 "summary": "Update user password",
                 "parameters": [
@@ -304,6 +408,63 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/profile/verify/mobile": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "verify Mobile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Verify Mobile",
+                "parameters": [
+                    {
+                        "description": "Fields",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.FieldVerifyOTP"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user.ResponseDetails"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
                     }
                 }
             }
@@ -318,7 +479,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "User"
                 ],
                 "summary": "Get all users",
                 "parameters": [
@@ -368,7 +529,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user"
+                    "User"
                 ],
                 "summary": "Get user details",
                 "parameters": [
@@ -398,7 +559,49 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.FieldPassLogin": {
+        "auth.FieldEmailLogin": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.FieldEmailRegister": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName",
+                "password",
+                "phoneNumber"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.FieldMobileLogin": {
             "type": "object",
             "required": [
                 "password",
@@ -517,6 +720,9 @@ const docTemplate = `{
                 },
                 "lastName": {
                     "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
                 }
             }
         },
@@ -534,11 +740,25 @@ const docTemplate = `{
                 }
             }
         },
+        "user.FieldVerifyOTP": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
         "user.ResponseDetails": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
+                },
+                "emailVerified": {
+                    "type": "boolean"
                 },
                 "firstName": {
                     "type": "string"
@@ -551,6 +771,9 @@ const docTemplate = `{
                 },
                 "lastName": {
                     "type": "string"
+                },
+                "mobileVerified": {
+                    "type": "boolean"
                 },
                 "phoneNumber": {
                     "type": "string"

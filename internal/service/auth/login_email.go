@@ -6,8 +6,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (a *authService) LoginByPassword(fields auth.FieldPassLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage) {
-	userM, err := a.userService.GetUserByMobile(fields.PhoneNumber)
+func (a *authService) LoginByEmail(fields auth.FieldEmailLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage) {
+	userM, err := a.userService.GetUserByEmail(fields.Email)
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusUnauthorized,

@@ -10,8 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func (u *userService) GetUserByMobile(mobile string) (*model.User, error) {
-	userM, err := u.userRepo.GetByMobile(mobile)
+func (u *userService) GetUserByEmail(email string) (*model.User, error) {
+	userM, err := u.userRepo.GetByEmail(email)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, shared.ErrUsertNotFound
@@ -21,8 +21,8 @@ func (u *userService) GetUserByMobile(mobile string) (*model.User, error) {
 	return userM, nil
 }
 
-func (u *userService) GetUserDetailsByMobile(mobile string) (*user.ResponseDetails, *shared.ResponseOneMessage) {
-	userM, err := u.userRepo.GetByMobile(mobile)
+func (u *userService) GetUserDetailsByEmail(email string) (*user.ResponseDetails, *shared.ResponseOneMessage) {
+	userM, err := u.userRepo.GetByEmail(email)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{

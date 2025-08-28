@@ -35,7 +35,20 @@ func (u *userService) UpdateUserProfile(userID uint, fields user.FieldUpdateDeta
 		userM.LastName = fields.LastName
 	}
 	if fields.Email != "" {
+		err := u.CheckUserEmailExists(fields.Email)
+		if err != nil {
+			return nil, err
+		}
 		userM.Email = fields.Email
+		userM.EmailVerified = false
+	}
+	if fields.PhoneNumber != "" {
+		err := u.CheckUserMobileExists(fields.PhoneNumber)
+		if err != nil {
+			return nil, err
+		}
+		userM.PhoneNumber = fields.PhoneNumber
+		userM.MobileVerified = false
 	}
 
 	err = u.userRepo.Update(userM)
@@ -47,14 +60,6 @@ func (u *userService) UpdateUserProfile(userID uint, fields user.FieldUpdateDeta
 		})
 		return nil, result
 	}
-	userDetails := user.ResponseDetails{
-		ID:           userM.ID,
-		PhoneNumber:  userM.PhoneNumber,
-		FirstName:    userM.FirstName,
-		LastName:     userM.LastName,
-		Email:        userM.Email,
-		RegisteredAt: userM.CreatedAt,
-		HasPassword:  userM.Password != "",
-	}
-	return &userDetails, nil
+	userDetails := user.NewUserResponse(userM)
+	return userDetails, nil
 }

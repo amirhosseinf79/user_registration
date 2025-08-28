@@ -7,11 +7,13 @@ import (
 
 type User struct {
 	gorm.Model
-	PhoneNumber string
-	FirstName   string
-	LastName    string
-	Email       string
-	Password    string
+	PhoneNumber    string
+	FirstName      string
+	LastName       string
+	Email          string
+	Password       string
+	MobileVerified bool
+	EmailVerified  bool
 }
 
 func (u *User) ValidatePassword(password string) bool {

@@ -57,14 +57,6 @@ func (u *userService) UpdateUserPassword(userID uint, fields user.FieldUpdatePas
 		})
 		return nil, result
 	}
-	userDetails := user.ResponseDetails{
-		ID:           userM.ID,
-		PhoneNumber:  userM.PhoneNumber,
-		FirstName:    userM.FirstName,
-		LastName:     userM.LastName,
-		Email:        userM.Email,
-		RegisteredAt: userM.CreatedAt,
-		HasPassword:  userM.Password != "",
-	}
-	return &userDetails, nil
+	userDetails := user.NewUserResponse(userM)
+	return userDetails, nil
 }

@@ -19,7 +19,8 @@ func (u *userService) RegisterUserByNumber(phoneNumber string) (*user.ResponseDe
 	}
 
 	userM := &model.User{
-		PhoneNumber: phoneNumber,
+		PhoneNumber:    phoneNumber,
+		MobileVerified: true,
 	}
 	if !exists {
 		err = u.userRepo.Create(userM)
@@ -42,14 +43,6 @@ func (u *userService) RegisterUserByNumber(phoneNumber string) (*user.ResponseDe
 			return nil, result
 		}
 	}
-	userDetails := user.ResponseDetails{
-		ID:           userM.ID,
-		PhoneNumber:  userM.PhoneNumber,
-		FirstName:    userM.FirstName,
-		LastName:     userM.LastName,
-		Email:        userM.Email,
-		RegisteredAt: userM.CreatedAt,
-		HasPassword:  userM.Password != "",
-	}
-	return &userDetails, nil
+	userDetails := user.NewUserResponse(userM)
+	return userDetails, nil
 }

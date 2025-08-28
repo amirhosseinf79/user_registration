@@ -18,16 +18,8 @@ func (u *userService) GetUserList(filter user.FilterUser) (*shared.ResponseList[
 	}
 	userList := []user.ResponseDetails{}
 	for _, userM := range users {
-		userDetails := user.ResponseDetails{
-			ID:           userM.ID,
-			PhoneNumber:  userM.PhoneNumber,
-			FirstName:    userM.FirstName,
-			LastName:     userM.LastName,
-			Email:        userM.Email,
-			RegisteredAt: userM.CreatedAt,
-			HasPassword:  userM.Password != "",
-		}
-		userList = append(userList, userDetails)
+		userDetails := user.NewUserResponse(userM)
+		userList = append(userList, *userDetails)
 	}
 	response := shared.NewResponseList(userList, int(total), filter.Page, filter.PageSize)
 	return &response, nil

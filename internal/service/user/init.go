@@ -6,11 +6,16 @@ import (
 )
 
 type userService struct {
-	userRepo repository.UserRepository
+	userRepo   repository.UserRepository
+	otpService interfaces.OTPStoreService
 }
 
-func NewUserService(userRepo repository.UserRepository) interfaces.UserService {
+func NewUserService(
+	userRepo repository.UserRepository,
+	otpService interfaces.OTPStoreService,
+) interfaces.UserService {
 	return &userService{
-		userRepo: userRepo,
+		userRepo:   userRepo,
+		otpService: otpService,
 	}
 }

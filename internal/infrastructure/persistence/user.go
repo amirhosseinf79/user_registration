@@ -35,12 +35,29 @@ func (r *userRepository) GetByID(id uint) (user *model.User, err error) {
 	return
 }
 
+func (r *userRepository) GetByEmail(email string) (user *model.User, err error) {
+	err = r.db.Where("email = ?", email).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
 func (r *userRepository) GetByMobile(mobile string) (user *model.User, err error) {
 	err = r.db.Where("phone_number = ?", mobile).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
 	return
+}
+
+func (r *userRepository) CheckEmailExists(email string) (exists bool, err error) {
+	var count int64
+	err = r.db.Model(&model.User{}).Where("email = ?", email).Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 
 func (r *userRepository) CheckMobileExists(mobile string) (exists bool, err error) {

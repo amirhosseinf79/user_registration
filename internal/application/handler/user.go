@@ -18,7 +18,7 @@ func NewUserHandler(userService interfaces.UserService) interfaces.UserHandler {
 
 // @Summary Get user details
 // @Description Get User Details by ID
-// @Tags user
+// @Tags User
 // @Accept json
 // @Produce json
 // @Param userID path int true "UserID"
@@ -36,7 +36,7 @@ func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 
 // @Summary Get all users
 // @Description Get list of all users
-// @Tags user
+// @Tags User
 // @Accept json
 // @Produce json
 // @Param filters query user.FilterUser false "Filters"
@@ -54,11 +54,12 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 
 // @Summary Get user profile
 // @Description Get User profile
-// @Tags user
+// @Tags Profile
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} user.ResponseDetails
+// @Failure 401 {object} shared.ResponseOneMessage
 // @Router /profile [get]
 func (uh *userHandler) GetUserProfile(ctx *fiber.Ctx) error {
 	userID := ctx.Locals("userID").(uint)
@@ -71,14 +72,15 @@ func (uh *userHandler) GetUserProfile(ctx *fiber.Ctx) error {
 
 // @Summary Update user Profile
 // @Description Update User Profile
-// @Tags user
+// @Tags Profile
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Param user body user.FieldUpdateDetails true "user"
 // @Success 200 {object} user.ResponseDetails
 // @Failure 400 {object} shared.ResponseOneMessage
-// @Router /profile/update [patch]
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /profile/update/info [patch]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 	var fields user.FieldUpdateDetails
 	ctx.BodyParser(&fields)
@@ -92,14 +94,15 @@ func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 
 // @Summary Update user password
 // @Description Update User Password
-// @Tags user
+// @Tags Profile
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Param fields body user.FieldUpdatePassword true "Fields"
 // @Success 200 {object} user.ResponseDetails
 // @Failure 400 {object} shared.ResponseOneMessage
-// @Router /profile/update-pass [put]
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /profile/update/password [put]
 func (uh *userHandler) UpdateUserPassword(ctx *fiber.Ctx) error {
 	var fields user.FieldUpdatePassword
 	ctx.BodyParser(&fields)
@@ -109,4 +112,26 @@ func (uh *userHandler) UpdateUserPassword(ctx *fiber.Ctx) error {
 		return ctx.Status(err.Code).JSON(err)
 	}
 	return ctx.JSON(userDetails)
+}
+
+// @Summary Verify Mobile
+// @Description verify Mobile
+// @Tags Profile
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param fields body user.FieldVerifyOTP true "Fields"
+// @Success 200 {object} user.ResponseDetails
+// @Failure 400 {object} shared.ResponseOneMessage
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /profile/verify/mobile [post]
+func (ah *userHandler) VerifyUserOTP(ctx *fiber.Ctx) error {
+	var fields user.FieldVerifyOTP
+	ctx.BodyParser(&fields)
+	userID := ctx.Locals("userID").(uint)
+	response, err := ah.userService.VerifyUserMobile(userID, fields.Code)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(response)
 }

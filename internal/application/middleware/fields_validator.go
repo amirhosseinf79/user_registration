@@ -34,8 +34,26 @@ func (fv *fieldsValidatorMiddleware) ValidateMobile(ctx *fiber.Ctx) error {
 	return ctx.Next()
 }
 
-func (fv *fieldsValidatorMiddleware) ValidateLogin(ctx *fiber.Ctx) error {
-	var fields auth.FieldPassLogin
+func (fv *fieldsValidatorMiddleware) ValidateRegister(ctx *fiber.Ctx) error {
+	var fields auth.FieldEmailRegister
+	response, err := pkg.ValidateRequestBody(&fields, ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	return ctx.Next()
+}
+
+func (fv *fieldsValidatorMiddleware) ValidateEmailLogin(ctx *fiber.Ctx) error {
+	var fields auth.FieldEmailLogin
+	response, err := pkg.ValidateRequestBody(&fields, ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	return ctx.Next()
+}
+
+func (fv *fieldsValidatorMiddleware) ValidateMobileLogin(ctx *fiber.Ctx) error {
+	var fields auth.FieldMobileLogin
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)

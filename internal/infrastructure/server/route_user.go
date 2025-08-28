@@ -7,6 +7,7 @@ func (s server) InitUserRoutes() {
 
 	profile := s.app.Group("/profile", s.authValidator.CheckToken)
 	profile.Get("/", s.userHandler.GetUserProfile)
-	profile.Patch("/update", s.fieldValidator.ValidateEmailBody, s.userHandler.UpdateProfileInfo)
-	profile.Put("/update-pass", s.fieldValidator.ValidateNewPassword, s.userHandler.UpdateUserPassword)
+	profile.Patch("/update/info", s.fieldValidator.ValidateEmailBody, s.userHandler.UpdateProfileInfo)
+	profile.Put("/update/password", s.fieldValidator.ValidateNewPassword, s.userHandler.UpdateUserPassword)
+	profile.Post("/verify/mobile", s.fieldValidator.ValidateCode, s.userHandler.VerifyUserOTP)
 }
