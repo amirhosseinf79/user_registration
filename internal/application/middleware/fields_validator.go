@@ -79,7 +79,16 @@ func (fv *fieldsValidatorMiddleware) ValidateNewPassword(ctx *fiber.Ctx) error {
 	return ctx.Next()
 }
 
-func (fv *fieldsValidatorMiddleware) ValidateCode(ctx *fiber.Ctx) error {
+func (fv *fieldsValidatorMiddleware) ValidateVerifyCode(ctx *fiber.Ctx) error {
+	var fields user.FieldVerifyOTP
+	response, err := pkg.ValidateRequestBody(&fields, ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(response)
+	}
+	return ctx.Next()
+}
+
+func (fv *fieldsValidatorMiddleware) ValidateVerifyField(ctx *fiber.Ctx) error {
 	var fields auth.FieldVerifyOTP
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {

@@ -9,5 +9,5 @@ func (s server) InitUserRoutes() {
 	profile.Get("/", s.userHandler.GetUserProfile)
 	profile.Patch("/update/info", s.fieldValidator.ValidateEmailBody, s.userHandler.UpdateProfileInfo)
 	profile.Put("/update/password", s.fieldValidator.ValidateNewPassword, s.userHandler.UpdateUserPassword)
-	profile.Post("/verify/mobile", s.fieldValidator.ValidateCode, s.userHandler.VerifyUserOTP)
+	profile.Post("/verify/mobile", s.fieldValidator.ValidateVerifyCode, s.userHandler.VerifyUserOTP)
 }

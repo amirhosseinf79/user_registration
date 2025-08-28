@@ -18,7 +18,7 @@ func (u *userService) CheckUserMobileExists(mobile string) *shared.ResponseOneMe
 	if exists {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusConflict,
-			ErrMessage: shared.ErrEmailExists,
+			ErrMessage: shared.ErrMobileExists,
 			RealError:  err,
 		})
 		return result

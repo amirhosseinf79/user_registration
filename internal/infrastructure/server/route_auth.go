@@ -15,7 +15,7 @@ func (s server) InitAuthRoutes() {
 	route.Post(
 		"/otp-login",
 		s.fieldValidator.ValidateMobile,
-		s.fieldValidator.ValidateCode,
+		s.fieldValidator.ValidateVerifyField,
 		s.authHandler.LoginByOTP,
 	)
 	route.Post(

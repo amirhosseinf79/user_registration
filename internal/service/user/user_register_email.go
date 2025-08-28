@@ -14,7 +14,10 @@ func (u *userService) RegisterUserByEmail(fields auth.FieldEmailRegister) (*user
 	if err != nil {
 		return nil, err
 	}
-
+	err = u.CheckUserMobileExists(fields.PhoneNumber)
+	if err != nil {
+		return nil, err
+	}
 	hashPassword, err2 := pkg.HashPassword(fields.Password)
 	if err2 != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
