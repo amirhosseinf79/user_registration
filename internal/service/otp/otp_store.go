@@ -58,7 +58,7 @@ func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *auth.OTPOk, *
 	response := auth.OTPOk{
 		Code:       fiber.StatusOK,
 		RetryCount: remained,
-		ExpiresIn:  o.otpRepo.GetOTPExpDuration(),
+		TTL:        o.otpRepo.GetOTPExpDuration(),
 	}
 	return generatedCode, &response, nil
 }

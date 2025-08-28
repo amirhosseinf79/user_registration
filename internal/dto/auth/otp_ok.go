@@ -4,12 +4,12 @@ import "time"
 
 type OTPOk struct {
 	Code       int           `json:"code,omitempty"`
-	ExpiresIn  time.Duration `json:"expiresIn"`
+	TTL        time.Duration `json:"ttl"`
 	RetryCount int           `json:"retryCount"`
 }
 
 type OTPOkMock struct {
 	Code       int `json:"code,omitempty"`
-	ExpiresIn  int `json:"expiresIn"`
+	TTL        int `json:"ttl"`
 	RetryCount int `json:"retryCount"`
 }

@@ -27,9 +27,9 @@ definitions:
     properties:
       code:
         type: integer
-      expiresIn:
-        type: integer
       retryCount:
+        type: integer
+      ttl:
         type: integer
     type: object
   auth.ResponseJWT:

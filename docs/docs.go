@@ -337,10 +337,10 @@ const docTemplate = `{
                 "code": {
                     "type": "integer"
                 },
-                "expiresIn": {
+                "retryCount": {
                     "type": "integer"
                 },
-                "retryCount": {
+                "ttl": {
                     "type": "integer"
                 }
             }
