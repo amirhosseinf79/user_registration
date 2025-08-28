@@ -244,14 +244,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ResponseDetails'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/shared.ResponseOneMessage'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/shared.ResponseOneMessage'
       security:
       - BearerAuth: []
       summary: Get user profile
@@ -276,8 +268,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ResponseDetails'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
       security:
@@ -304,8 +296,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ResponseDetails'
-        "500":
-          description: Internal Server Error
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
       security:
@@ -333,10 +325,6 @@ paths:
             $ref: '#/definitions/user.ResponseDetails'
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/shared.ResponseOneMessage'
-        "500":
-          description: Internal Server Error
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
       summary: Get user details
@@ -370,10 +358,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ResponseList'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/shared.ResponseOneMessage'
       summary: Get all users
       tags:
       - user

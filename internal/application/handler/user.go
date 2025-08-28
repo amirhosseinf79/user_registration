@@ -24,7 +24,6 @@ func NewUserHandler(userService interfaces.UserService) interfaces.UserHandler {
 // @Param userID path int true "UserID"
 // @Success 200 {object} user.ResponseDetails
 // @Failure 404 {object} shared.ResponseOneMessage
-// @Failure 500 {object} shared.ResponseOneMessage
 // @Router /user/{userID} [get]
 func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 	userID, _ := ctx.ParamsInt("userID", 0)
@@ -42,7 +41,6 @@ func (uh *userHandler) GetUserByID(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param filters query user.FilterUser false "Filters"
 // @Success 200 {object} user.ResponseList
-// @Failure 500 {object} shared.ResponseOneMessage
 // @Router /user/all [get]
 func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 	var filter user.FilterUser
@@ -61,8 +59,6 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 // @Produce json
 // @Security BearerAuth
 // @Success 200 {object} user.ResponseDetails
-// @Failure 404 {object} shared.ResponseOneMessage
-// @Failure 500 {object} shared.ResponseOneMessage
 // @Router /profile [get]
 func (uh *userHandler) GetUserProfile(ctx *fiber.Ctx) error {
 	userID := ctx.Locals("userID").(uint)
@@ -81,7 +77,7 @@ func (uh *userHandler) GetUserProfile(ctx *fiber.Ctx) error {
 // @Security BearerAuth
 // @Param user body user.FieldUpdateDetails true "user"
 // @Success 200 {object} user.ResponseDetails
-// @Failure 500 {object} shared.ResponseOneMessage
+// @Failure 400 {object} shared.ResponseOneMessage
 // @Router /profile/update [patch]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 	var fields user.FieldUpdateDetails
@@ -102,7 +98,7 @@ func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 // @Security BearerAuth
 // @Param fields body user.FieldUpdatePassword true "Fields"
 // @Success 200 {object} user.ResponseDetails
-// @Failure 500 {object} shared.ResponseOneMessage
+// @Failure 400 {object} shared.ResponseOneMessage
 // @Router /profile/update-pass [put]
 func (uh *userHandler) UpdateUserPassword(ctx *fiber.Ctx) error {
 	var fields user.FieldUpdatePassword

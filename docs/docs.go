@@ -214,18 +214,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
                     }
                 }
             }
@@ -266,8 +254,8 @@ const docTemplate = `{
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
@@ -311,8 +299,8 @@ const docTemplate = `{
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
@@ -366,12 +354,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/user.ResponseList"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
                     }
                 }
             }
@@ -407,12 +389,6 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }

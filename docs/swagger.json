@@ -205,18 +205,6 @@
                         "schema": {
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
                     }
                 }
             }
@@ -257,8 +245,8 @@
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
@@ -302,8 +290,8 @@
                             "$ref": "#/definitions/user.ResponseDetails"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
@@ -357,12 +345,6 @@
                         "schema": {
                             "$ref": "#/definitions/user.ResponseList"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
                     }
                 }
             }
@@ -398,12 +380,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/shared.ResponseOneMessage"
                         }
