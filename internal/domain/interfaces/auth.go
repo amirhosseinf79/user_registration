@@ -9,11 +9,13 @@ import (
 type AuthHandler interface {
 	SendOTP(ctx *fiber.Ctx) error
 	LoginByOTP(ctx *fiber.Ctx) error
+	LoginByPassword(ctx *fiber.Ctx) error
 	RefreshToken(ctx *fiber.Ctx) error
 }
 
 type AuthService interface {
 	SendOTP(fields auth.FieldSendOTP) (*auth.OTPOk, *shared.ResponseOneMessage)
 	LoginByOTP(fields auth.FieldVerifyOTP) (*auth.ResponseJWT, *shared.ResponseOneMessage)
+	LoginByPassword(fields auth.FieldPassLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 	RefreshToken(refresh string) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 }

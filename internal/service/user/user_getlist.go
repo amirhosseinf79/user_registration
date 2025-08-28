@@ -25,6 +25,7 @@ func (u *userService) GetUserList(filter user.FilterUser) (*shared.ResponseList[
 			LastName:     userM.LastName,
 			Email:        userM.Email,
 			RegisteredAt: userM.CreatedAt,
+			HasPassword:  userM.Password != "",
 		}
 		userList = append(userList, userDetails)
 	}

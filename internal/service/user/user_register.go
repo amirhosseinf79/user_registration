@@ -49,6 +49,7 @@ func (u *userService) RegisterUserByNumber(phoneNumber string) (*user.ResponseDe
 		LastName:     userM.LastName,
 		Email:        userM.Email,
 		RegisteredAt: userM.CreatedAt,
+		HasPassword:  userM.Password != "",
 	}
 	return &userDetails, nil
 }

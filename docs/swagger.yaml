@@ -1,4 +1,14 @@
 definitions:
+  auth.FieldPassLogin:
+    properties:
+      password:
+        type: string
+      phoneNumber:
+        type: string
+    required:
+    - password
+    - phoneNumber
+    type: object
   auth.FieldRefreshToken:
     properties:
       refreshToken:
@@ -68,12 +78,23 @@ definitions:
       lastName:
         type: string
     type: object
+  user.FieldUpdatePassword:
+    properties:
+      newPassword:
+        type: string
+      oldPassword:
+        type: string
+    required:
+    - newPassword
+    type: object
   user.ResponseDetails:
     properties:
       email:
         type: string
       firstName:
         type: string
+      hasPassword:
+        type: boolean
       id:
         type: integer
       lastName:
@@ -97,6 +118,34 @@ info:
   title: User OTP Registration API
   version: "1.0"
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login with Mobile & Password
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/auth.FieldPassLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.ResponseJWT'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      summary: Login with Password
+      tags:
+      - auth
   /auth/refresh-token:
     post:
       consumes:
@@ -183,6 +232,31 @@ paths:
       summary: Verify OTP
       tags:
       - auth
+  /profile:
+    get:
+      consumes:
+      - application/json
+      description: Get User profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseDetails'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - user
   /profile/update:
     patch:
       consumes:
@@ -209,6 +283,34 @@ paths:
       security:
       - BearerAuth: []
       summary: Update user Profile
+      tags:
+      - user
+  /profile/update-pass:
+    put:
+      consumes:
+      - application/json
+      description: Update User Password
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/user.FieldUpdatePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseDetails'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      security:
+      - BearerAuth: []
+      summary: Update user password
       tags:
       - user
   /user/{userID}:

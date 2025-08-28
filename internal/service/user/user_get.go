@@ -34,6 +34,7 @@ func (u *userService) GetUserDetailsByID(userID uint) (*user.ResponseDetails, *s
 		LastName:     userM.LastName,
 		Email:        userM.Email,
 		RegisteredAt: userM.CreatedAt,
+		HasPassword:  userM.Password != "",
 	}
 	return &userDetails, nil
 }

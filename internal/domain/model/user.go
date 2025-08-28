@@ -1,6 +1,9 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/amirhosseinf79/user_registration/pkg"
+	"github.com/jinzhu/gorm"
+)
 
 type User struct {
 	gorm.Model
@@ -8,4 +11,9 @@ type User struct {
 	FirstName   string
 	LastName    string
 	Email       string
+	Password    string
+}
+
+func (u *User) ValidatePassword(password string) bool {
+	return pkg.ComparePassword(password, u.Password)
 }

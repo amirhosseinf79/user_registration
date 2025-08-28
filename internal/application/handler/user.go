@@ -54,6 +54,25 @@ func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 	return ctx.JSON(userDetails)
 }
 
+// @Summary Get user profile
+// @Description Get User profile
+// @Tags user
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} user.ResponseDetails
+// @Failure 404 {object} shared.ResponseOneMessage
+// @Failure 500 {object} shared.ResponseOneMessage
+// @Router /profile [get]
+func (uh *userHandler) GetUserProfile(ctx *fiber.Ctx) error {
+	userID := ctx.Locals("userID").(uint)
+	userDetails, err := uh.userService.GetUserDetailsByID(userID)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(userDetails)
+}
+
 // @Summary Update user Profile
 // @Description Update User Profile
 // @Tags user
@@ -69,6 +88,27 @@ func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 	ctx.BodyParser(&fields)
 	userID := ctx.Locals("userID").(uint)
 	userDetails, err := uh.userService.UpdateUserProfile(userID, fields)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(userDetails)
+}
+
+// @Summary Update user password
+// @Description Update User Password
+// @Tags user
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param fields body user.FieldUpdatePassword true "Fields"
+// @Success 200 {object} user.ResponseDetails
+// @Failure 500 {object} shared.ResponseOneMessage
+// @Router /profile/update-pass [put]
+func (uh *userHandler) UpdateUserPassword(ctx *fiber.Ctx) error {
+	var fields user.FieldUpdatePassword
+	ctx.BodyParser(&fields)
+	userID := ctx.Locals("userID").(uint)
+	userDetails, err := uh.userService.UpdateUserPassword(userID, fields)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)
 	}

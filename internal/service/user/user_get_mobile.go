@@ -3,14 +3,26 @@ package user
 import (
 	"errors"
 
+	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/internal/dto/user"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
 
-func (u *userService) UpdateUserProfile(userID uint, fields user.FieldUpdateDetails) (*user.ResponseDetails, *shared.ResponseOneMessage) {
-	userM, err := u.userRepo.GetByID(userID)
+func (u *userService) GetUserByMobile(mobile string) (*model.User, error) {
+	userM, err := u.userRepo.GetByMobile(mobile)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, shared.ErrUsertNotFound
+		}
+		return nil, err
+	}
+	return userM, nil
+}
+
+func (u *userService) GetUserDetailsByMobile(mobile string) (*user.ResponseDetails, *shared.ResponseOneMessage) {
+	userM, err := u.userRepo.GetByMobile(mobile)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
@@ -20,26 +32,6 @@ func (u *userService) UpdateUserProfile(userID uint, fields user.FieldUpdateDeta
 			})
 			return nil, result
 		}
-		result := shared.NewDefaultResponse(shared.ResponseArgs{
-			ErrStatus:  fiber.StatusInternalServerError,
-			ErrMessage: shared.ErrInternalServerError,
-			RealError:  err,
-		})
-		return nil, result
-	}
-
-	if fields.FirstName != "" {
-		userM.FirstName = fields.FirstName
-	}
-	if fields.LastName != "" {
-		userM.LastName = fields.LastName
-	}
-	if fields.Email != "" {
-		userM.Email = fields.Email
-	}
-
-	err = u.userRepo.Update(userM)
-	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,
 			ErrMessage: shared.ErrInternalServerError,

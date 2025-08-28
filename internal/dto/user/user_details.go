@@ -9,4 +9,5 @@ type ResponseDetails struct {
 	FirstName    string    `json:"firstName"`
 	LastName     string    `json:"lastName"`
 	RegisteredAt time.Time `json:"registeredAt"`
+	HasPassword  bool      `json:"hasPassword"`
 }

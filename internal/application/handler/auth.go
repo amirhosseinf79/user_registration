@@ -55,6 +55,25 @@ func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
 	return ctx.JSON(response)
 }
 
+// @Summary Login with Password
+// @Description Login with Mobile & Password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param fields body auth.FieldPassLogin true "Fields"
+// @Success 200 {array} auth.ResponseJWT
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /auth/login [post]
+func (ah *authHandler) LoginByPassword(ctx *fiber.Ctx) error {
+	var fields auth.FieldPassLogin
+	ctx.BodyParser(&fields)
+	response, err := ah.authService.LoginByPassword(fields)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(response)
+}
+
 // @Summary Refresh Token
 // @Description Refresh Token
 // @Tags auth
