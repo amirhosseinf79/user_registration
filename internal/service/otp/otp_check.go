@@ -27,11 +27,11 @@ func (o *otpService) CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared.Res
 		})
 		return false, result
 	}
-	canLogin, result := o.CanLogin(fields.PhoneNumber)
+	canLogin, result := o.CanLogin(fields.PhoneNumber, pkg.ComparePassword(fields.Code, savedHash))
 	if result != nil {
 		return false, result
 	}
-	if !canLogin || !pkg.ComparePassword(fields.Code, savedHash) {
+	if !canLogin {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusUnauthorized,
 			ErrMessage: shared.ErrInvalidCode,

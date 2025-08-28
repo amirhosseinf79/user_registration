@@ -12,5 +12,6 @@ type OTPRepository interface {
 	CanLogin(mobile string) (bool, int, error)
 	SaveOTP(otp *model.OTP) error
 	GetOTPByMobile(mobile string) (string, error)
+	ResetLoginLimit(mobile string) error
 	DeleteOTP(mobile string) error
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (o *otpService) CanLogin(mobile string) (bool, *shared.ResponseOneMessage) {
+func (o *otpService) CanLogin(mobile string, passwordOk bool) (bool, *shared.ResponseOneMessage) {
 	canLogin, _, err := o.otpRepo.CanLogin(mobile)
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
@@ -15,5 +15,19 @@ func (o *otpService) CanLogin(mobile string) (bool, *shared.ResponseOneMessage) 
 		})
 		return false, result
 	}
-	return canLogin, nil
+	if !canLogin {
+		return false, nil
+	}
+	if passwordOk {
+		err = o.otpRepo.ResetLoginLimit(mobile)
+		if err != nil {
+			result := shared.NewDefaultResponse(shared.ResponseArgs{
+				ErrStatus:  fiber.StatusInternalServerError,
+				ErrMessage: shared.ErrInternalServerError,
+				RealError:  err,
+			})
+			return false, result
+		}
+	}
+	return passwordOk, nil
 }

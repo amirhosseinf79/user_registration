@@ -104,3 +104,15 @@ func (o *otpRepository) DeleteOTP(mobile string) error {
 	}
 	return nil
 }
+
+func (o *otpRepository) ResetLoginLimit(mobile string) error {
+	key := o.prefix + "get:limit:" + mobile
+	err := o.client.Del(o.ctx, key).Err()
+	if err == redis.Nil {
+		return shared.ErrUsertNotFound
+	}
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -16,11 +16,11 @@ func (a *authService) LoginByEmail(fields auth.FieldEmailLogin) (*auth.ResponseJ
 		})
 		return nil, result
 	}
-	canLogin, result := a.otpService.CanLogin(userM.PhoneNumber)
+	canLogin, result := a.otpService.CanLogin(userM.PhoneNumber, userM.ValidatePassword(fields.Password))
 	if result != nil {
 		return nil, result
 	}
-	if !canLogin || !userM.ValidatePassword(fields.Password) {
+	if !canLogin {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusUnauthorized,
 			ErrMessage: shared.ErrInvalidCreds,
