@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
@@ -30,7 +31,7 @@ func (u *userService) VerifyUserMobile(userID uint, code string) (*user.Response
 	}
 
 	_, err2 := u.otpService.CheckOTPCode(auth.FieldVerifyOTP{
-		FieldSendOTP: auth.FieldSendOTP{PhoneNumber: userM.PhoneNumber},
+		FieldSendOTP: auth.FieldSendOTP{PhoneNumber: fmt.Sprintf("V:%v", userM.PhoneNumber)},
 		Code:         code,
 	})
 	if err2 != nil {

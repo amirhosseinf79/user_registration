@@ -316,6 +316,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/profile/send/otp": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Send Verify Code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Send Verify Code",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.OTPOkMock"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/profile/update/info": {
             "patch": {
                 "security": [

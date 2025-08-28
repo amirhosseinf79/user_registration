@@ -355,6 +355,27 @@ paths:
       summary: Get user profile
       tags:
       - Profile
+  /profile/send/otp:
+    post:
+      consumes:
+      - application/json
+      description: Send Verify Code
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.OTPOkMock'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      security:
+      - BearerAuth: []
+      summary: Send Verify Code
+      tags:
+      - Profile
   /profile/update/info:
     patch:
       consumes:

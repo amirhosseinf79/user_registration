@@ -54,11 +54,11 @@ func main() {
 	tokenRepo := persistence.NewTokenRepository(ctx, redisDB, configs.Token.RefreshTokenExp)
 	smsRepo := external.NewKavenegarSMSService(configs.SMS.Kavenegar.Key, configs.SMS.Kavenegar.Sender)
 
-	jwtService := jwt.NewJWTService(jwtRepo, tokenRepo)
 	otpService := otp.NewOTPService(otpRepo)
-	userService := user.NewUserService(userRepo, otpService)
-
 	smsService := sms.NewSMSService(smsRepo)
+	jwtService := jwt.NewJWTService(jwtRepo, tokenRepo)
+	userService := user.NewUserService(userRepo, otpService, smsService)
+
 	authService := auth.NewAuthService(
 		jwtService,
 		userService,
