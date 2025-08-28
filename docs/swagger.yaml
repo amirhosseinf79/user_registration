@@ -23,6 +23,15 @@ definitions:
     - code
     - phoneNumber
     type: object
+  auth.OTPOkMock:
+    properties:
+      code:
+        type: integer
+      expiresIn:
+        type: integer
+      retryCount:
+        type: integer
+    type: object
   auth.ResponseJWT:
     properties:
       accessToken:
@@ -134,9 +143,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/shared.ResponseOneMessage'
-            type: array
+            $ref: '#/definitions/auth.OTPOkMock'
         "400":
           description: Bad Request
           schema:

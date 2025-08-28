@@ -22,14 +22,17 @@ func NewAuthHandler(authService interfaces.AuthService) interfaces.AuthHandler {
 // @Accept json
 // @Produce json
 // @Param fields body auth.FieldSendOTP true "Fields"
-// @Success 200 {array} shared.ResponseOneMessage
+// @Success 200 {object} auth.OTPOkMock
 // @Failure 400 {object} shared.ResponseOneMessage
 // @Failure 403 {object} shared.ResponseOneMessage
 // @Router /auth/send-otp [post]
 func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 	var fields auth.FieldSendOTP
 	ctx.BodyParser(&fields)
-	response := ah.authService.SendOTP(fields)
+	response, err := ah.authService.SendOTP(fields)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
 	return ctx.Status(response.Code).JSON(response)
 }
 

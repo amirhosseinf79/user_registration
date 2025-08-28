@@ -86,10 +86,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/shared.ResponseOneMessage"
-                            }
+                            "$ref": "#/definitions/auth.OTPOkMock"
                         }
                     },
                     "400": {
@@ -331,6 +328,20 @@ const docTemplate = `{
                 },
                 "phoneNumber": {
                     "type": "string"
+                }
+            }
+        },
+        "auth.OTPOkMock": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "expiresIn": {
+                    "type": "integer"
+                },
+                "retryCount": {
+                    "type": "integer"
                 }
             }
         },

@@ -13,7 +13,7 @@ type AuthHandler interface {
 }
 
 type AuthService interface {
-	SendOTP(fields auth.FieldSendOTP) *shared.ResponseOneMessage
+	SendOTP(fields auth.FieldSendOTP) (*auth.OTPOk, *shared.ResponseOneMessage)
 	LoginByOTP(fields auth.FieldVerifyOTP) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 	RefreshToken(refresh string) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 }

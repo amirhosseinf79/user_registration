@@ -6,6 +6,6 @@ import (
 )
 
 type OTPStoreService interface {
-	StoreCode(fields auth.FieldSendOTP) (string, *shared.ResponseOneMessage)
+	StoreCode(fields auth.FieldSendOTP) (string, *auth.OTPOk, *shared.ResponseOneMessage)
 	CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared.ResponseOneMessage)
 }

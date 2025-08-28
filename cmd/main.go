@@ -50,14 +50,22 @@ func main() {
 	otpTimeExp := 2 * time.Minute
 	accessTokenExp := 2 * time.Hour
 	refreshRokenExp := 6 * time.Hour
-	smsRateLimitDuration := 10 * time.Minute
-	smsRateLimitCount := 3
+	rateLimitDuration := 10 * time.Minute
+	otpSendRateLimit := 3
+	loginRateLimit := 5
 
 	ctx := context.Background()
 	gormDB := database.NewGormconnection(gormConnStr, debug)
 	redisDB := database.NewRedisConnection(redisAddr, redisPwd, ctx)
 
-	otpRepo := persistence.NewOTPRepository(ctx, redisDB, otpTimeExp, smsRateLimitCount, smsRateLimitDuration)
+	otpRepo := persistence.NewOTPRepository(
+		ctx,
+		redisDB,
+		otpTimeExp,
+		loginRateLimit,
+		otpSendRateLimit,
+		rateLimitDuration,
+	)
 	tokenRepo := persistence.NewTokenRepository(ctx, redisDB, refreshRokenExp)
 	userRepo := persistence.NewUserRepository(gormDB)
 	jwtRepo := persistence.NewJWTRepository(secret, accessTokenExp, refreshRokenExp)

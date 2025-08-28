@@ -8,22 +8,22 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *shared.ResponseOneMessage) {
-	canGenerate, err := o.otpRepo.CanSetOTP(fields.PhoneNumber)
+func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *auth.OTPOk, *shared.ResponseOneMessage) {
+	canGenerate, remained, err := o.otpRepo.CanSetOTP(fields.PhoneNumber)
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,
 			ErrMessage: shared.ErrInternalServerError,
 			RealError:  err,
 		})
-		return "", result
+		return "", nil, result
 	}
 	if !canGenerate {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusForbidden,
 			ErrMessage: shared.ErrSmsRateLimited,
 		})
-		return "", result
+		return "", nil, result
 	}
 	generatedCode, err := pkg.GenerateNumericOTP(6)
 	if err != nil {
@@ -32,11 +32,20 @@ func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *shared.Respon
 			ErrMessage: shared.ErrInternalServerError,
 			RealError:  err,
 		})
-		return "", result
+		return "", nil, result
+	}
+	hashedCode, err := pkg.HashPassword(generatedCode)
+	if err != nil {
+		result := shared.NewDefaultResponse(shared.ResponseArgs{
+			ErrStatus:  fiber.StatusInternalServerError,
+			ErrMessage: shared.ErrInternalServerError,
+			RealError:  err,
+		})
+		return "", nil, result
 	}
 	err = o.otpRepo.SaveOTP(&model.OTP{
 		Mobile: fields.PhoneNumber,
-		Code:   generatedCode,
+		Code:   hashedCode,
 	})
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
@@ -44,7 +53,12 @@ func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *shared.Respon
 			ErrMessage: shared.ErrInternalServerError,
 			RealError:  err,
 		})
-		return "", result
+		return "", nil, result
 	}
-	return generatedCode, nil
+	response := auth.OTPOk{
+		Code:       fiber.StatusOK,
+		RetryCount: remained,
+		ExpiresIn:  o.otpRepo.GetOTPExpDuration(),
+	}
+	return generatedCode, &response, nil
 }

@@ -1,11 +1,15 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 )
 
 type OTPRepository interface {
-	CanSetOTP(mobile string) (bool, error)
+	GetOTPExpDuration() time.Duration
+	CanSetOTP(mobile string) (bool, int, error)
+	CanLoginOTP(mobile string) (bool, int, error)
 	SaveOTP(otp *model.OTP) error
 	GetOTPByMobile(mobile string) (string, error)
 	DeleteOTP(mobile string) error
