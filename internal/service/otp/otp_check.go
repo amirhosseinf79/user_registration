@@ -27,13 +27,8 @@ func (o *otpService) CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared.Res
 		})
 		return false, result
 	}
-	canLogin, _, err := o.otpRepo.CanLoginOTP(fields.PhoneNumber)
-	if err != nil {
-		result := shared.NewDefaultResponse(shared.ResponseArgs{
-			ErrStatus:  fiber.StatusInternalServerError,
-			ErrMessage: shared.ErrInternalServerError,
-			RealError:  err,
-		})
+	canLogin, result := o.CanLogin(fields.PhoneNumber)
+	if result != nil {
 		return false, result
 	}
 	if !canLogin || !pkg.ComparePassword(fields.Code, savedHash) {

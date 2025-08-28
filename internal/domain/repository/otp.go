@@ -9,7 +9,7 @@ import (
 type OTPRepository interface {
 	GetOTPExpDuration() time.Duration
 	CanSetOTP(mobile string) (bool, int, error)
-	CanLoginOTP(mobile string) (bool, int, error)
+	CanLogin(mobile string) (bool, int, error)
 	SaveOTP(otp *model.OTP) error
 	GetOTPByMobile(mobile string) (string, error)
 	DeleteOTP(mobile string) error

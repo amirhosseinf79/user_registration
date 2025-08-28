@@ -61,7 +61,7 @@ func (o *otpRepository) CanSetOTP(mobile string) (bool, int, error) {
 	return true, o.otpSendRateLimit - int(count), nil
 }
 
-func (o *otpRepository) CanLoginOTP(mobile string) (bool, int, error) {
+func (o *otpRepository) CanLogin(mobile string) (bool, int, error) {
 	key := o.prefix + "get:limit:" + mobile
 	counter, err := o.client.Incr(o.ctx, key).Result()
 	if err != nil {
