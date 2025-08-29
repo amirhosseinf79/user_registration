@@ -3,13 +3,14 @@ package user
 import (
 	"errors"
 
+	"github.com/amirhosseinf79/user_registration/internal/dto/otp"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/internal/dto/user"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
 
-func (u *userService) VerifyUserEmail(userID uint) (*user.ResponseDetails, *shared.ResponseOneMessage) {
+func (u *userService) VerifyUserEmail(userID uint, code string) (*user.ResponseDetails, *shared.ResponseOneMessage) {
 	userM, err := u.userRepo.GetByID(userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -26,6 +27,25 @@ func (u *userService) VerifyUserEmail(userID uint) (*user.ResponseDetails, *shar
 			RealError:  err,
 		})
 		return nil, result
+	}
+
+	if userM.Email == "" {
+		result := shared.NewDefaultResponse(shared.ResponseArgs{
+			ErrStatus:  fiber.StatusBadRequest,
+			ErrMessage: shared.ErrInvalidEmail,
+		})
+		return nil, result
+	}
+
+	_, err2 := u.otpService.CheckOTPCode(otp.FieldVerifyOTP{
+		FieldOTPStore: otp.FieldOTPStore{
+			Prefix: "verify:email:",
+			Key:    userM.Email,
+		},
+		Code: code,
+	})
+	if err2 != nil {
+		return nil, err2
 	}
 
 	userM.EmailVerified = true

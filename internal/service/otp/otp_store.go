@@ -22,7 +22,7 @@ func (o *otpService) StoreCode(fields otp.FieldOTPStore) (string, *auth.OTPOk, *
 	if !canGenerate {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusForbidden,
-			ErrMessage: shared.ErrSmsRateLimited,
+			ErrMessage: shared.ErrOTPRateLimited,
 		})
 		return "", nil, result
 	}

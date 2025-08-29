@@ -7,15 +7,25 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/dto/otp"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/internal/dto/sms"
+	"github.com/gofiber/fiber/v2"
 )
 
-func (a *userService) SendVerifyOTP(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage) {
+func (a *userService) SendVerifyMobile(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage) {
 	userM, err := a.GetUserDetailsByID(userID)
 	if err != nil {
 		return nil, err
 	}
+
+	if userM.PhoneNumber == "" {
+		result := shared.NewDefaultResponse(shared.ResponseArgs{
+			ErrStatus:  fiber.StatusBadRequest,
+			ErrMessage: shared.ErrInvalidMobile,
+		})
+		return nil, result
+	}
+
 	generatedCode, response, err := a.otpService.StoreCode(otp.FieldOTPStore{
-		Prefix: "verify:",
+		Prefix: "verify:mobile:",
 		Key:    userM.PhoneNumber,
 	},
 	)

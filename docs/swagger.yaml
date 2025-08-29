@@ -357,7 +357,28 @@ paths:
       summary: Get user profile
       tags:
       - Profile
-  /profile/send/otp:
+  /profile/send/verify-email-otp:
+    post:
+      consumes:
+      - application/json
+      description: Send Verify Code
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.OTPOkMock'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      security:
+      - BearerAuth: []
+      summary: Send Verify Code
+      tags:
+      - Profile
+  /profile/send/verify-mobile-otp:
     post:
       consumes:
       - application/json
@@ -440,6 +461,38 @@ paths:
       security:
       - BearerAuth: []
       summary: Update user password
+      tags:
+      - Profile
+  /profile/verify/email:
+    post:
+      consumes:
+      - application/json
+      description: verify Mobile
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/user.FieldVerifyOTP'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ResponseDetails'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      security:
+      - BearerAuth: []
+      summary: Verify Mobile
       tags:
       - Profile
   /profile/verify/mobile:

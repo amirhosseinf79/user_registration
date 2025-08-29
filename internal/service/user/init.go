@@ -6,19 +6,22 @@ import (
 )
 
 type userService struct {
-	userRepo   repository.UserRepository
-	otpService interfaces.OTPStoreService
-	smsService interfaces.SMSService
+	userRepo    repository.UserRepository
+	otpService  interfaces.OTPStoreService
+	smsService  interfaces.SMSService
+	mailService interfaces.EmailService
 }
 
 func NewUserService(
 	userRepo repository.UserRepository,
 	otpService interfaces.OTPStoreService,
 	smsService interfaces.SMSService,
+	mailService interfaces.EmailService,
 ) interfaces.UserService {
 	return &userService{
-		userRepo:   userRepo,
-		otpService: otpService,
-		smsService: smsService,
+		userRepo:    userRepo,
+		otpService:  otpService,
+		smsService:  smsService,
+		mailService: mailService,
 	}
 }

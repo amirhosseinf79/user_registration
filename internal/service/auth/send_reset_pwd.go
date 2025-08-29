@@ -52,10 +52,13 @@ func (a *authService) SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OT
 			return nil, result
 		}
 	} else {
-		a.emailService.SendToClient(email.FieldSendClient{
+		err := a.emailService.SendToClient(email.FieldSendClient{
 			Email: fields.Username,
 			Text:  userText,
 		})
+		if err != nil {
+			return nil, err
+		}
 	}
 	return ok, nil
 }

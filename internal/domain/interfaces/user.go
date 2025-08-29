@@ -15,8 +15,10 @@ type UserHandler interface {
 	UpdateProfileInfo(ctx *fiber.Ctx) error
 	UpdateUserPassword(ctx *fiber.Ctx) error
 
-	SendUserOTP(ctx *fiber.Ctx) error
-	VerifyUserOTP(ctx *fiber.Ctx) error
+	SendUserVerifyMobile(ctx *fiber.Ctx) error
+	SendUserVerifyEmail(ctx *fiber.Ctx) error
+	VerifyUserMobile(ctx *fiber.Ctx) error
+	VerifyUserEmail(ctx *fiber.Ctx) error
 }
 
 type UserService interface {
@@ -35,11 +37,12 @@ type UserService interface {
 	RegisterUserByNumber(phoneNumber string) (*user.ResponseDetails, *shared.ResponseOneMessage)
 	RegisterUserByEmail(fields auth.FieldEmailRegister) (*user.ResponseDetails, *shared.ResponseOneMessage)
 
-	SendVerifyOTP(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage)
-
 	UpdateUserProfile(userID uint, fields user.FieldUpdateDetails) (*user.ResponseDetails, *shared.ResponseOneMessage)
 	UpdateUserPassword(userID uint, fields user.FieldUpdatePassword) (*user.ResponseDetails, *shared.ResponseOneMessage)
 	ResetUserPasswordByInfo(userInfo, newPassword string) (*user.ResponseDetails, *shared.ResponseOneMessage)
+
+	SendVerifyMobile(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage)
+	SendVerifyEmail(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage)
 	VerifyUserMobile(userID uint, code string) (*user.ResponseDetails, *shared.ResponseOneMessage)
-	VerifyUserEmail(userID uint) (*user.ResponseDetails, *shared.ResponseOneMessage)
+	VerifyUserEmail(userID uint, code string) (*user.ResponseDetails, *shared.ResponseOneMessage)
 }

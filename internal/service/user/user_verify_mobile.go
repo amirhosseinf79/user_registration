@@ -29,9 +29,17 @@ func (u *userService) VerifyUserMobile(userID uint, code string) (*user.Response
 		return nil, result
 	}
 
+	if userM.PhoneNumber == "" {
+		result := shared.NewDefaultResponse(shared.ResponseArgs{
+			ErrStatus:  fiber.StatusBadRequest,
+			ErrMessage: shared.ErrInvalidMobile,
+		})
+		return nil, result
+	}
+
 	_, err2 := u.otpService.CheckOTPCode(otp.FieldVerifyOTP{
 		FieldOTPStore: otp.FieldOTPStore{
-			Prefix: "verify:",
+			Prefix: "verify:mobile:",
 			Key:    userM.PhoneNumber,
 		},
 		Code: code,

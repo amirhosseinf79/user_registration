@@ -114,22 +114,18 @@ func (uh *userHandler) UpdateUserPassword(ctx *fiber.Ctx) error {
 	return ctx.JSON(userDetails)
 }
 
-// @Summary Verify Mobile
-// @Description verify Mobile
+// @Summary Send Verify Code
+// @Description Send Verify Code
 // @Tags Profile
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param fields body user.FieldVerifyOTP true "Fields"
-// @Success 200 {object} user.ResponseDetails
-// @Failure 400 {object} shared.ResponseOneMessage
+// @Success 200 {object} auth.OTPOkMock
 // @Failure 401 {object} shared.ResponseOneMessage
-// @Router /profile/verify/mobile [post]
-func (ah *userHandler) VerifyUserOTP(ctx *fiber.Ctx) error {
-	var fields user.FieldVerifyOTP
-	ctx.BodyParser(&fields)
+// @Router /profile/send/verify-mobile-otp [post]
+func (ah *userHandler) SendUserVerifyMobile(ctx *fiber.Ctx) error {
 	userID := ctx.Locals("userID").(uint)
-	response, err := ah.userService.VerifyUserMobile(userID, fields.Code)
+	response, err := ah.userService.SendVerifyMobile(userID)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)
 	}
@@ -144,10 +140,54 @@ func (ah *userHandler) VerifyUserOTP(ctx *fiber.Ctx) error {
 // @Security BearerAuth
 // @Success 200 {object} auth.OTPOkMock
 // @Failure 401 {object} shared.ResponseOneMessage
-// @Router /profile/send/otp [post]
-func (ah *userHandler) SendUserOTP(ctx *fiber.Ctx) error {
+// @Router /profile/send/verify-email-otp [post]
+func (ah *userHandler) SendUserVerifyEmail(ctx *fiber.Ctx) error {
 	userID := ctx.Locals("userID").(uint)
-	response, err := ah.userService.SendVerifyOTP(userID)
+	response, err := ah.userService.SendVerifyEmail(userID)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(response)
+}
+
+// @Summary Verify Mobile
+// @Description verify Mobile
+// @Tags Profile
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param fields body user.FieldVerifyOTP true "Fields"
+// @Success 200 {object} user.ResponseDetails
+// @Failure 400 {object} shared.ResponseOneMessage
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /profile/verify/mobile [post]
+func (ah *userHandler) VerifyUserMobile(ctx *fiber.Ctx) error {
+	var fields user.FieldVerifyOTP
+	ctx.BodyParser(&fields)
+	userID := ctx.Locals("userID").(uint)
+	response, err := ah.userService.VerifyUserMobile(userID, fields.Code)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(response)
+}
+
+// @Summary Verify Mobile
+// @Description verify Mobile
+// @Tags Profile
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param fields body user.FieldVerifyOTP true "Fields"
+// @Success 200 {object} user.ResponseDetails
+// @Failure 400 {object} shared.ResponseOneMessage
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /profile/verify/email [post]
+func (ah *userHandler) VerifyUserEmail(ctx *fiber.Ctx) error {
+	var fields user.FieldVerifyOTP
+	ctx.BodyParser(&fields)
+	userID := ctx.Locals("userID").(uint)
+	response, err := ah.userService.VerifyUserEmail(userID, fields.Code)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)
 	}
