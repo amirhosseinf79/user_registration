@@ -47,3 +47,8 @@ func (t *tokenRepository) GetUserIDByRefresh(refreshToken string) (uint, error) 
 	}
 	return uint(id), nil
 }
+
+func (t *tokenRepository) DeleteRefreshToken(refreshToken string) error {
+	key := t.prefix + refreshToken
+	return t.client.Del(t.ctx, key).Err()
+}

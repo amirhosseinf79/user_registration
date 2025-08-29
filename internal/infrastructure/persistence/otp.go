@@ -11,9 +11,11 @@ import (
 )
 
 type otpRepository struct {
+	prefix            string
+	loginLimit        string
+	saveOTPLimit      string
 	ctx               context.Context
 	client            *redis.Client
-	prefix            string
 	otpExp            time.Duration
 	loginRateLimit    int
 	otpSendRateLimit  int
@@ -30,6 +32,8 @@ func NewOTPRepository(
 ) repository.OTPRepository {
 	return &otpRepository{
 		prefix:            "OTP:",
+		loginLimit:        "login:limit:",
+		saveOTPLimit:      "store:limit:",
 		client:            client,
 		ctx:               ctx,
 		otpExp:            otpExp,
@@ -43,8 +47,8 @@ func (o *otpRepository) GetOTPExpDuration() time.Duration {
 	return o.otpExp / 1000000000
 }
 
-func (o *otpRepository) CanSetOTP(mobile string) (bool, int, error) {
-	key := o.prefix + "set:limit:" + mobile
+func (o *otpRepository) CanSaveOTP(mobile string) (bool, int, error) {
+	key := o.prefix + o.saveOTPLimit + mobile
 	count, err := o.client.Incr(o.ctx, key).Result()
 	if err != nil {
 		return false, 0, err
@@ -62,7 +66,7 @@ func (o *otpRepository) CanSetOTP(mobile string) (bool, int, error) {
 }
 
 func (o *otpRepository) CanLogin(mobile string) (bool, int, error) {
-	key := o.prefix + "get:limit:" + mobile
+	key := o.prefix + o.loginLimit + mobile
 	counter, err := o.client.Incr(o.ctx, key).Result()
 	if err != nil {
 		return false, 0, err
@@ -105,8 +109,20 @@ func (o *otpRepository) DeleteOTP(mobile string) error {
 	return nil
 }
 
+func (o *otpRepository) ResetSetOTPLimit(mobile string) error {
+	key := o.prefix + o.saveOTPLimit + mobile
+	err := o.client.Del(o.ctx, key).Err()
+	if err == redis.Nil {
+		return shared.ErrUsertNotFound
+	}
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *otpRepository) ResetLoginLimit(mobile string) error {
-	key := o.prefix + "get:limit:" + mobile
+	key := o.prefix + o.loginLimit + mobile
 	err := o.client.Del(o.ctx, key).Err()
 	if err == redis.Nil {
 		return shared.ErrUsertNotFound

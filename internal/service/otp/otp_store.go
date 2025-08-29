@@ -9,7 +9,7 @@ import (
 )
 
 func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *auth.OTPOk, *shared.ResponseOneMessage) {
-	canGenerate, remained, err := o.otpRepo.CanSetOTP(fields.PhoneNumber)
+	canGenerate, remained, err := o.otpRepo.CanSaveOTP(fields.PhoneNumber)
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,

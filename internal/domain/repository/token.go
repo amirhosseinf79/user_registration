@@ -7,4 +7,5 @@ import (
 type TokenRepository interface {
 	SaveRefreshToken(token *model.Token) error
 	GetUserIDByRefresh(refreshToken string) (uint, error)
+	DeleteRefreshToken(refreshToken string) error
 }
