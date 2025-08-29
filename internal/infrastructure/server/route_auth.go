@@ -12,19 +12,20 @@ func (s server) InitAuthRoutes() {
 		s.fieldValidator.ValidateRefreshToken,
 		s.authHandler.RefreshToken,
 	)
-	route.Post(
-		"/otp-login",
+	login := route.Group("/login")
+	login.Post(
+		"/otp",
 		s.fieldValidator.ValidateMobile,
 		s.fieldValidator.ValidateVerifyField,
 		s.authHandler.LoginByOTP,
 	)
-	route.Post(
-		"/mobile-login",
+	login.Post(
+		"/mobile",
 		s.fieldValidator.ValidateMobileLogin,
 		s.authHandler.LoginByMobile,
 	)
-	route.Post(
-		"/email-login",
+	login.Post(
+		"/email",
 		s.fieldValidator.ValidateEmailLogin,
 		s.authHandler.LoginByEmail,
 	)

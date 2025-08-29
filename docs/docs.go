@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/email-login": {
+        "/auth/login/email": {
             "post": {
                 "description": "Login with Email \u0026 Password",
                 "consumes": [
@@ -58,7 +58,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/mobile-login": {
+        "/auth/login/mobile": {
             "post": {
                 "description": "Login with Mobile \u0026 Password",
                 "consumes": [
@@ -101,7 +101,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/otp-login": {
+        "/auth/login/otp": {
             "post": {
                 "description": "Login By OTP Code",
                 "consumes": [

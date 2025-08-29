@@ -160,7 +160,7 @@ info:
   title: User OTP Registration API
   version: "1.0"
 paths:
-  /auth/email-login:
+  /auth/login/email:
     post:
       consumes:
       - application/json
@@ -188,7 +188,7 @@ paths:
       summary: Login By Email
       tags:
       - Auth
-  /auth/mobile-login:
+  /auth/login/mobile:
     post:
       consumes:
       - application/json
@@ -216,7 +216,7 @@ paths:
       summary: Login by Mobile
       tags:
       - Auth
-  /auth/otp-login:
+  /auth/login/otp:
     post:
       consumes:
       - application/json
