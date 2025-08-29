@@ -17,7 +17,7 @@ func NewUserService(
 	otpService interfaces.OTPStoreService,
 	smsService interfaces.SMSService,
 	mailService interfaces.EmailService,
-) interfaces.UserService {
+) interfaces.UserService1 {
 	return &userService{
 		userRepo:    userRepo,
 		otpService:  otpService,

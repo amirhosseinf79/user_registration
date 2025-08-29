@@ -2,7 +2,7 @@ package interfaces
 
 type ServerService interface {
 	InitSwaggerRoutes()
-	InitAuthRoutes()
-	InitUserRoutes()
+	InitAuthRoutes1()
+	InitUserRoutes1()
 	Start(port string)
 }

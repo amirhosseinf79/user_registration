@@ -1,22 +1,22 @@
 package server
 
-func (s server) InitAuthRoutes() {
-	route := s.app.Group("/auth")
+func (s server) InitAuthRoutes1() {
+	route := s.app.Group("api/v1/auth")
 	route.Post(
 		"/send-otp",
 		s.fieldValidator.ValidateMobile,
-		s.authHandler.SendOTP,
+		s.authHandler1.SendOTP,
 	)
 	route.Post(
 		"/refresh-token",
 		s.fieldValidator.ValidateRefreshToken,
-		s.authHandler.RefreshToken,
+		s.authHandler1.RefreshToken,
 	)
 
 	route.Post(
 		"/login",
 		s.fieldValidator.ValidateLogin,
-		s.authHandler.AutoLogin,
+		s.authHandler1.AutoLogin,
 	)
 
 	route.Post(
@@ -24,19 +24,19 @@ func (s server) InitAuthRoutes() {
 		s.fieldValidator.ValidateRegister,
 		s.fieldValidator.ValidateEmail,
 		s.fieldValidator.ValidateMobile,
-		s.authHandler.RegisterByEmail,
+		s.authHandler1.RegisterByEmail,
 	)
 
 	password := route.Group("/password")
 	password.Post(
 		"/send-code",
 		s.fieldValidator.ValidateSendResetPassOTP,
-		s.authHandler.SendResetPassOTP,
+		s.authHandler1.SendResetPassOTP,
 	)
 	password.Put(
 		"/reset",
 		s.fieldValidator.ValidateVerifyCode,
 		s.fieldValidator.ValidateNewPassword,
-		s.authHandler.ResetPassWithOTP,
+		s.authHandler1.ResetPassWithOTP,
 	)
 }

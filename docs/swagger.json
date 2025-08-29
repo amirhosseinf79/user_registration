@@ -6,7 +6,7 @@
         "version": "1.0"
     },
     "paths": {
-        "/auth/login": {
+        "/api/v1/auth/login": {
             "post": {
                 "description": "Login By Email, Mobile or OTP",
                 "consumes": [
@@ -49,7 +49,7 @@
                 }
             }
         },
-        "/auth/password/reset": {
+        "/api/v1/auth/password/reset": {
             "put": {
                 "description": "change passwrod by sent OTP. Username could be Number or Email",
                 "consumes": [
@@ -92,7 +92,7 @@
                 }
             }
         },
-        "/auth/password/send-code": {
+        "/api/v1/auth/password/send-code": {
             "post": {
                 "description": "Send Reset Password Code",
                 "consumes": [
@@ -135,7 +135,7 @@
                 }
             }
         },
-        "/auth/refresh-token": {
+        "/api/v1/auth/refresh-token": {
             "post": {
                 "description": "Refresh Token",
                 "consumes": [
@@ -178,7 +178,7 @@
                 }
             }
         },
-        "/auth/register": {
+        "/api/v1/auth/register": {
             "post": {
                 "description": "Register By Email",
                 "consumes": [
@@ -221,7 +221,7 @@
                 }
             }
         },
-        "/auth/send-otp": {
+        "/api/v1/auth/send-otp": {
             "post": {
                 "description": "Send OTP",
                 "consumes": [
@@ -273,7 +273,7 @@
                 }
             }
         },
-        "/profile": {
+        "/api/v1/profile": {
             "get": {
                 "security": [
                     {
@@ -307,7 +307,7 @@
                 }
             }
         },
-        "/profile/send/verify-email-otp": {
+        "/api/v1/profile/send/verify-email-otp": {
             "post": {
                 "security": [
                     {
@@ -341,7 +341,7 @@
                 }
             }
         },
-        "/profile/send/verify-mobile-otp": {
+        "/api/v1/profile/send/verify-mobile-otp": {
             "post": {
                 "security": [
                     {
@@ -375,7 +375,7 @@
                 }
             }
         },
-        "/profile/update/info": {
+        "/api/v1/profile/update/info": {
             "patch": {
                 "security": [
                     {
@@ -426,7 +426,7 @@
                 }
             }
         },
-        "/profile/update/password": {
+        "/api/v1/profile/update/password": {
             "put": {
                 "security": [
                     {
@@ -477,7 +477,7 @@
                 }
             }
         },
-        "/profile/verify/email": {
+        "/api/v1/profile/verify/email": {
             "post": {
                 "security": [
                     {
@@ -528,7 +528,7 @@
                 }
             }
         },
-        "/profile/verify/mobile": {
+        "/api/v1/profile/verify/mobile": {
             "post": {
                 "security": [
                     {
@@ -579,7 +579,7 @@
                 }
             }
         },
-        "/user/all": {
+        "/api/v1/user/all": {
             "get": {
                 "description": "Get list of all users",
                 "consumes": [
@@ -629,7 +629,7 @@
                 }
             }
         },
-        "/user/{userID}": {
+        "/api/v1/user/{userID}": {
             "get": {
                 "description": "Get User Details by ID",
                 "consumes": [

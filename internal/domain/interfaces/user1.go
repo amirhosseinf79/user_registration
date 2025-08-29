@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type UserHandler interface {
+type UserHandler1 interface {
 	GetUserByID(ctx *fiber.Ctx) error
 	GetUsersList(ctx *fiber.Ctx) error
 	GetUserProfile(ctx *fiber.Ctx) error
@@ -21,7 +21,7 @@ type UserHandler interface {
 	VerifyUserEmail(ctx *fiber.Ctx) error
 }
 
-type UserService interface {
+type UserService1 interface {
 	GetUserByID(id uint) (*model.User, error)
 	GetUserByEmail(email string) (*model.User, error)
 	GetUserByMobile(mobile string) (*model.User, error)

@@ -6,7 +6,7 @@ import (
 
 type authService struct {
 	jwtService   interfaces.JWTService
-	userService  interfaces.UserService
+	userService  interfaces.UserService1
 	otpService   interfaces.OTPStoreService
 	smsService   interfaces.SMSService
 	emailService interfaces.EmailService
@@ -14,11 +14,11 @@ type authService struct {
 
 func NewAuthService(
 	jwtService interfaces.JWTService,
-	userService interfaces.UserService,
+	userService interfaces.UserService1,
 	otpService interfaces.OTPStoreService,
 	smsService interfaces.SMSService,
 	emailService interfaces.EmailService,
-) interfaces.AuthService {
+) interfaces.AuthService1 {
 	return &authService{
 		jwtService:   jwtService,
 		userService:  userService,

@@ -162,7 +162,7 @@ info:
   title: User OTP Registration API
   version: "1.0"
 paths:
-  /auth/login:
+  /api/v1/auth/login:
     post:
       consumes:
       - application/json
@@ -190,7 +190,7 @@ paths:
       summary: Login
       tags:
       - Auth
-  /auth/password/reset:
+  /api/v1/auth/password/reset:
     put:
       consumes:
       - application/json
@@ -218,7 +218,7 @@ paths:
       summary: Reset Password
       tags:
       - Auth
-  /auth/password/send-code:
+  /api/v1/auth/password/send-code:
     post:
       consumes:
       - application/json
@@ -246,7 +246,7 @@ paths:
       summary: Send Reset Code
       tags:
       - Auth
-  /auth/refresh-token:
+  /api/v1/auth/refresh-token:
     post:
       consumes:
       - application/json
@@ -274,7 +274,7 @@ paths:
       summary: Refresh Token
       tags:
       - Auth
-  /auth/register:
+  /api/v1/auth/register:
     post:
       consumes:
       - application/json
@@ -302,7 +302,7 @@ paths:
       summary: Register By Email
       tags:
       - Auth
-  /auth/send-otp:
+  /api/v1/auth/send-otp:
     post:
       consumes:
       - application/json
@@ -336,7 +336,7 @@ paths:
       summary: Send OTP
       tags:
       - Auth
-  /profile:
+  /api/v1/profile:
     get:
       consumes:
       - application/json
@@ -357,7 +357,7 @@ paths:
       summary: Get user profile
       tags:
       - Profile
-  /profile/send/verify-email-otp:
+  /api/v1/profile/send/verify-email-otp:
     post:
       consumes:
       - application/json
@@ -378,7 +378,7 @@ paths:
       summary: Send Verify Code
       tags:
       - Profile
-  /profile/send/verify-mobile-otp:
+  /api/v1/profile/send/verify-mobile-otp:
     post:
       consumes:
       - application/json
@@ -399,7 +399,7 @@ paths:
       summary: Send Verify Code
       tags:
       - Profile
-  /profile/update/info:
+  /api/v1/profile/update/info:
     patch:
       consumes:
       - application/json
@@ -431,7 +431,7 @@ paths:
       summary: Update user Profile
       tags:
       - Profile
-  /profile/update/password:
+  /api/v1/profile/update/password:
     put:
       consumes:
       - application/json
@@ -463,7 +463,7 @@ paths:
       summary: Update user password
       tags:
       - Profile
-  /profile/verify/email:
+  /api/v1/profile/verify/email:
     post:
       consumes:
       - application/json
@@ -495,7 +495,7 @@ paths:
       summary: Verify Mobile
       tags:
       - Profile
-  /profile/verify/mobile:
+  /api/v1/profile/verify/mobile:
     post:
       consumes:
       - application/json
@@ -527,7 +527,7 @@ paths:
       summary: Verify Mobile
       tags:
       - Profile
-  /user/{userID}:
+  /api/v1/user/{userID}:
     get:
       consumes:
       - application/json
@@ -552,7 +552,7 @@ paths:
       summary: Get user details
       tags:
       - User
-  /user/all:
+  /api/v1/user/all:
     get:
       consumes:
       - application/json

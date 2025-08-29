@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type AuthHandler interface {
+type AuthHandler1 interface {
 	SendOTP(ctx *fiber.Ctx) error
 	AutoLogin(ctx *fiber.Ctx) error
 	RegisterByEmail(ctx *fiber.Ctx) error
@@ -15,7 +15,7 @@ type AuthHandler interface {
 	ResetPassWithOTP(ctx *fiber.Ctx) error
 }
 
-type AuthService interface {
+type AuthService1 interface {
 	SendOTP(fields auth.FieldSendOTP) (*auth.OTPOk, *shared.ResponseOneMessage)
 	RegisterByEmail(fields auth.FieldEmailRegister) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 

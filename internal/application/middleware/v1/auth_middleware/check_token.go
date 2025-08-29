@@ -1,24 +1,11 @@
-package middleware
+package auth_middleware
 
 import (
 	"strings"
 
-	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/gofiber/fiber/v2"
 )
-
-type authMiddleware struct {
-	jwtService interfaces.JWTService
-	prefix     string
-}
-
-func NewAuthMiddleware(jwtService interfaces.JWTService) interfaces.AuthMiddleware {
-	return &authMiddleware{
-		jwtService: jwtService,
-		prefix:     "Bearer ",
-	}
-}
 
 func (am *authMiddleware) CheckToken(ctx *fiber.Ctx) error {
 	token := ctx.Get("Authorization", "")

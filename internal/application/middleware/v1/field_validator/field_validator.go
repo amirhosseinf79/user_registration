@@ -1,4 +1,4 @@
-package middleware
+package field_validator
 
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"

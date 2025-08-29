@@ -4,19 +4,21 @@ import (
 	"context"
 
 	_ "github.com/amirhosseinf79/user_registration/docs"
-	"github.com/amirhosseinf79/user_registration/internal/application/handler"
-	"github.com/amirhosseinf79/user_registration/internal/application/middleware"
+	auth_handler1 "github.com/amirhosseinf79/user_registration/internal/application/handler/v1/auth"
+	user_handler1 "github.com/amirhosseinf79/user_registration/internal/application/handler/v1/user"
+	"github.com/amirhosseinf79/user_registration/internal/application/middleware/v1/auth_middleware"
+	"github.com/amirhosseinf79/user_registration/internal/application/middleware/v1/field_validator"
 	"github.com/amirhosseinf79/user_registration/internal/configs"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/database"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/external"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/persistence"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/server"
-	"github.com/amirhosseinf79/user_registration/internal/service/auth"
+	auth_service "github.com/amirhosseinf79/user_registration/internal/service/auth"
 	"github.com/amirhosseinf79/user_registration/internal/service/email"
 	"github.com/amirhosseinf79/user_registration/internal/service/jwt"
 	"github.com/amirhosseinf79/user_registration/internal/service/otp"
 	"github.com/amirhosseinf79/user_registration/internal/service/sms"
-	"github.com/amirhosseinf79/user_registration/internal/service/user"
+	user_service "github.com/amirhosseinf79/user_registration/internal/service/user"
 )
 
 // @title User OTP Registration API
@@ -25,8 +27,8 @@ import (
 // @in header
 // @name Authorization
 // @description Bearer [...]
-// @BasePath /
 // @schemes http
+// @BasePath /
 func main() {
 	configs := configs.NewConfig()
 	ctx := context.Background()
@@ -60,14 +62,14 @@ func main() {
 	mailService := email.NewEmailService()
 	jwtService := jwt.NewJWTService(jwtRepo, tokenRepo)
 
-	userService := user.NewUserService(
+	userService := user_service.NewUserService(
 		userRepo,
 		otpService,
 		smsService,
 		mailService,
 	)
 
-	authService := auth.NewAuthService(
+	authService := auth_service.NewAuthService(
 		jwtService,
 		userService,
 		otpService,
@@ -75,20 +77,20 @@ func main() {
 		mailService,
 	)
 
-	fieldValidator := middleware.NewFieldValidator()
-	authValidator := middleware.NewAuthMiddleware(jwtService)
-	authHandler := handler.NewAuthHandler(authService)
-	userHandler := handler.NewUserHandler(userService)
+	fieldValidator := field_validator.NewFieldValidator()
+	authValidator := auth_middleware.NewAuthMiddleware(jwtService)
+	authHandler1 := auth_handler1.NewAuthHandler(authService)
+	userHandler1 := user_handler1.NewUserHandler(userService)
 
 	server := server.NewServer(
 		fieldValidator,
 		authValidator,
-		authHandler,
-		userHandler,
+		authHandler1,
+		userHandler1,
 	)
 
 	server.InitSwaggerRoutes()
-	server.InitAuthRoutes()
-	server.InitUserRoutes()
+	server.InitAuthRoutes1()
+	server.InitUserRoutes1()
 	server.Start(configs.Server.Port)
 }
