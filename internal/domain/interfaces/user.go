@@ -39,6 +39,7 @@ type UserService interface {
 
 	UpdateUserProfile(userID uint, fields user.FieldUpdateDetails) (*user.ResponseDetails, *shared.ResponseOneMessage)
 	UpdateUserPassword(userID uint, fields user.FieldUpdatePassword) (*user.ResponseDetails, *shared.ResponseOneMessage)
+	ResetUserPasswordByInfo(userInfo, newPassword string) (*user.ResponseDetails, *shared.ResponseOneMessage)
 	VerifyUserMobile(userID uint, code string) (*user.ResponseDetails, *shared.ResponseOneMessage)
 	VerifyUserEmail(userID uint) (*user.ResponseDetails, *shared.ResponseOneMessage)
 }

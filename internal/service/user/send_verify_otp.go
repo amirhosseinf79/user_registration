@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
+	"github.com/amirhosseinf79/user_registration/internal/dto/otp"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/internal/dto/sms"
 )
@@ -13,8 +14,10 @@ func (a *userService) SendVerifyOTP(userID uint) (*auth.OTPOk, *shared.ResponseO
 	if err != nil {
 		return nil, err
 	}
-	generatedCode, response, err := a.otpService.StoreCode(auth.FieldSendOTP{
-		PhoneNumber: fmt.Sprintf("V:%v", userM.PhoneNumber)},
+	generatedCode, response, err := a.otpService.StoreCode(otp.FieldOTPStore{
+		Prefix: "verify:",
+		Key:    userM.PhoneNumber,
+	},
 	)
 	if err != nil {
 		return nil, err

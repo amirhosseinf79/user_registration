@@ -1,6 +1,7 @@
 package model
 
 type OTP struct {
-	Mobile string `json:"mobile"`
+	Prefix string `json:"prefix"`
+	Key    string `json:"key"`
 	Code   string `json:"code"`
 }

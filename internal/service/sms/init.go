@@ -9,7 +9,7 @@ type smsProviderService struct {
 	smsRepo repository.SMSRepository
 }
 
-func NewSMSService(smsRepo repository.SMSRepository) interfaces.SmsService {
+func NewSMSService(smsRepo repository.SMSRepository) interfaces.SMSService {
 	return &smsProviderService{
 		smsRepo: smsRepo,
 	}

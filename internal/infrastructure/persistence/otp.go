@@ -47,14 +47,14 @@ func (o *otpRepository) GetOTPExpDuration() time.Duration {
 	return o.otpExp / 1000000000
 }
 
-func (o *otpRepository) CanSaveOTP(mobile string) (bool, int, error) {
-	key := o.prefix + o.saveOTPLimit + mobile
-	count, err := o.client.Incr(o.ctx, key).Result()
+func (o *otpRepository) CanSaveOTP(key string) (bool, int, error) {
+	k := o.prefix + o.saveOTPLimit + key
+	count, err := o.client.Incr(o.ctx, k).Result()
 	if err != nil {
 		return false, 0, err
 	}
 	if count == 1 {
-		err = o.client.Expire(o.ctx, key, o.rateLimitDuration).Err()
+		err = o.client.Expire(o.ctx, k, o.rateLimitDuration).Err()
 		if err != nil {
 			return false, 0, err
 		}
@@ -65,14 +65,14 @@ func (o *otpRepository) CanSaveOTP(mobile string) (bool, int, error) {
 	return true, o.otpSendRateLimit - int(count), nil
 }
 
-func (o *otpRepository) CanLogin(mobile string) (bool, int, error) {
-	key := o.prefix + o.loginLimit + mobile
-	counter, err := o.client.Incr(o.ctx, key).Result()
+func (o *otpRepository) CanLogin(key string) (bool, int, error) {
+	k := o.prefix + o.loginLimit + key
+	counter, err := o.client.Incr(o.ctx, k).Result()
 	if err != nil {
 		return false, 0, err
 	}
 	if counter == 1 {
-		err := o.client.Expire(o.ctx, key, o.otpExp).Err()
+		err := o.client.Expire(o.ctx, k, o.otpExp).Err()
 		if err != nil {
 			return false, 0, err
 		}
@@ -84,11 +84,11 @@ func (o *otpRepository) CanLogin(mobile string) (bool, int, error) {
 }
 
 func (o *otpRepository) SaveOTP(otp *model.OTP) error {
-	return o.client.Set(o.ctx, o.prefix+otp.Mobile, otp.Code, o.otpExp).Err()
+	return o.client.Set(o.ctx, o.prefix+otp.Prefix+otp.Key, otp.Code, o.otpExp).Err()
 }
 
-func (o *otpRepository) GetOTPByMobile(mobile string) (string, error) {
-	code, err := o.client.Get(o.ctx, o.prefix+mobile).Result()
+func (o *otpRepository) GetOTP(prefix, key string) (string, error) {
+	code, err := o.client.Get(o.ctx, o.prefix+prefix+key).Result()
 	if err == redis.Nil {
 		return "", shared.ErrUsertNotFound
 	}
@@ -98,8 +98,8 @@ func (o *otpRepository) GetOTPByMobile(mobile string) (string, error) {
 	return code, nil
 }
 
-func (o *otpRepository) DeleteOTP(mobile string) error {
-	err := o.client.Del(o.ctx, o.prefix+mobile).Err()
+func (o *otpRepository) DeleteOTP(prefix, key string) error {
+	err := o.client.Del(o.ctx, o.prefix+prefix+key).Err()
 	if err == redis.Nil {
 		return shared.ErrUsertNotFound
 	}
@@ -109,9 +109,9 @@ func (o *otpRepository) DeleteOTP(mobile string) error {
 	return nil
 }
 
-func (o *otpRepository) ResetSetOTPLimit(mobile string) error {
-	key := o.prefix + o.saveOTPLimit + mobile
-	err := o.client.Del(o.ctx, key).Err()
+func (o *otpRepository) ResetSetOTPLimit(key string) error {
+	k := o.prefix + o.saveOTPLimit + key
+	err := o.client.Del(o.ctx, k).Err()
 	if err == redis.Nil {
 		return shared.ErrUsertNotFound
 	}
@@ -121,9 +121,9 @@ func (o *otpRepository) ResetSetOTPLimit(mobile string) error {
 	return nil
 }
 
-func (o *otpRepository) ResetLoginLimit(mobile string) error {
-	key := o.prefix + o.loginLimit + mobile
-	err := o.client.Del(o.ctx, key).Err()
+func (o *otpRepository) ResetLoginLimit(key string) error {
+	k := o.prefix + o.loginLimit + key
+	err := o.client.Del(o.ctx, k).Err()
 	if err == redis.Nil {
 		return shared.ErrUsertNotFound
 	}

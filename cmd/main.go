@@ -12,6 +12,7 @@ import (
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/persistence"
 	"github.com/amirhosseinf79/user_registration/internal/infrastructure/server"
 	"github.com/amirhosseinf79/user_registration/internal/service/auth"
+	"github.com/amirhosseinf79/user_registration/internal/service/email"
 	"github.com/amirhosseinf79/user_registration/internal/service/jwt"
 	"github.com/amirhosseinf79/user_registration/internal/service/otp"
 	"github.com/amirhosseinf79/user_registration/internal/service/sms"
@@ -56,6 +57,7 @@ func main() {
 
 	otpService := otp.NewOTPService(otpRepo)
 	smsService := sms.NewSMSService(smsRepo)
+	mailService := email.NewEmailService()
 	jwtService := jwt.NewJWTService(jwtRepo, tokenRepo)
 	userService := user.NewUserService(userRepo, otpService, smsService)
 
@@ -64,6 +66,7 @@ func main() {
 		userService,
 		otpService,
 		smsService,
+		mailService,
 	)
 
 	fieldValidator := middleware.NewFieldValidator()

@@ -131,3 +131,38 @@ func (ah *authHandler) LoginByMobile(ctx *fiber.Ctx) error {
 	}
 	return ctx.JSON(response)
 }
+
+// @Summary Send Reset Code
+// @Description Send Reset Password Code
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param fields body auth.FieldSendResetPwd true "Fields"
+// @Success 200 {array} auth.OTPOkMock
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /auth/password/send-code [post]
+func (ah *authHandler) SendResetPassOTP(ctx *fiber.Ctx) error {
+	var fields auth.FieldSendResetPwd
+	ctx.BodyParser(&fields)
+	response, err := ah.authService.SendResetPasswerd(fields)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(response)
+}
+
+// @Summary Reset Password
+// @Description change passwrod bu sent OTP
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param fields body auth.FieldResetByOTP true "Fields"
+// @Success 200 {array} auth.OTPOkMock
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /auth/password/reset [put]
+func (ah *authHandler) ResetPassWithOTP(ctx *fiber.Ctx) error {
+	var fields auth.FieldResetByOTP
+	ctx.BodyParser(&fields)
+	response := ah.authService.ResetPassWithOTP(fields)
+	return ctx.Status(response.Code).JSON(response)
+}

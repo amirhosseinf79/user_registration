@@ -135,6 +135,92 @@
                 }
             }
         },
+        "/auth/password/reset": {
+            "put": {
+                "description": "change passwrod bu sent OTP",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Reset Password",
+                "parameters": [
+                    {
+                        "description": "Fields",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.FieldResetByOTP"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/auth.OTPOkMock"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/password/send-code": {
+            "post": {
+                "description": "Send Reset Password Code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send Reset Code",
+                "parameters": [
+                    {
+                        "description": "Fields",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.FieldSendResetPwd"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/auth.OTPOkMock"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/shared.ResponseOneMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/refresh-token": {
             "post": {
                 "description": "Refresh Token",
@@ -652,6 +738,25 @@
                 }
             }
         },
+        "auth.FieldResetByOTP": {
+            "type": "object",
+            "required": [
+                "code",
+                "input",
+                "newPassword"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.FieldSendOTP": {
             "type": "object",
             "required": [
@@ -659,6 +764,17 @@
             ],
             "properties": {
                 "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.FieldSendResetPwd": {
+            "type": "object",
+            "required": [
+                "input"
+            ],
+            "properties": {
+                "input": {
                     "type": "string"
                 }
             }

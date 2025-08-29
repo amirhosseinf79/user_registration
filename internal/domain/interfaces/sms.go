@@ -5,6 +5,6 @@ import (
 	sms_dto "github.com/amirhosseinf79/user_registration/internal/dto/sms"
 )
 
-type SmsService interface {
+type SMSService interface {
 	SendToClient(fields sms_dto.FieldSendClient) *shared_dto.ResponseOneMessage
 }

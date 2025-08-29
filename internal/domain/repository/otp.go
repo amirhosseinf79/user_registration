@@ -8,11 +8,12 @@ import (
 
 type OTPRepository interface {
 	GetOTPExpDuration() time.Duration
-	CanSaveOTP(mobile string) (bool, int, error)
-	CanLogin(mobile string) (bool, int, error)
+	CanSaveOTP(key string) (bool, int, error)
+	CanLogin(key string) (bool, int, error)
+	ResetSetOTPLimit(key string) error
+	ResetLoginLimit(key string) error
+
 	SaveOTP(otp *model.OTP) error
-	GetOTPByMobile(mobile string) (string, error)
-	ResetSetOTPLimit(mobile string) error
-	ResetLoginLimit(mobile string) error
-	DeleteOTP(mobile string) error
+	GetOTP(prefix, key string) (string, error)
+	DeleteOTP(prefix, mobile string) error
 }

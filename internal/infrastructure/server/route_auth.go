@@ -12,6 +12,7 @@ func (s server) InitAuthRoutes() {
 		s.fieldValidator.ValidateRefreshToken,
 		s.authHandler.RefreshToken,
 	)
+
 	login := route.Group("/login")
 	login.Post(
 		"/otp",
@@ -29,11 +30,25 @@ func (s server) InitAuthRoutes() {
 		s.fieldValidator.ValidateEmailLogin,
 		s.authHandler.LoginByEmail,
 	)
+
 	route.Post(
 		"/register",
 		s.fieldValidator.ValidateRegister,
 		s.fieldValidator.ValidateEmailBody,
 		s.fieldValidator.ValidateMobile,
 		s.authHandler.RegisterByEmail,
+	)
+
+	password := route.Group("/password")
+	password.Post(
+		"/send-code",
+		s.fieldValidator.ValidateSendResetPassOTP,
+		s.authHandler.SendResetPassOTP,
+	)
+	password.Put(
+		"/reset",
+		s.fieldValidator.ValidateVerifyCode,
+		s.fieldValidator.ValidateNewPassword,
+		s.authHandler.ResetPassWithOTP,
 	)
 }

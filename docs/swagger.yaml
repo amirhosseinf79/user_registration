@@ -45,12 +45,32 @@ definitions:
     required:
     - refreshToken
     type: object
+  auth.FieldResetByOTP:
+    properties:
+      code:
+        type: string
+      input:
+        type: string
+      newPassword:
+        type: string
+    required:
+    - code
+    - input
+    - newPassword
+    type: object
   auth.FieldSendOTP:
     properties:
       phoneNumber:
         type: string
     required:
     - phoneNumber
+    type: object
+  auth.FieldSendResetPwd:
+    properties:
+      input:
+        type: string
+    required:
+    - input
     type: object
   auth.FieldVerifyOTP:
     properties:
@@ -242,6 +262,62 @@ paths:
           schema:
             $ref: '#/definitions/shared.ResponseOneMessage'
       summary: Login By OTP
+      tags:
+      - Auth
+  /auth/password/reset:
+    put:
+      consumes:
+      - application/json
+      description: change passwrod bu sent OTP
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/auth.FieldResetByOTP'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.OTPOkMock'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      summary: Reset Password
+      tags:
+      - Auth
+  /auth/password/send-code:
+    post:
+      consumes:
+      - application/json
+      description: Send Reset Password Code
+      parameters:
+      - description: Fields
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/auth.FieldSendResetPwd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/auth.OTPOkMock'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/shared.ResponseOneMessage'
+      summary: Send Reset Code
       tags:
       - Auth
   /auth/refresh-token:

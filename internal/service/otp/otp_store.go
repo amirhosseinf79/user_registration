@@ -3,13 +3,14 @@ package otp
 import (
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
+	"github.com/amirhosseinf79/user_registration/internal/dto/otp"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/pkg"
 	"github.com/gofiber/fiber/v2"
 )
 
-func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *auth.OTPOk, *shared.ResponseOneMessage) {
-	canGenerate, remained, err := o.otpRepo.CanSaveOTP(fields.PhoneNumber)
+func (o *otpService) StoreCode(fields otp.FieldOTPStore) (string, *auth.OTPOk, *shared.ResponseOneMessage) {
+	canGenerate, remained, err := o.otpRepo.CanSaveOTP(fields.Key)
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,
@@ -44,7 +45,8 @@ func (o *otpService) StoreCode(fields auth.FieldSendOTP) (string, *auth.OTPOk, *
 		return "", nil, result
 	}
 	err = o.otpRepo.SaveOTP(&model.OTP{
-		Mobile: fields.PhoneNumber,
+		Prefix: fields.Prefix,
+		Key:    fields.Key,
 		Code:   hashedCode,
 	})
 	if err != nil {

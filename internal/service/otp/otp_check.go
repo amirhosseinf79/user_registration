@@ -3,14 +3,14 @@ package otp
 import (
 	"errors"
 
-	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
+	otp "github.com/amirhosseinf79/user_registration/internal/dto/otp"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/pkg"
 	"github.com/gofiber/fiber/v2"
 )
 
-func (o *otpService) CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared.ResponseOneMessage) {
-	savedHash, err := o.otpRepo.GetOTPByMobile(fields.PhoneNumber)
+func (o *otpService) CheckOTPCode(fields otp.FieldVerifyOTP) (bool, *shared.ResponseOneMessage) {
+	savedHash, err := o.otpRepo.GetOTP(fields.Prefix, fields.Key)
 	if err != nil {
 		if !errors.Is(err, shared.ErrUsertNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
@@ -27,7 +27,7 @@ func (o *otpService) CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared.Res
 		})
 		return false, result
 	}
-	canLogin, result := o.CanLogin(fields.PhoneNumber, pkg.ComparePassword(fields.Code, savedHash))
+	canLogin, result := o.CanLogin(fields.Prefix+fields.Key, pkg.ComparePassword(fields.Code, savedHash))
 	if result != nil {
 		return false, result
 	}
@@ -39,7 +39,7 @@ func (o *otpService) CheckOTPCode(fields auth.FieldVerifyOTP) (bool, *shared.Res
 		})
 		return false, result
 	}
-	err = o.otpRepo.DeleteOTP(fields.PhoneNumber)
+	err = o.otpRepo.DeleteOTP(fields.Prefix, fields.Key)
 	if err != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,
