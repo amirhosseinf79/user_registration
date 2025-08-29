@@ -13,28 +13,16 @@ func (s server) InitAuthRoutes() {
 		s.authHandler.RefreshToken,
 	)
 
-	login := route.Group("/login")
-	login.Post(
-		"/otp",
-		s.fieldValidator.ValidateMobile,
-		s.fieldValidator.ValidateVerifyField,
-		s.authHandler.LoginByOTP,
-	)
-	login.Post(
-		"/mobile",
-		s.fieldValidator.ValidateMobileLogin,
-		s.authHandler.LoginByMobile,
-	)
-	login.Post(
-		"/email",
-		s.fieldValidator.ValidateEmailLogin,
-		s.authHandler.LoginByEmail,
+	route.Post(
+		"/login",
+		s.fieldValidator.ValidateLogin,
+		s.authHandler.AutoLogin,
 	)
 
 	route.Post(
 		"/register",
 		s.fieldValidator.ValidateRegister,
-		s.fieldValidator.ValidateEmailBody,
+		s.fieldValidator.ValidateEmail,
 		s.fieldValidator.ValidateMobile,
 		s.authHandler.RegisterByEmail,
 	)

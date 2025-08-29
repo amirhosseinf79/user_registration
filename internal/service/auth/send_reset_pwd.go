@@ -3,7 +3,6 @@ package auth
 import (
 	"errors"
 	"fmt"
-	"regexp"
 
 	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	"github.com/amirhosseinf79/user_registration/internal/dto/email"
@@ -15,11 +14,10 @@ import (
 
 func (a *authService) SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage) {
 	var err error
-	reg := regexp.MustCompile(`^09\d{9}$`)
-	if reg.MatchString(fields.Input) {
-		_, err = a.userService.GetUserByMobile(fields.Input)
+	if a.MatchMobile(fields.Username) {
+		_, err = a.userService.GetUserByMobile(fields.Username)
 	} else {
-		_, err = a.userService.GetUserByEmail(fields.Input)
+		_, err = a.userService.GetUserByEmail(fields.Username)
 	}
 	if err != nil {
 		if errors.Is(err, shared.ErrUsertNotFound) {
@@ -39,15 +37,15 @@ func (a *authService) SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OT
 	}
 	generatedCode, ok, result := a.otpService.StoreCode(otp.FieldOTPStore{
 		Prefix: "reset:",
-		Key:    fields.Input,
+		Key:    fields.Username,
 	})
 	if result != nil {
 		return nil, result
 	}
 	userText := fmt.Sprintf(shared.TemplateSendVerifyOTP, generatedCode)
-	if reg.MatchString(fields.Input) {
+	if a.MatchMobile(fields.Username) {
 		result = a.smsService.SendToClient(sms.FieldSendClient{
-			PhoneNumber: fields.Input,
+			PhoneNumber: fields.Username,
 			Text:        userText,
 		})
 		if result != nil {
@@ -55,7 +53,7 @@ func (a *authService) SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OT
 		}
 	} else {
 		a.emailService.SendToClient(email.FieldSendClient{
-			Email: fields.Input,
+			Email: fields.Username,
 			Text:  userText,
 		})
 	}

@@ -8,10 +8,8 @@ import (
 
 type AuthHandler interface {
 	SendOTP(ctx *fiber.Ctx) error
+	AutoLogin(ctx *fiber.Ctx) error
 	RegisterByEmail(ctx *fiber.Ctx) error
-	LoginByOTP(ctx *fiber.Ctx) error
-	LoginByMobile(ctx *fiber.Ctx) error
-	LoginByEmail(ctx *fiber.Ctx) error
 	RefreshToken(ctx *fiber.Ctx) error
 	SendResetPassOTP(ctx *fiber.Ctx) error
 	ResetPassWithOTP(ctx *fiber.Ctx) error
@@ -21,9 +19,7 @@ type AuthService interface {
 	SendOTP(fields auth.FieldSendOTP) (*auth.OTPOk, *shared.ResponseOneMessage)
 	RegisterByEmail(fields auth.FieldEmailRegister) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 
-	LoginByOTP(fields auth.FieldVerifyOTP) (*auth.ResponseJWT, *shared.ResponseOneMessage)
-	LoginByEmail(fields auth.FieldEmailLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage)
-	LoginByMobile(fields auth.FieldMobileLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage)
+	AutoLogin(field auth.FieldUserLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 	RefreshToken(refresh string) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 	SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage)
 	ResetPassWithOTP(fields auth.FieldResetByOTP) *shared.ResponseOneMessage

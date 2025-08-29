@@ -11,14 +11,14 @@ func (a *authService) ResetPassWithOTP(fields auth.FieldResetByOTP) *shared.Resp
 	_, result := a.otpService.CheckOTPCode(otp.FieldVerifyOTP{
 		FieldOTPStore: otp.FieldOTPStore{
 			Prefix: "reset:",
-			Key:    fields.Input,
+			Key:    fields.Username,
 		},
 		Code: fields.Code,
 	})
 	if result != nil {
 		return result
 	}
-	_, result = a.userService.ResetUserPasswordByInfo(fields.Input, fields.NewPassword)
+	_, result = a.userService.ResetUserPasswordByInfo(fields.Username, fields.NewPassword)
 	if result != nil {
 		return result
 	}

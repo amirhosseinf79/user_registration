@@ -37,6 +37,25 @@ func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 	return ctx.Status(response.Code).JSON(response)
 }
 
+// @Summary Login
+// @Description Login By Email, Mobile or OTP
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param fields body auth.FieldUserLogin true "Fields"
+// @Success 200 {array} auth.ResponseJWT
+// @Failure 401 {object} shared.ResponseOneMessage
+// @Router /auth/login [post]
+func (ah *authHandler) AutoLogin(ctx *fiber.Ctx) error {
+	var fields auth.FieldUserLogin
+	ctx.BodyParser(&fields)
+	response, err := ah.authService.AutoLogin(fields)
+	if err != nil {
+		return ctx.Status(err.Code).JSON(err)
+	}
+	return ctx.JSON(response)
+}
+
 // @Summary Refresh Token
 // @Description Refresh Token
 // @Tags Auth
@@ -75,63 +94,6 @@ func (ah *authHandler) RegisterByEmail(ctx *fiber.Ctx) error {
 	return ctx.JSON(response)
 }
 
-// @Summary Login By OTP
-// @Description Login By OTP Code
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param fields body auth.FieldVerifyOTP true "Fields"
-// @Success 200 {array} auth.ResponseJWT
-// @Failure 401 {object} shared.ResponseOneMessage
-// @Router /auth/login/otp [post]
-func (ah *authHandler) LoginByOTP(ctx *fiber.Ctx) error {
-	var fields auth.FieldVerifyOTP
-	ctx.BodyParser(&fields)
-	response, err := ah.authService.LoginByOTP(fields)
-	if err != nil {
-		return ctx.Status(err.Code).JSON(err)
-	}
-	return ctx.JSON(response)
-}
-
-// @Summary Login By Email
-// @Description Login with Email & Password
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param fields body auth.FieldEmailLogin true "Fields"
-// @Success 200 {array} auth.ResponseJWT
-// @Failure 401 {object} shared.ResponseOneMessage
-// @Router /auth/login/email [post]
-func (ah *authHandler) LoginByEmail(ctx *fiber.Ctx) error {
-	var fields auth.FieldEmailLogin
-	ctx.BodyParser(&fields)
-	response, err := ah.authService.LoginByEmail(fields)
-	if err != nil {
-		return ctx.Status(err.Code).JSON(err)
-	}
-	return ctx.JSON(response)
-}
-
-// @Summary Login by Mobile
-// @Description Login with Mobile & Password
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param fields body auth.FieldMobileLogin true "Fields"
-// @Success 200 {array} auth.ResponseJWT
-// @Failure 401 {object} shared.ResponseOneMessage
-// @Router /auth/login/mobile [post]
-func (ah *authHandler) LoginByMobile(ctx *fiber.Ctx) error {
-	var fields auth.FieldMobileLogin
-	ctx.BodyParser(&fields)
-	response, err := ah.authService.LoginByMobile(fields)
-	if err != nil {
-		return ctx.Status(err.Code).JSON(err)
-	}
-	return ctx.JSON(response)
-}
-
 // @Summary Send Reset Code
 // @Description Send Reset Password Code
 // @Tags Auth
@@ -152,7 +114,7 @@ func (ah *authHandler) SendResetPassOTP(ctx *fiber.Ctx) error {
 }
 
 // @Summary Reset Password
-// @Description change passwrod bu sent OTP
+// @Description change passwrod by sent OTP. Username could be Number or Email
 // @Tags Auth
 // @Accept json
 // @Produce json

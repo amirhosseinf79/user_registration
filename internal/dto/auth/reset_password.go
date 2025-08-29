@@ -1,7 +1,7 @@
 package auth
 
 type FieldSendResetPwd struct {
-	Input string `json:"input" validate:"required"`
+	Username string `json:"username" validate:"required"`
 }
 
 type FieldResetByOTP struct {

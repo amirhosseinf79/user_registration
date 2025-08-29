@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/login/email": {
+        "/auth/login": {
             "post": {
-                "description": "Login with Email \u0026 Password",
+                "description": "Login By Email, Mobile or OTP",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Login By Email",
+                "summary": "Login",
                 "parameters": [
                     {
                         "description": "Fields",
@@ -35,93 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.FieldEmailLogin"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/auth.ResponseJWT"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/login/mobile": {
-            "post": {
-                "description": "Login with Mobile \u0026 Password",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Login by Mobile",
-                "parameters": [
-                    {
-                        "description": "Fields",
-                        "name": "fields",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.FieldMobileLogin"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/auth.ResponseJWT"
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/shared.ResponseOneMessage"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/login/otp": {
-            "post": {
-                "description": "Login By OTP Code",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Login By OTP",
-                "parameters": [
-                    {
-                        "description": "Fields",
-                        "name": "fields",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.FieldVerifyOTP"
+                            "$ref": "#/definitions/auth.FieldUserLogin"
                         }
                     }
                 ],
@@ -146,7 +60,7 @@ const docTemplate = `{
         },
         "/auth/password/reset": {
             "put": {
-                "description": "change passwrod bu sent OTP",
+                "description": "change passwrod by sent OTP. Username could be Number or Email",
                 "consumes": [
                     "application/json"
                 ],
@@ -679,21 +593,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.FieldEmailLogin": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
         "auth.FieldEmailRegister": {
             "type": "object",
             "required": [
@@ -721,21 +620,6 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.FieldMobileLogin": {
-            "type": "object",
-            "required": [
-                "password",
-                "phoneNumber"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "phoneNumber": {
-                    "type": "string"
-                }
-            }
-        },
         "auth.FieldRefreshToken": {
             "type": "object",
             "required": [
@@ -751,17 +635,17 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "code",
-                "input",
-                "newPassword"
+                "newPassword",
+                "username"
             ],
             "properties": {
                 "code": {
                     "type": "string"
                 },
-                "input": {
+                "newPassword": {
                     "type": "string"
                 },
-                "newPassword": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -780,25 +664,28 @@ const docTemplate = `{
         "auth.FieldSendResetPwd": {
             "type": "object",
             "required": [
-                "input"
+                "username"
             ],
             "properties": {
-                "input": {
+                "username": {
                     "type": "string"
                 }
             }
         },
-        "auth.FieldVerifyOTP": {
+        "auth.FieldUserLogin": {
             "type": "object",
             "required": [
-                "code",
-                "phoneNumber"
+                "password",
+                "username"
             ],
             "properties": {
-                "code": {
+                "password": {
                     "type": "string"
                 },
-                "phoneNumber": {
+                "useOTP": {
+                    "type": "boolean"
+                },
+                "username": {
                     "type": "string"
                 }
             }
