@@ -12,6 +12,7 @@ type FieldValidatorMiddleware1 interface {
 	ValidateRegister(ctx *fiber.Ctx) error
 	ValidateLogin(ctx *fiber.Ctx) error
 	ValidatePassword(ctx *fiber.Ctx) error
+	ValidateUpdateMobile(ctx *fiber.Ctx) error
 }
 
 type AuthMiddleware1 interface {

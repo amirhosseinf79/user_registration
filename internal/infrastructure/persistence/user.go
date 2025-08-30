@@ -2,7 +2,8 @@ package persistence
 
 import (
 	"errors"
-	"strings"
+	"fmt"
+	"regexp"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
@@ -12,26 +13,41 @@ import (
 )
 
 type userRepository struct {
-	db *gorm.DB
+	db          *gorm.DB
+	uniqueMatch *regexp.Regexp
 }
 
 func NewUserRepository(db *gorm.DB) repository.UserRepository {
-	return &userRepository{db: db}
+	return &userRepository{
+		db:          db,
+		uniqueMatch: regexp.MustCompile(`UNIQUE constraint failed: .+\.(.+)`),
+	}
 }
 
 func (r *userRepository) Create(user *model.User) error {
-	uniqueErr := "UNIQUE constraint failed: "
 	err := r.db.Create(user).Error
-	if err != nil && strings.Contains(err.Error(), uniqueErr) {
-		keyName := strings.ReplaceAll(err.Error(), uniqueErr, "")
-		errKeyName := errors.New(keyName)
-		return errors.Join(errKeyName, shared.ErrAlreadyExists)
+	if err != nil {
+		if r.uniqueMatch.MatchString(err.Error()) {
+			keyName := r.uniqueMatch.FindStringSubmatch(err.Error())
+			fmt.Println(keyName)
+			errKeyName := errors.New(keyName[1])
+			return errors.Join(errKeyName, shared.ErrAlreadyExists)
+		}
 	}
 	return err
 }
 
 func (r *userRepository) Update(user *model.User) error {
-	return r.db.Save(user).Error
+	err := r.db.Save(user).Error
+	if err != nil {
+		if r.uniqueMatch.MatchString(err.Error()) {
+			keyName := r.uniqueMatch.FindStringSubmatch(err.Error())
+			fmt.Println(keyName)
+			errKeyName := errors.New(keyName[1])
+			return errors.Join(errKeyName, shared.ErrAlreadyExists)
+		}
+	}
+	return err
 }
 
 func (r *userRepository) Delete(id uint) error {

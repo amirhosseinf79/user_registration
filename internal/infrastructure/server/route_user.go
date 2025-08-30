@@ -7,7 +7,7 @@ func (s server) InitUserRoutes1() {
 
 	profile := s.app.Group("api/v1/profile", s.access1.CheckToken)
 	profile.Get("/", s.user1.GetUserProfile)
-	profile.Patch("/update/info", s.validator1.ValidateEmail, s.user1.UpdateProfileInfo)
+	profile.Patch("/update/info", s.validator1.ValidateEmail, s.validator1.ValidateUpdateMobile, s.user1.UpdateProfileInfo)
 	profile.Put("/update/password", s.validator1.ValidateNewPassword, s.user1.UpdateUserPassword)
 
 	profile.Post("/send/verify-mobile-otp", s.user1.SendUserVerifyMobile)
