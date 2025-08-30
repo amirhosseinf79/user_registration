@@ -30,17 +30,20 @@ A robust Golang backend service implementing OTP-based login and registration wi
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone git@github.com:amirhosseinf79/user_registration.git
    cd user_registration
    ```
 
 2. **Create environment file**
+
    ```bash
    cp .env.example .env
    ```
 
 3. **Run with Docker Compose**
+
    ```bash
    docker-compose up --build
    ```
@@ -132,6 +135,7 @@ docker-compose down -v
 ### Why PostgreSQL + Redis?
 
 #### PostgreSQL (Primary Database)
+
 - **ACID Compliance**: Ensures data integrity for user registration
 - **Advanced Features**: JSON support, UUID generation, efficient indexing
 - **Scalability**: Excellent performance for read-heavy workloads and pagination
@@ -139,17 +143,20 @@ docker-compose down -v
 - **Production Ready**: Mature ecosystem with robust backup and monitoring tools
 
 #### Redis (Cache Layer)
+
 - **Performance**: Sub-millisecond response times for OTP verification
 - **Built-in TTL**: Automatic OTP expiration (2 minutes) without cleanup jobs
 - **Atomic Operations**: Thread-safe rate limiting and attempt counting
 - **Memory Efficiency**: Optimized for temporary data storage
 
 ### Data Flow
+
 ```
 User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 ```
 
 ### Alternative Considerations
+
 - **MongoDB**: Rejected due to eventual consistency model
 - **MySQL**: PostgreSQL offers better JSON support and concurrency
 - **SQLite**: Not suitable for production concurrent access
@@ -157,23 +164,24 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 
 ### API Endpoints
 
-| Method | Endpoint          | Description                 |
-|--------|------------------|-----------------------------|
-| POST   | /auth/send-otp    | Request OTP                 |
-| POST   | /auth/verify-otp  | Verify OTP and login/register |
-| GET    | /user/all         | Get users (with pagination & search) |
-| GET    | /user/:userID     | Get user by ID              |
-| PUT    | /profile/update   | Update user profile         |
-
+| Method | Endpoint               | Description                          |
+| ------ | ---------------------- | ------------------------------------ |
+| POST   | /api/v1/auth/send-otp  | Request OTP                          |
+| POST   | /api/v1/auth/login     | Verify OTP and login/register        |
+| GET    | /api/v1/user/all       | Get users (with pagination & search) |
+| GET    | /api/v1/user/:userID   | Get user by ID                       |
+| PUT    | /api/v1/profile/update | Update user profile                  |
 
 ## Request: POST /auth/send-otp
+
 ```json
 {
-    "phoneNumber": "09334455678"
+  "phoneNumber": "09334455678"
 }
 ```
 
 ## Response:
+
 ```json
 {
   "message": "ok"
@@ -181,6 +189,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 ```
 
 ## Request: POST /auth/verify-otp
+
 ```json
 {
   "phone": "09334455678",
@@ -189,6 +198,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 ```
 
 ## Response:
+
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
@@ -199,6 +209,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 ## Development
 
 ### Local Development
+
 ```bash
 # Install dependencies
 go mod download
