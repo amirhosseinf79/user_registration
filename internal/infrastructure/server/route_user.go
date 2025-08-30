@@ -2,16 +2,16 @@ package server
 
 func (s server) InitUserRoutes1() {
 	user := s.app.Group("api/v1/user")
-	user.Get("/all", s.userHandler1.GetUsersList)
-	user.Get("/:userID", s.userHandler1.GetUserByID)
+	user.Get("/all", s.user1.GetUsersList)
+	user.Get("/:userID", s.user1.GetUserByID)
 
-	profile := s.app.Group("/profile", s.authValidator1.CheckToken)
-	profile.Get("/", s.userHandler1.GetUserProfile)
-	profile.Patch("/update/info", s.fieldValidator1.ValidateEmail, s.userHandler1.UpdateProfileInfo)
-	profile.Put("/update/password", s.fieldValidator1.ValidateNewPassword, s.userHandler1.UpdateUserPassword)
+	profile := s.app.Group("/profile", s.access1.CheckToken)
+	profile.Get("/", s.user1.GetUserProfile)
+	profile.Patch("/update/info", s.validator1.ValidateEmail, s.user1.UpdateProfileInfo)
+	profile.Put("/update/password", s.validator1.ValidateNewPassword, s.user1.UpdateUserPassword)
 
-	profile.Post("/send/verify-mobile-otp", s.userHandler1.SendUserVerifyMobile)
-	profile.Post("/send/verify-email-otp", s.userHandler1.SendUserVerifyEmail)
-	profile.Post("/verify/mobile", s.fieldValidator1.ValidateVerifyCode, s.userHandler1.VerifyUserMobile)
-	profile.Post("/verify/email", s.fieldValidator1.ValidateVerifyCode, s.userHandler1.VerifyUserEmail)
+	profile.Post("/send/verify-mobile-otp", s.user1.SendUserVerifyMobile)
+	profile.Post("/send/verify-email-otp", s.user1.SendUserVerifyEmail)
+	profile.Post("/verify/mobile", s.validator1.ValidateVerifyCode, s.user1.VerifyUserMobile)
+	profile.Post("/verify/email", s.validator1.ValidateVerifyCode, s.user1.VerifyUserEmail)
 }
