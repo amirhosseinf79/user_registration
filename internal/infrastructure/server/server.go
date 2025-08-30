@@ -8,27 +8,24 @@ import (
 )
 
 type server struct {
-	fieldValidator interfaces.FieldValidatorMiddleware
-	authValidator  interfaces.AuthMiddleware
-	authHandler1   interfaces.AuthHandler1
-	userHandler1   interfaces.UserHandler1
-	app            *fiber.App
+	fieldValidator1 interfaces.FieldValidatorMiddleware1
+	authValidator1  interfaces.AuthMiddleware1
+	authHandler1    interfaces.AuthHandler1
+	userHandler1    interfaces.UserHandler1
+	app             *fiber.App
 }
 
 func NewServer(
-	fieldValidator interfaces.FieldValidatorMiddleware,
-	authValidator interfaces.AuthMiddleware,
-	authHandler1 interfaces.AuthHandler1,
-	userHandler1 interfaces.UserHandler1,
+	authImp1 interfaces.AuthImplimentation1,
 ) interfaces.ServerService {
 	app := fiber.New()
 
 	return &server{
-		app:            app,
-		fieldValidator: fieldValidator,
-		authValidator:  authValidator,
-		authHandler1:   authHandler1,
-		userHandler1:   userHandler1,
+		app:             app,
+		fieldValidator1: authImp1.GetFieldVaidator(),
+		authValidator1:  authImp1.GetAuthValidator(),
+		authHandler1:    authImp1.GetAuthHandler(),
+		userHandler1:    authImp1.GetUserHandler(),
 	}
 }
 

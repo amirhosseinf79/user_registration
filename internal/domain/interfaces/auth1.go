@@ -24,3 +24,10 @@ type AuthService1 interface {
 	SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage)
 	ResetPassWithOTP(fields auth.FieldResetByOTP) *shared.ResponseOneMessage
 }
+
+type AuthImplimentation1 interface {
+	GetFieldVaidator() FieldValidatorMiddleware1
+	GetAuthValidator() AuthMiddleware1
+	GetAuthHandler() AuthHandler1
+	GetUserHandler() UserHandler1
+}

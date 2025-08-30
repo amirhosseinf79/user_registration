@@ -5,13 +5,13 @@ func (s server) InitUserRoutes1() {
 	user.Get("/all", s.userHandler1.GetUsersList)
 	user.Get("/:userID", s.userHandler1.GetUserByID)
 
-	profile := s.app.Group("/profile", s.authValidator.CheckToken)
+	profile := s.app.Group("/profile", s.authValidator1.CheckToken)
 	profile.Get("/", s.userHandler1.GetUserProfile)
-	profile.Patch("/update/info", s.fieldValidator.ValidateEmail, s.userHandler1.UpdateProfileInfo)
-	profile.Put("/update/password", s.fieldValidator.ValidateNewPassword, s.userHandler1.UpdateUserPassword)
+	profile.Patch("/update/info", s.fieldValidator1.ValidateEmail, s.userHandler1.UpdateProfileInfo)
+	profile.Put("/update/password", s.fieldValidator1.ValidateNewPassword, s.userHandler1.UpdateUserPassword)
 
 	profile.Post("/send/verify-mobile-otp", s.userHandler1.SendUserVerifyMobile)
 	profile.Post("/send/verify-email-otp", s.userHandler1.SendUserVerifyEmail)
-	profile.Post("/verify/mobile", s.fieldValidator.ValidateVerifyCode, s.userHandler1.VerifyUserMobile)
-	profile.Post("/verify/email", s.fieldValidator.ValidateVerifyCode, s.userHandler1.VerifyUserEmail)
+	profile.Post("/verify/mobile", s.fieldValidator1.ValidateVerifyCode, s.userHandler1.VerifyUserMobile)
+	profile.Post("/verify/email", s.fieldValidator1.ValidateVerifyCode, s.userHandler1.VerifyUserEmail)
 }

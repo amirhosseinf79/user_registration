@@ -2,7 +2,7 @@ package interfaces
 
 import "github.com/gofiber/fiber/v2"
 
-type FieldValidatorMiddleware interface {
+type FieldValidatorMiddleware1 interface {
 	ValidateSendResetPassOTP(ctx *fiber.Ctx) error
 	ValidateNewPassword(ctx *fiber.Ctx) error
 	ValidateMobile(ctx *fiber.Ctx) error
@@ -13,6 +13,6 @@ type FieldValidatorMiddleware interface {
 	ValidateLogin(ctx *fiber.Ctx) error
 }
 
-type AuthMiddleware interface {
+type AuthMiddleware1 interface {
 	CheckToken(ctx *fiber.Ctx) error
 }

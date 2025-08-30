@@ -9,7 +9,7 @@ type authMiddleware struct {
 	prefix     string
 }
 
-func NewAuthMiddleware(jwtService interfaces.JWTService) interfaces.AuthMiddleware {
+func NewAuthMiddleware(jwtService interfaces.JWTService) interfaces.AuthMiddleware1 {
 	return &authMiddleware{
 		jwtService: jwtService,
 		prefix:     "Bearer ",

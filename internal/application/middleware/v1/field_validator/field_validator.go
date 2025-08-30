@@ -6,6 +6,6 @@ import (
 
 type fieldsValidatorMiddleware struct{}
 
-func NewFieldValidator() interfaces.FieldValidatorMiddleware {
+func NewFieldValidator() interfaces.FieldValidatorMiddleware1 {
 	return &fieldsValidatorMiddleware{}
 }
