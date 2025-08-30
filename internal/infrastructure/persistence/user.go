@@ -22,7 +22,7 @@ func NewUserRepository(db *gorm.DB) repository.UserRepository {
 func (r *userRepository) Create(user *model.User) error {
 	uniqueErr := "UNIQUE constraint failed: "
 	err := r.db.Create(user).Error
-	if strings.Contains(err.Error(), uniqueErr) {
+	if err != nil && strings.Contains(err.Error(), uniqueErr) {
 		keyName := strings.ReplaceAll(err.Error(), uniqueErr, "")
 		errKeyName := errors.New(keyName)
 		return errors.Join(errKeyName, shared.ErrAlreadyExists)
