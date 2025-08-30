@@ -1,6 +1,9 @@
 package user
 
 import (
+	"errors"
+
+	"github.com/amirhosseinf79/user_registration/internal/domain/enum"
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/dto/auth"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
@@ -10,14 +13,6 @@ import (
 )
 
 func (u *userService) RegisterUserByEmail(fields auth.FieldEmailRegister) (*user.ResponseDetails, *shared.ResponseOneMessage) {
-	err := u.CheckUserEmailExists(fields.Email)
-	if err != nil {
-		return nil, err
-	}
-	err = u.CheckUserMobileExists(fields.PhoneNumber)
-	if err != nil {
-		return nil, err
-	}
 	hashPassword, err2 := pkg.HashPassword(fields.Password)
 	if err2 != nil {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
@@ -34,9 +29,17 @@ func (u *userService) RegisterUserByEmail(fields auth.FieldEmailRegister) (*user
 		PhoneNumber: fields.PhoneNumber,
 		Email:       fields.Email,
 		Password:    hashPassword,
+		UserType:    enum.User,
 	}
 	err2 = u.userRepo.Create(userM)
 	if err2 != nil {
+		if errors.Is(err2, shared.ErrAlreadyExists) {
+			result := shared.NewDefaultResponse(shared.ResponseArgs{
+				ErrStatus:  fiber.StatusConflict,
+				ErrMessage: err2,
+			})
+			return nil, result
+		}
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,
 			ErrMessage: shared.ErrInternalServerError,

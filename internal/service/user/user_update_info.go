@@ -35,24 +35,23 @@ func (u *userService) UpdateUserProfile(userID uint, fields user.FieldUpdateDeta
 		userM.LastName = fields.LastName
 	}
 	if fields.Email != "" {
-		err := u.CheckUserEmailExists(fields.Email)
-		if err != nil {
-			return nil, err
-		}
 		userM.Email = fields.Email
 		userM.EmailVerified = false
 	}
 	if fields.PhoneNumber != "" {
-		err := u.CheckUserMobileExists(fields.PhoneNumber)
-		if err != nil {
-			return nil, err
-		}
 		userM.PhoneNumber = fields.PhoneNumber
 		userM.MobileVerified = false
 	}
 
 	err = u.userRepo.Update(userM)
 	if err != nil {
+		if errors.Is(err, shared.ErrAlreadyExists) {
+			result := shared.NewDefaultResponse(shared.ResponseArgs{
+				ErrStatus:  fiber.StatusConflict,
+				ErrMessage: err,
+			})
+			return nil, result
+		}
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusInternalServerError,
 			ErrMessage: shared.ErrInternalServerError,

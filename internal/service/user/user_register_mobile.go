@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/amirhosseinf79/user_registration/internal/domain/enum"
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/internal/dto/user"
@@ -21,6 +22,7 @@ func (u *userService) RegisterUserByNumber(phoneNumber string) (*user.ResponseDe
 	userM := &model.User{
 		PhoneNumber:    phoneNumber,
 		MobileVerified: true,
+		UserType:       enum.User,
 	}
 	if !exists {
 		err = u.userRepo.Create(userM)

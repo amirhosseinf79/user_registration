@@ -9,15 +9,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (fv *fieldsValidatorMiddleware) ValidatePassword(ctx *fiber.Ctx) error {
+func (fv *fieldsValidatorMiddleware) ValidateNewPassword(ctx *fiber.Ctx) error {
 	re1 := regexp.MustCompile(`.{10}`)
 	re2 := regexp.MustCompile(`[@#$%^&*]+`)
-	var fields user.FieldPassword
+	var fields user.FieldUpdatePassword
 	response, err := pkg.ValidateRequestBody(&fields, ctx)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(response)
 	}
-	if !re1.MatchString(fields.Password) || !re2.MatchString(fields.Password) {
+	if !re1.MatchString(fields.NewPassword) || !re2.MatchString(fields.NewPassword) {
 		result := shared.NewDefaultResponse(shared.ResponseArgs{
 			ErrStatus:  fiber.StatusBadRequest,
 			ErrMessage: shared.ErrPasswordValidation,

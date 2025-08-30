@@ -902,6 +902,9 @@ const docTemplate = `{
                 },
                 "registeredAt": {
                     "type": "string"
+                },
+                "userType": {
+                    "type": "integer"
                 }
             }
         },

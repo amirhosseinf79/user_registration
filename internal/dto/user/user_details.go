@@ -8,6 +8,7 @@ import (
 
 type ResponseDetails struct {
 	ID             uint      `json:"id"`
+	UserType       uint      `json:"userType"`
 	PhoneNumber    string    `json:"phoneNumber"`
 	Email          string    `json:"email" query:"email"`
 	FirstName      string    `json:"firstName"`
@@ -21,6 +22,7 @@ type ResponseDetails struct {
 func NewUserResponse(userM *model.User) *ResponseDetails {
 	return &ResponseDetails{
 		ID:             userM.ID,
+		UserType:       uint(userM.UserType),
 		PhoneNumber:    userM.PhoneNumber,
 		FirstName:      userM.FirstName,
 		LastName:       userM.LastName,

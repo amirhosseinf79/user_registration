@@ -1,6 +1,11 @@
 package shared
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type ResponseArgs struct {
 	ErrStatus  int
@@ -24,10 +29,12 @@ func NewDefaultResponse(fields ResponseArgs) *ResponseOneMessage {
 		Error: fields.RealError,
 	}
 	if fields.ErrMessage != nil {
-		response.Message = fields.ErrMessage.Error()
+		errStr := strings.ReplaceAll(fields.ErrMessage.Error(), "\n", " ")
+		response.Message = errStr
 		if fields.RealError == nil {
 			response.Error = fields.ErrMessage
 		}
 	}
+	fmt.Println(response.Error)
 	return &response
 }

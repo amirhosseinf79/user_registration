@@ -8,7 +8,7 @@ func (s server) InitAuthRoutes1() {
 	route.Post("/login", s.validator1.ValidateLogin, s.auth1.AutoLogin)
 
 	registerMidd := route.Group("/register", s.validator1.ValidateRegister, s.validator1.ValidateEmail)
-	registerMidd.Post("", s.validator1.ValidateMobile, s.auth1.RegisterByEmail)
+	registerMidd.Post("", s.validator1.ValidateMobile, s.validator1.ValidatePassword, s.auth1.RegisterByEmail)
 
 	password := route.Group("/password")
 	password.Post("/send-code", s.validator1.ValidateSendResetPassOTP, s.auth1.SendResetPassOTP)

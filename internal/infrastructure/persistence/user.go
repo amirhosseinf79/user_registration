@@ -1,8 +1,12 @@
 package persistence
 
 import (
+	"errors"
+	"strings"
+
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
+	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/internal/dto/user"
 	"gorm.io/gorm"
 )
@@ -16,7 +20,14 @@ func NewUserRepository(db *gorm.DB) repository.UserRepository {
 }
 
 func (r *userRepository) Create(user *model.User) error {
-	return r.db.Create(user).Error
+	uniqueErr := "UNIQUE constraint failed: "
+	err := r.db.Create(user).Error
+	if strings.Contains(err.Error(), uniqueErr) {
+		keyName := strings.ReplaceAll(err.Error(), uniqueErr, "")
+		errKeyName := errors.New(keyName)
+		return errors.Join(errKeyName, shared.ErrAlreadyExists)
+	}
+	return err
 }
 
 func (r *userRepository) Update(user *model.User) error {
