@@ -16,7 +16,7 @@ func (u *userService) VerifyUserEmail(userID uint, code string) (*user.ResponseD
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
 				ErrStatus:  fiber.StatusNotFound,
-				ErrMessage: shared.ErrUsertNotFound,
+				ErrMessage: shared.ErrUserNotFound,
 				RealError:  err,
 			})
 			return nil, result

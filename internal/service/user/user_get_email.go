@@ -14,7 +14,7 @@ func (u *userService) GetUserByEmail(email string) (*model.User, error) {
 	userM, err := u.userRepo.GetByEmail(email)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, shared.ErrUsertNotFound
+			return nil, shared.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (u *userService) GetUserDetailsByEmail(email string) (*user.ResponseDetails
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
 				ErrStatus:  fiber.StatusNotFound,
-				ErrMessage: shared.ErrUsertNotFound,
+				ErrMessage: shared.ErrUserNotFound,
 				RealError:  err,
 			})
 			return nil, result

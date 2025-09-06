@@ -12,7 +12,7 @@ import (
 func (o *otpService) CheckOTPCode(fields otp.FieldVerifyOTP) (bool, *shared.ResponseOneMessage) {
 	savedHash, err := o.otpRepo.GetOTP(fields.Prefix, fields.Key)
 	if err != nil {
-		if !errors.Is(err, shared.ErrUsertNotFound) {
+		if !errors.Is(err, shared.ErrUserNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
 				ErrStatus:  fiber.StatusInternalServerError,
 				ErrMessage: shared.ErrInternalServerError,

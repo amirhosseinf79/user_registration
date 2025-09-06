@@ -36,7 +36,7 @@ func (t *tokenRepository) GetUserIDByRefresh(refreshToken string) (uint, error) 
 	key := t.prefix + refreshToken
 	userID, err := t.client.Get(t.ctx, key).Result()
 	if errors.Is(err, redis.Nil) {
-		return 0, shared.ErrUsertNotFound
+		return 0, shared.ErrUserNotFound
 	}
 	if err != nil {
 		return 0, err

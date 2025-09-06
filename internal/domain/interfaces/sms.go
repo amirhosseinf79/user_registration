@@ -1,10 +1,10 @@
 package interfaces
 
 import (
-	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
-	sms_dto "github.com/amirhosseinf79/user_registration/internal/dto/sms"
+	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	"github.com/amirhosseinf79/user_registration/internal/dto/sms"
 )
 
 type SMSService interface {
-	SendToClient(fields sms_dto.FieldSendClient) *shared_dto.ResponseOneMessage
+	SendToClient(fields sms.FieldSendClient) *shared.ResponseOneMessage
 }

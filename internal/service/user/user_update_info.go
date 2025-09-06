@@ -15,7 +15,7 @@ func (u *userService) UpdateUserProfile(userID uint, fields user.FieldUpdateDeta
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
 				ErrStatus:  fiber.StatusNotFound,
-				ErrMessage: shared.ErrUsertNotFound,
+				ErrMessage: shared.ErrUserNotFound,
 				RealError:  err,
 			})
 			return nil, result

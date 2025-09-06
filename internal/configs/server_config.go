@@ -15,60 +15,60 @@ func NewConfig() *Configs {
 	}
 
 	// Database and secrets config
-	SERVER_PORT := os.Getenv("PORT")
-	SERVER_SECRET := os.Getenv("SECRET")
-	GORM_CONNSTR := os.Getenv("SQLDB")
-	REDIS_SERVER := os.Getenv("RedisServer")
-	REDIS_PASSWORD := os.Getenv("RedisPass")
+	ServerPort := os.Getenv("PORT")
+	ServerSecret := os.Getenv("SECRET")
+	GormConnStr := os.Getenv("SQLDB")
+	RedisServer := os.Getenv("RedisServer")
+	RedisPassword := os.Getenv("RedisPass")
 	DEBUG := false
 	if os.Getenv("DEBUG") == "true" {
 		DEBUG = true
 	}
 
 	// external services
-	KAVENEGAR_KEY := os.Getenv("KAVENEGAR_KEY")
-	KAVENEGAR_SENDER := os.Getenv("KAVENEGAR_SENDER")
+	KavenegarKey := os.Getenv("KAVENEGAR_KEY")
+	KavenegarSender := os.Getenv("KAVENEGAR_SENDER")
 
 	// OTP Configs
-	OTP_EXPIRE_TIME := 2 * time.Minute
-	OTP_LIMIT_DURATION := 10 * time.Minute
-	OTP_SEND_RATE := 3
-	OTP_LOGIN_RATE := 5
+	OtpExpireTime := 2 * time.Minute
+	OtpLimitDuration := 10 * time.Minute
+	OtpSendRate := 3
+	OtpLoginRate := 5
 
 	// TOKEN Configs
-	ACCESS_TOKEN_EXP := 2 * time.Hour
-	REFRESH_TOKEN_EXP := 6 * time.Hour
+	AccessTokenExp := 2 * time.Hour
+	RefreshTokenExp := 6 * time.Hour
 
 	return &Configs{
 		Server: serverConfig{
-			Port:   SERVER_PORT,
-			Secret: SERVER_SECRET,
+			Port:   ServerPort,
+			Secret: ServerSecret,
 			Debug:  DEBUG,
 		},
 		DB: dbConfig{
 			Gorm: gormDB{
-				ConnSTR: GORM_CONNSTR,
+				ConnSTR: GormConnStr,
 			},
 			Redis: redisDB{
-				Server:   REDIS_SERVER,
-				Password: REDIS_PASSWORD,
+				Server:   RedisServer,
+				Password: RedisPassword,
 			},
 		},
 		Token: tokenConfig{
-			AccessTokenExp:  ACCESS_TOKEN_EXP,
-			RefreshTokenExp: REFRESH_TOKEN_EXP,
+			AccessTokenExp:  AccessTokenExp,
+			RefreshTokenExp: RefreshTokenExp,
 		},
 		SMS: smsProviders{
 			Kavenegar: smsConfig{
-				Key:    KAVENEGAR_KEY,
-				Sender: KAVENEGAR_SENDER,
+				Key:    KavenegarKey,
+				Sender: KavenegarSender,
 			},
 		},
 		OTP: otpConfig{
-			ExpireTime:    OTP_EXPIRE_TIME,
-			LimitDuration: OTP_LIMIT_DURATION,
-			SendRate:      OTP_SEND_RATE,
-			LoginRate:     OTP_LOGIN_RATE,
+			ExpireTime:    OtpExpireTime,
+			LimitDuration: OtpLimitDuration,
+			SendRate:      OtpSendRate,
+			LoginRate:     OtpLoginRate,
 		},
 	}
 }

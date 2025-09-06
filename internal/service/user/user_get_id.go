@@ -14,7 +14,7 @@ func (u *userService) GetUserByID(id uint) (*model.User, error) {
 	userM, err := u.userRepo.GetByID(id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, shared.ErrUsertNotFound
+			return nil, shared.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (u *userService) GetUserDetailsByID(userID uint) (*user.ResponseDetails, *s
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
 				ErrStatus:  fiber.StatusNotFound,
-				ErrMessage: shared.ErrUsertNotFound,
+				ErrMessage: shared.ErrUserNotFound,
 				RealError:  err,
 			})
 			return nil, result

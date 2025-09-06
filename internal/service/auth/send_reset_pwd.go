@@ -20,7 +20,7 @@ func (a *authService) SendResetPassword(fields auth.FieldSendResetPwd) (*auth.OT
 		_, err = a.userService.GetUserByEmail(fields.Username)
 	}
 	if err != nil {
-		if errors.Is(err, shared.ErrUsertNotFound) {
+		if errors.Is(err, shared.ErrUserNotFound) {
 			result := shared.NewDefaultResponse(shared.ResponseArgs{
 				ErrStatus:  fiber.StatusUnauthorized,
 				ErrMessage: shared.ErrInvalidMobile,

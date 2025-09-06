@@ -60,7 +60,7 @@ const docTemplate = `{
         },
         "/api/v1/auth/password/reset": {
             "put": {
-                "description": "change passwrod by sent OTP. Username could be Number or Email",
+                "description": "change password by sent OTP. Username could be Number or Email",
                 "consumes": [
                     "application/json"
                 ],

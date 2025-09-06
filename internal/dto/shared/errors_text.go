@@ -2,7 +2,7 @@ package shared
 
 import "errors"
 
-var ErrUsertNotFound = errors.New("user not found")
+var ErrUserNotFound = errors.New("user not found")
 var ErrUnauthorized = errors.New("unauthorized")
 var ErrTokenExpired = errors.New("token expired")
 var ErrInternalServerError = errors.New("internal server error")
@@ -21,4 +21,4 @@ var ErrEmailExists = errors.New("email already exists")
 var ErrMobileExists = errors.New("mobile already exists")
 
 var ErrOTPRateLimited = errors.New("can not send OTP Code. try few minutes later")
-var ErrPasswordValidation = errors.New("The password must be at least 10 characters long and include at least one special character.")
+var ErrPasswordValidation = errors.New("the password must be at least 10 characters long and include at least one special character")

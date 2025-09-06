@@ -165,7 +165,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 ### API Endpoints
 
 | Method | Endpoint               | Description                          |
-| ------ | ---------------------- | ------------------------------------ |
+|--------|------------------------|--------------------------------------|
 | POST   | /api/v1/auth/send-otp  | Request OTP                          |
 | POST   | /api/v1/auth/login     | Verify OTP and login/register        |
 | GET    | /api/v1/user/all       | Get users (with pagination & search) |
@@ -201,7 +201,7 @@ User Request → PostgreSQL (User Data) + Redis (OTP/Rate Limiting)
 
 ```json
 {
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
 }
 ```
