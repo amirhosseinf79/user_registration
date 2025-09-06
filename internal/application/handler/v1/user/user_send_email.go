@@ -2,6 +2,7 @@ package user
 
 import "github.com/gofiber/fiber/v2"
 
+// SendUserVerifyEmail godoc
 // @Summary Send Verify Code
 // @Description Send Verify Code
 // @Tags Profile
@@ -11,9 +12,9 @@ import "github.com/gofiber/fiber/v2"
 // @Success 200 {object} auth.OTPOkMock
 // @Failure 401 {object} shared.ResponseOneMessage
 // @Router /api/v1/profile/send/verify-email-otp [post]
-func (ah *userHandler) SendUserVerifyEmail(ctx *fiber.Ctx) error {
+func (uh *userHandler) SendUserVerifyEmail(ctx *fiber.Ctx) error {
 	userID := ctx.Locals("userID").(uint)
-	response, err := ah.userService.SendVerifyEmail(userID)
+	response, err := uh.userService.SendVerifyEmail(userID)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)
 	}

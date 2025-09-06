@@ -5,8 +5,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// ResetPassWithOTP
 // @Summary Reset Password
-// @Description change passwrod by sent OTP. Username could be Number or Email
+// @Description change password by sent OTP. Username could be Number or Email
 // @Tags Auth
 // @Accept json
 // @Produce json
@@ -16,7 +17,7 @@ import (
 // @Router /api/v1/auth/password/reset [put]
 func (ah *authHandler) ResetPassWithOTP(ctx *fiber.Ctx) error {
 	var fields auth.FieldResetByOTP
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	response := ah.authService.ResetPassWithOTP(fields)
 	return ctx.Status(response.Code).JSON(response)
 }

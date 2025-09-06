@@ -3,7 +3,7 @@ package otp
 import (
 	"errors"
 
-	otp "github.com/amirhosseinf79/user_registration/internal/dto/otp"
+	"github.com/amirhosseinf79/user_registration/internal/dto/otp"
 	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/amirhosseinf79/user_registration/pkg"
 	"github.com/gofiber/fiber/v2"

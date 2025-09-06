@@ -13,7 +13,7 @@ type smsRepo struct {
 func NewKavenegarSMSService(token string, sender string) repository.SMSRepository {
 	return &smsRepo{
 		api:    kavenegar.New(token),
-		sender: "",
+		sender: sender,
 	}
 }
 

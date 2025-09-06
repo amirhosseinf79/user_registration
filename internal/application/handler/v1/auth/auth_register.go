@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// RegisterByEmail
 // @Summary Register By Email
 // @Description Register By Email
 // @Tags Auth
@@ -16,7 +17,7 @@ import (
 // @Router /api/v1/auth/register [post]
 func (ah *authHandler) RegisterByEmail(ctx *fiber.Ctx) error {
 	var fields auth.FieldEmailRegister
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	response, err := ah.authService.RegisterByEmail(fields)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)

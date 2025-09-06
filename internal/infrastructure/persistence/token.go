@@ -2,12 +2,13 @@ package persistence
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"time"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -34,8 +35,8 @@ func (t *tokenRepository) SaveRefreshToken(token *model.Token) error {
 func (t *tokenRepository) GetUserIDByRefresh(refreshToken string) (uint, error) {
 	key := t.prefix + refreshToken
 	userID, err := t.client.Get(t.ctx, key).Result()
-	if err == redis.Nil {
-		return 0, shared_dto.ErrUsertNotFound
+	if errors.Is(err, redis.Nil) {
+		return 0, shared.ErrUsertNotFound
 	}
 	if err != nil {
 		return 0, err

@@ -12,7 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (a *authService) SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage) {
+func (a *authService) SendResetPassword(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage) {
 	var err error
 	if a.MatchMobile(fields.Username) {
 		_, err = a.userService.GetUserByMobile(fields.Username)

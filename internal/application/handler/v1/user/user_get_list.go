@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// GetUsersList godoc
 // @Summary Get all users
 // @Description Get list of all users
 // @Tags User
@@ -15,7 +16,7 @@ import (
 // @Router /api/v1/user/all [get]
 func (uh *userHandler) GetUsersList(ctx *fiber.Ctx) error {
 	var filter user.FilterUser
-	ctx.QueryParser(&filter)
+	_ = ctx.QueryParser(&filter)
 	userDetails, err := uh.userService.GetUserList(filter)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)

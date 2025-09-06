@@ -8,7 +8,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func NewConfig() *configs {
+func NewConfig() *Configs {
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Printf("Error loading .env file: %v\n", err)
@@ -39,7 +39,7 @@ func NewConfig() *configs {
 	ACCESS_TOKEN_EXP := 2 * time.Hour
 	REFRESH_TOKEN_EXP := 6 * time.Hour
 
-	return &configs{
+	return &Configs{
 		Server: serverConfig{
 			Port:   SERVER_PORT,
 			Secret: SERVER_SECRET,
@@ -65,7 +65,7 @@ func NewConfig() *configs {
 			},
 		},
 		OTP: otpConfig{
-			ExireTime:     OTP_EXPIRE_TIME,
+			ExpireTime:    OTP_EXPIRE_TIME,
 			LimitDuration: OTP_LIMIT_DURATION,
 			SendRate:      OTP_SEND_RATE,
 			LoginRate:     OTP_LOGIN_RATE,

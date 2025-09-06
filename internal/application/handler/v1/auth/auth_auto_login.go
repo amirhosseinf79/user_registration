@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// AutoLogin
 // @Summary Login
 // @Description Login By Email, Mobile or OTP
 // @Tags Auth
@@ -16,7 +17,7 @@ import (
 // @Router /api/v1/auth/login [post]
 func (ah *authHandler) AutoLogin(ctx *fiber.Ctx) error {
 	var fields auth.FieldUserLogin
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	response, err := ah.authService.AutoLogin(fields)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)

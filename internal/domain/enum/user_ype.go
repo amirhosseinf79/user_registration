@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// UserType represents the type of a user.
+// UserType represents the type of user.
 type UserType uint
 
 const (
@@ -14,8 +14,8 @@ const (
 	User    UserType = 2
 )
 
-func (m UserType) IsValid() bool {
-	switch m {
+func (m *UserType) IsValid() bool {
+	switch *m {
 	case Admin, User:
 		return true
 	default:
@@ -23,8 +23,8 @@ func (m UserType) IsValid() bool {
 	}
 }
 
-func (m UserType) String() string {
-	switch m {
+func (m *UserType) String() string {
+	switch *m {
 	case Admin:
 		return "Admin"
 	case User:
@@ -35,11 +35,11 @@ func (m UserType) String() string {
 }
 
 // Value implements driver.Valuer so GORM/DB can store the enum as integer.
-func (m UserType) Value() (driver.Value, error) {
+func (m *UserType) Value() (driver.Value, error) {
 	if !m.IsValid() {
 		return nil, fmt.Errorf("invalid userType: %d", m)
 	}
-	return int64(m), nil
+	return int64(*m), nil
 }
 
 // Scan implements sql.Scanner so GORM/DB can read the integer into the enum.

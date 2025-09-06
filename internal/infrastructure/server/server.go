@@ -16,13 +16,13 @@ type server struct {
 }
 
 func NewServer(
-	authImp1 interfaces.AuthImplimentation1,
+	authImp1 interfaces.AuthImplementation1,
 ) interfaces.ServerService {
 	app := fiber.New()
 
 	return &server{
 		app:        app,
-		validator1: authImp1.GetFieldVaidator(),
+		validator1: authImp1.GetFieldValidator(),
 		access1:    authImp1.GetAuthValidator(),
 		auth1:      authImp1.GetAuthHandler(),
 		user1:      authImp1.GetUserHandler(),

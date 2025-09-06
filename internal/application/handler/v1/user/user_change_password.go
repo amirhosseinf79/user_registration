@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// UpdateUserPassword godoc
 // @Summary Update user password
 // @Description Update User Password
 // @Tags Profile
@@ -18,7 +19,7 @@ import (
 // @Router /api/v1/profile/update/password [put]
 func (uh *userHandler) UpdateUserPassword(ctx *fiber.Ctx) error {
 	var fields user.FieldUpdatePassword
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	userID := ctx.Locals("userID").(uint)
 	userDetails, err := uh.userService.UpdateUserPassword(userID, fields)
 	if err != nil {

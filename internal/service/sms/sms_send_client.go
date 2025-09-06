@@ -14,6 +14,7 @@ func (s *smsProviderService) SendToClient(fields sms.FieldSendClient) *shared.Re
 	fmt.Println(fields.Text)
 	err := s.smsRepo.SendOne(fields.PhoneNumber, fields.Text)
 	if err != nil {
+		//goland:noinspection GoTypeAssertionOnErrors
 		switch err := err.(type) {
 		case *kavenegar.APIError:
 			return shared.NewDefaultResponse(shared.ResponseArgs{

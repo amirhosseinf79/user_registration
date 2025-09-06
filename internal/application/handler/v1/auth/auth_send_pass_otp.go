@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// SendResetPassOTP
 // @Summary Send Reset Code
 // @Description Send Reset Password Code
 // @Tags Auth
@@ -16,8 +17,8 @@ import (
 // @Router /api/v1/auth/password/send-code [post]
 func (ah *authHandler) SendResetPassOTP(ctx *fiber.Ctx) error {
 	var fields auth.FieldSendResetPwd
-	ctx.BodyParser(&fields)
-	response, err := ah.authService.SendResetPasswerd(fields)
+	_ = ctx.BodyParser(&fields)
+	response, err := ah.authService.SendResetPassword(fields)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)
 	}

@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/model"
@@ -89,7 +90,7 @@ func (o *otpRepository) SaveOTP(otp *model.OTP) error {
 
 func (o *otpRepository) GetOTP(prefix, key string) (string, error) {
 	code, err := o.client.Get(o.ctx, o.prefix+prefix+key).Result()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return "", shared.ErrUsertNotFound
 	}
 	if err != nil {
@@ -100,7 +101,7 @@ func (o *otpRepository) GetOTP(prefix, key string) (string, error) {
 
 func (o *otpRepository) DeleteOTP(prefix, key string) error {
 	err := o.client.Del(o.ctx, o.prefix+prefix+key).Err()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return shared.ErrUsertNotFound
 	}
 	if err != nil {
@@ -112,7 +113,7 @@ func (o *otpRepository) DeleteOTP(prefix, key string) error {
 func (o *otpRepository) ResetSetOTPLimit(key string) error {
 	k := o.prefix + o.saveOTPLimit + key
 	err := o.client.Del(o.ctx, k).Err()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return shared.ErrUsertNotFound
 	}
 	if err != nil {
@@ -124,7 +125,7 @@ func (o *otpRepository) ResetSetOTPLimit(key string) error {
 func (o *otpRepository) ResetLoginLimit(key string) error {
 	k := o.prefix + o.loginLimit + key
 	err := o.client.Del(o.ctx, k).Err()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return shared.ErrUsertNotFound
 	}
 	if err != nil {

@@ -16,7 +16,7 @@ func (u *userService) GetUserList(filter user.FilterUser) (*shared.ResponseList[
 		})
 		return nil, result
 	}
-	userList := []user.ResponseDetails{}
+	var userList = make([]user.ResponseDetails, 0, len(users))
 	for _, userM := range users {
 		userDetails := user.NewUserResponse(userM)
 		userList = append(userList, *userDetails)

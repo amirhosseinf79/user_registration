@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// UpdateProfileInfo godoc
 // @Summary Update user Profile
 // @Description Update User Profile
 // @Tags Profile
@@ -18,7 +19,7 @@ import (
 // @Router /api/v1/profile/update/info [patch]
 func (uh *userHandler) UpdateProfileInfo(ctx *fiber.Ctx) error {
 	var fields user.FieldUpdateDetails
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	userID := ctx.Locals("userID").(uint)
 	userDetails, err := uh.userService.UpdateUserProfile(userID, fields)
 	if err != nil {

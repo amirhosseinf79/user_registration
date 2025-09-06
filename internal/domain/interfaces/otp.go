@@ -9,5 +9,5 @@ import (
 type OTPStoreService interface {
 	StoreCode(fields otp.FieldOTPStore) (string, *auth.OTPOk, *shared.ResponseOneMessage)
 	CheckOTPCode(fields otp.FieldVerifyOTP) (bool, *shared.ResponseOneMessage)
-	CanLogin(mobile string, paswordOk bool) (bool, *shared.ResponseOneMessage)
+	CanLogin(mobile string, passwordOk bool) (bool, *shared.ResponseOneMessage)
 }

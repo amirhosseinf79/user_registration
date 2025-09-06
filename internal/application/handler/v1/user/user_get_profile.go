@@ -2,6 +2,7 @@ package user
 
 import "github.com/gofiber/fiber/v2"
 
+// GetUserProfile godoc
 // @Summary Get user profile
 // @Description Get User profile
 // @Tags Profile

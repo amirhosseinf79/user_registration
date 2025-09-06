@@ -37,14 +37,13 @@ type tokenConfig struct {
 }
 
 type otpConfig struct {
-	ExireTime     time.Duration
+	ExpireTime    time.Duration
 	LimitDuration time.Duration
 	SendRate      int
 	LoginRate     int
 }
 
-//
-type configs struct {
+type Configs struct {
 	Server serverConfig
 	DB     dbConfig
 	Token  tokenConfig

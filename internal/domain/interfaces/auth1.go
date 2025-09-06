@@ -21,12 +21,12 @@ type AuthService1 interface {
 
 	AutoLogin(field auth.FieldUserLogin) (*auth.ResponseJWT, *shared.ResponseOneMessage)
 	RefreshToken(refresh string) (*auth.ResponseJWT, *shared.ResponseOneMessage)
-	SendResetPasswerd(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage)
+	SendResetPassword(fields auth.FieldSendResetPwd) (*auth.OTPOk, *shared.ResponseOneMessage)
 	ResetPassWithOTP(fields auth.FieldResetByOTP) *shared.ResponseOneMessage
 }
 
-type AuthImplimentation1 interface {
-	GetFieldVaidator() FieldValidatorMiddleware1
+type AuthImplementation1 interface {
+	GetFieldValidator() FieldValidatorMiddleware1
 	GetAuthValidator() AuthMiddleware1
 	GetAuthHandler() AuthHandler1
 	GetUserHandler() UserHandler1

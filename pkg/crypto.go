@@ -19,10 +19,10 @@ func ComparePassword(password string, hash string) bool {
 }
 
 func GenerateToken() string {
-	uuid := uuid.New()
-	token, err := HashPassword(uuid.String())
+	newUUID := uuid.New()
+	token, err := HashPassword(newUUID.String())
 	if err != nil {
-		return uuid.String()
+		return newUUID.String()
 	}
 	return token
 }

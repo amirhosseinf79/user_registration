@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// RefreshToken
 // @Summary Refresh Token
 // @Description Refresh Token
 // @Tags Auth
@@ -16,7 +17,7 @@ import (
 // @Router /api/v1/auth/refresh-token [post]
 func (ah *authHandler) RefreshToken(ctx *fiber.Ctx) error {
 	var fields auth.FieldRefreshToken
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	response, err := ah.authService.RefreshToken(fields.RefreshToken)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)

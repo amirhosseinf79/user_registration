@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func NewGormconnection(connStr string, debug bool) *gorm.DB {
+func NewGormConnection(connStr string, debug bool) *gorm.DB {
 	gormConfig := &gorm.Config{}
 	if debug {
 		gormConfig.Logger = logger.Default.LogMode(logger.Info)
@@ -22,8 +22,8 @@ func NewGormconnection(connStr string, debug bool) *gorm.DB {
 	var err error
 
 	for {
-		fmt.Println("Connectiong to SQL-DB...")
-		var dbConf gorm.Dialector = sqlite.Open("debug.db")
+		fmt.Println("Connecting to SQL-DB...")
+		var dbConf = sqlite.Open("debug.db")
 		if !debug {
 			dbConf = postgres.Open(connStr)
 		}

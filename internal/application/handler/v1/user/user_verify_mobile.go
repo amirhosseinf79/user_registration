@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// VerifyUserMobile godoc
 // @Summary Verify Mobile
 // @Description verify Mobile
 // @Tags Profile
@@ -16,11 +17,11 @@ import (
 // @Failure 400 {object} shared.ResponseOneMessage
 // @Failure 401 {object} shared.ResponseOneMessage
 // @Router /api/v1/profile/verify/mobile [post]
-func (ah *userHandler) VerifyUserMobile(ctx *fiber.Ctx) error {
+func (uh *userHandler) VerifyUserMobile(ctx *fiber.Ctx) error {
 	var fields user.FieldVerifyOTP
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	userID := ctx.Locals("userID").(uint)
-	response, err := ah.userService.VerifyUserMobile(userID, fields.Code)
+	response, err := uh.userService.VerifyUserMobile(userID, fields.Code)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)
 	}

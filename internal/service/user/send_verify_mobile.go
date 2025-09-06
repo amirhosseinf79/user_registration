@@ -10,8 +10,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (a *userService) SendVerifyMobile(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage) {
-	userM, err := a.GetUserDetailsByID(userID)
+func (u *userService) SendVerifyMobile(userID uint) (*auth.OTPOk, *shared.ResponseOneMessage) {
+	userM, err := u.GetUserDetailsByID(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (a *userService) SendVerifyMobile(userID uint) (*auth.OTPOk, *shared.Respon
 		return nil, result
 	}
 
-	generatedCode, response, err := a.otpService.StoreCode(otp.FieldOTPStore{
+	generatedCode, response, err := u.otpService.StoreCode(otp.FieldOTPStore{
 		Prefix: "verify:mobile:",
 		Key:    userM.PhoneNumber,
 	},
@@ -33,7 +33,7 @@ func (a *userService) SendVerifyMobile(userID uint) (*auth.OTPOk, *shared.Respon
 		return nil, err
 	}
 	smsText := fmt.Sprintf(shared.TemplateSendVerifyOTP, generatedCode)
-	err = a.smsService.SendToClient(sms.FieldSendClient{
+	err = u.smsService.SendToClient(sms.FieldSendClient{
 		PhoneNumber: userM.PhoneNumber,
 		Text:        smsText,
 	})

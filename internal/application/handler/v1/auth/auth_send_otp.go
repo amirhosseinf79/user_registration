@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// SendOTP
 // @Summary Send OTP
 // @Description Send OTP
 // @Tags Auth
@@ -18,7 +19,7 @@ import (
 // @Router /api/v1/auth/send-otp [post]
 func (ah *authHandler) SendOTP(ctx *fiber.Ctx) error {
 	var fields auth.FieldSendOTP
-	ctx.BodyParser(&fields)
+	_ = ctx.BodyParser(&fields)
 	response, err := ah.authService.SendOTP(fields)
 	if err != nil {
 		return ctx.Status(err.Code).JSON(err)

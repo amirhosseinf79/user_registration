@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/repository"
-	shared_dto "github.com/amirhosseinf79/user_registration/internal/dto/shared"
+	"github.com/amirhosseinf79/user_registration/internal/dto/shared"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -12,21 +12,21 @@ import (
 type jwtRepo struct {
 	secretKey       []byte
 	accessTokenExp  time.Duration
-	refreshRokenExp time.Duration
+	refreshTokenExp time.Duration
 }
 
-func NewJWTRepository(secretKey string, accessTokenExp time.Duration, refreshRokenExp time.Duration) repository.JWTRepository {
+func NewJWTRepository(secretKey string, accessTokenExp time.Duration, refreshTokenExp time.Duration) repository.JWTRepository {
 	return &jwtRepo{
 		secretKey:       []byte(secretKey),
 		accessTokenExp:  accessTokenExp,
-		refreshRokenExp: refreshRokenExp,
+		refreshTokenExp: refreshTokenExp,
 	}
 }
 
 func (j *jwtRepo) GenerateToken(userID uint, long bool) (string, error) {
 	exp := j.accessTokenExp
 	if long {
-		exp = j.refreshRokenExp
+		exp = j.refreshTokenExp
 	}
 
 	now := time.Now().UTC()
@@ -56,19 +56,19 @@ func (j *jwtRepo) Verify(tokenString string) (uint, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if exp, ok := claims["exp"].(float64); ok {
 			if int64(exp) < time.Now().Unix() {
-				return 0, shared_dto.ErrTokenExpired
+				return 0, shared.ErrTokenExpired
 			}
 		}
 		if iss, ok := claims["iss"].(string); ok {
 			if iss != "auth-svc" {
-				return 0, shared_dto.ErrInvalidIssuer
+				return 0, shared.ErrInvalidIssuer
 			}
 		}
 		userID, ok := claims["userID"].(float64)
 		if !ok {
-			return 0, shared_dto.ErrInvalidUser
+			return 0, shared.ErrInvalidUser
 		}
 		return uint(userID), err
 	}
-	return 0, shared_dto.ErrInvalidToken
+	return 0, shared.ErrInvalidToken
 }
