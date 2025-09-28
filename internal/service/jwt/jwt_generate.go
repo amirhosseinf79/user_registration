@@ -40,9 +40,6 @@ func (j *jwtService) GenerateAuthTokens(userID uint) (*auth.ResponseJWT, *shared
 		return nil, result
 	}
 
-	token := auth.ResponseJWT{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-	}
-	return &token, nil
+	token := auth.NewJWTResponse(accessToken, refreshToken)
+	return token, nil
 }

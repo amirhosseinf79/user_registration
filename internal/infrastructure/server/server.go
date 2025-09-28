@@ -35,6 +35,9 @@ func (s server) Start(port string) {
 		AllowOrigins: "*",
 		AllowHeaders: "*",
 	}))
+	s.InitSwaggerRoutes()
+	s.InitAuthRoutes1()
+	s.InitUserRoutes1()
 	err := s.app.Listen(":" + port)
 	if err != nil {
 		log.Fatal("Error starting server: ", err)

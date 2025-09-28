@@ -27,8 +27,5 @@ func main() {
 	authImp1 := implementation.ImplementAuthService1(ctx, gormDB, redisDB)
 
 	serverS := server.NewServer(authImp1)
-	serverS.InitSwaggerRoutes()
-	serverS.InitAuthRoutes1()
-	serverS.InitUserRoutes1()
 	serverS.Start(configF.Server.Port)
 }
