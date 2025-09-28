@@ -5,6 +5,7 @@ import (
 
 	"github.com/amirhosseinf79/user_registration/internal/domain/interfaces"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type server struct {
@@ -30,6 +31,9 @@ func NewServer(
 }
 
 func (s server) Start(port string) {
+	s.app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:3000, https://localhost:3000",
+	}))
 	err := s.app.Listen(":" + port)
 	if err != nil {
 		log.Fatal("Error starting server: ", err)
