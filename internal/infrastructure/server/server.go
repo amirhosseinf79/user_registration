@@ -32,7 +32,8 @@ func NewServer(
 
 func (s server) Start(port string) {
 	s.app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000, https://localhost:3000",
+		AllowOrigins: "*",
+		AllowHeaders: "*",
 	}))
 	err := s.app.Listen(":" + port)
 	if err != nil {
