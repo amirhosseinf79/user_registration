@@ -23,7 +23,7 @@ func NewGormConnection(connStr string, debug bool) *gorm.DB {
 
 	for {
 		fmt.Println("Connecting to SQL-DB...")
-		var dbConf = sqlite.Open("debug.db")
+		var dbConf = sqlite.Open(":memory:")
 		if !debug {
 			dbConf = postgres.Open(connStr)
 		}
